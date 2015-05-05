@@ -1,5 +1,5 @@
 <?php
-namespace asinfotrack\yii2\widgets\widgets;
+namespace asinfotrack\yii2\toolbox\widgets;
 
 use yii\helpers\Html;
 use yii\base\InvalidConfigException;
