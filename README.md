@@ -10,6 +10,26 @@ The preferred way to install this extension is through [composer](http://getcomp
 
 ## Contents
 
+### Widgets
+
+###### Panel
+Renders a Bootstrap-Panel. You can either set its body via attribute or between `begin()` and `end()`.
+The attributes `heading`, `body` and `footer` support setting via string or via Closure returning a string.
+Exemplary usage:
+
+```
+<?php Panel::begin([
+	'heading'=>Html::tag('h3', 'Welcome!'),
+	'footer'=>function() {
+		return Yii::$app->formatter->asDatetime(time());
+	},
+]); ?>
+ 	
+ 	<p>Hello world! This is a simple panel with a heading.</p>
+ 	 	
+<?php Penel::end(); ?>
+```
+
 ### Helpers
 
 ###### Html
