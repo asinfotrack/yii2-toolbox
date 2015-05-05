@@ -12,9 +12,8 @@ The preferred way to install this extension is through [composer](http://getcomp
 
 ### Helpers
 
-#### Html
+###### Html
 Extends the Html-helper of Yii2 with additional functionality
 
-#### Timestamp
----------------
+###### Timestamp
 This helper is responsible for common tasks associated with UNIX-Timestamps

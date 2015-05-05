@@ -16,8 +16,8 @@
 	
 	"minimum-stability": "stable",
 	"support": {
-		"source": "https://github.com/asinfotrack/yii2-helpers",
-		"issues": "https://github.com/asinfotrack/yii2-helpers/issues"
+		"source": "https://github.com/asinfotrack/yii2-toolbox",
+		"issues": "https://github.com/asinfotrack/yii2-toolbox/issues"
 	},
 	
 	"require": {
