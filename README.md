@@ -2,12 +2,10 @@
 Yii2-Toolbox is a collection of useful helpers, widgets etc. extending the basic functionality of Yii2
 
 
-
 ## Installation
 The preferred way to install this extension is through [composer](http://getcomposer.org/download/).
 
-	"asinfotrack/yii2-toolbox": "*"
-
+	"asinfotrack/yii2-toolbox": "dev-master"
 
 
 ## Contents
@@ -31,6 +29,11 @@ Exemplary usage:
  	 	
 <?php Penel::end(); ?>
 ```
+
+###### Button
+The button-widget extends the one provided by yii2. It adds functionality to specify an icon.
+The Icons depend on font-awesome and hence require the yii2-extension `rmrevin/yii2-fontawesome`
+
 
 ### Helpers
 
