@@ -10,6 +10,41 @@ The preferred way to install this extension is through [composer](http://getcomp
 
 ## Contents
 
+
+### Components
+
+###### PdfResponseFormatter
+Additional response formatter for handling PDF-requests. You need to add the formatter to the config like this:
+```php
+'response' => [
+	// ...
+	'formatters'=>[
+		'pdf'=>'asinfotrack\yii2\toolbox\components\PdfResponseFormatter',
+		'pdf_download'=>[
+			'class'=>'asinfotrack\yii2\toolbox\components\PdfResponseFormatter', 
+			'forceDownload'=>true,
+		],
+	],
+	// ...
+],
+```
+
+After that you can use it to output PDFs via actions easily:
+
+```php
+public function actionPdf()
+{
+	//create pdf with some library (eg FPDF)
+	$pdf = new FPDF();
+	// ...
+
+	$response = Yii::$app->response;
+	$response->data = $pdf->Output();
+	$response->format = 'pdf';
+}
+```
+
+
 ### Widgets
 
 ###### Panel
