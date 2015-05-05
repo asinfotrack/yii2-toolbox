@@ -1,5 +1,5 @@
 <?php
-namespace asinfotrack\widgets;
+namespace asinfotrack\yii2\toolbox\widgets;
 
 use rmrevin\yii\fontawesome\FA;
 use yii\helpers\Html;

@@ -1,5 +1,5 @@
 <?php
-namespace asinfotrack\helpers;
+namespace asinfotrack\yii2\toolbox\helpers;
 
 /**
  * Helper class for working with UNIX-timestamps
