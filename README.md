@@ -75,5 +75,9 @@ The Icons depend on font-awesome and hence require the yii2-extension `rmrevin/y
 ###### Html
 Extends the Html-helper of Yii2 with additional functionality
 
+###### ServerConfig
+Provides functionality to fetch the most important server vars and to check if certain
+extensions are loaded
+
 ###### Timestamp
 This helper is responsible for common tasks associated with UNIX-Timestamps
