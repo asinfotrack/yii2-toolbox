@@ -12,7 +12,9 @@ class Timestamp
 {
 	
 	/**
-	 * Gets todays timestamp without the time part (time will be set to 00:00:00).
+	 * Gets todays timestamp without the time part (time will be
+	 * set to 00:00:00).
+	 * 
 	 * @return int timestamp
 	 */
 	public static function getTodayStampWithoutTime()
@@ -23,6 +25,7 @@ class Timestamp
 	/**
 	 * Returns a corrected timestamp which consists only of the date
 	 * part. Hours, minutes and seconds are set to zero.
+	 * 
 	 * @param int $stamp the timestamp to correct
 	 * @return int the cleaned timestamp
 	 */
