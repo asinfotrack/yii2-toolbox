@@ -12,7 +12,6 @@ $urlParams = $generator->generateUrlParams();
 
 echo "<?php\n";
 ?>
-
 use asinfotrack\yii2\toolbox\helpers\Html;
 use yii\widgets\DetailView;
 

@@ -21,8 +21,8 @@ use asinfotrack\yii2\toolbox\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this <?= $generator->getViewBaseClass(); ?> */
-/* @var $model <?= ltrim($generator->modelClass, '\\') ?> */
 /* @var $form yii\widgets\ActiveForm */
+/* @var $model <?= ltrim($generator->modelClass, '\\') ?> */
 ?>
 
 <div class="<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>-form">
@@ -36,7 +36,9 @@ use yii\widgets\ActiveForm;
 } ?>
 
 		<div class="form-group">
-			<?= "<?= " ?>Html::submitButton(Yii::t('sahli/common', $model->isNewRecord ? 'Create' : 'Save'), ['class'=>$model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']); ?>
+			<?= "<?= " ?>Html::submitButton(Yii::t('sahli/common', $model->isNewRecord ? 'Create' : 'Save'), [
+				'class'=>$model->isNewRecord ? 'btn btn-success' : 'btn btn-primary'
+			]); ?>
 		</div>
 
 	<?= "<?php " ?>ActiveForm::end(); ?>

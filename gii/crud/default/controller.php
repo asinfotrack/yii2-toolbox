@@ -26,7 +26,6 @@ $actionParamComments = $generator->generateActionParamComments();
 
 echo "<?php\n";
 ?>
-
 namespace <?= StringHelper::dirname(ltrim($generator->controllerClass, '\\')) ?>;
 
 use Yii;
@@ -35,7 +34,6 @@ use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
 use <?= ltrim($generator->modelClass, '\\') ?>;
 use <?= ltrim($generator->searchModelClass, '\\') . (isset($searchModelAlias) ? " as $searchModelAlias" : "") ?>;
-use <?= ltrim($generator->baseControllerClass, '\\') ?>;
 
 /* @var $model <?= $modelClass; ?> */ 
 /* @var $searchModel <?= isset($searchModelAlias) ? $searchModelAlias : $searchModelClass; ?> */ 
@@ -43,7 +41,7 @@ use <?= ltrim($generator->baseControllerClass, '\\') ?>;
 /**
  * <?= $controllerClass ?> implements the CRUD actions for <?= $modelClass ?> model.
  */
-class <?= $controllerClass ?> extends <?= StringHelper::basename($generator->baseControllerClass) . "\n" ?>
+class <?= $controllerClass ?> extends <?= '\\' . ltrim($generator->baseControllerClass, '\\') . "\n" ?>
 {
 
 	public function behaviors()
@@ -167,11 +165,9 @@ if (count($pks) === 1) {
 }
 ?>
 		$model = <?= $modelClass ?>::findOne(<?= $condition ?>);
-		if ($model !== null) {
-			return $model;
-		} else {
-			throw new NotFoundHttpException('Die angeforderte Seite existiert nicht.');
-		}
+		if ($model !== null) return $model;
+		
+		throw new NotFoundHttpException('Die angeforderte Seite existiert nicht.');
 	}
 	
 }

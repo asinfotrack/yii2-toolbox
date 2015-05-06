@@ -14,8 +14,8 @@ use asinfotrack\yii2\toolbox\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this <?= $generator->getViewBaseClass(); ?> */
-/* @var $model <?= ltrim($generator->modelClass, '\\') ?> */
 /* @var $form yii\widgets\ActiveForm */
+/* @var $model <?= ltrim($generator->modelClass, '\\') ?> */
 ?>
 
 <div class="<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>-search">

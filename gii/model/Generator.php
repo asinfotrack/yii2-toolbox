@@ -1,10 +1,4 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
- */
-
 namespace asinfotrack\yii2\toolbox\gii\model;
 
 use Yii;
@@ -15,6 +9,14 @@ class Generator extends \yii\gii\generators\model\Generator
 
 	public $queryClass;
 	public $iconName;
+
+	/**
+	 * @inheritdoc
+	 */
+	public function getName()
+	{
+		return 'ASi Model-Generator';
+	}
 		
 	public function rules()
 	{

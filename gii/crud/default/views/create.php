@@ -15,7 +15,7 @@ use asinfotrack\yii2\toolbox\helpers\Html;
 /* @var $this <?= $generator->getViewBaseClass(); ?> */
 /* @var $model <?= ltrim($generator->modelClass, '\\') ?> */
 
-$this->title = 'Create new ' . <?= $generator->generateString('{modelClass}', ['modelClass' => Inflector::camel2words(StringHelper::basename($generator->modelClass))]) ?>;
+$this->title = 'Create new <?= ltrim($generator->generateString('{modelClass}', ['modelClass' => Inflector::camel2words(StringHelper::basename($generator->modelClass))]), '\'') ?>;
 ?>
 
 <?= "<?= " ?>$this->render('partials/_form', [
