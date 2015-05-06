@@ -5,7 +5,7 @@
  * @license http://www.yiiframework.com/license/
  */
 
-namespace asinfotrack\yii2\toolbox\gii\crud\;
+namespace asinfotrack\yii2\toolbox\gii\crud;
 
 use Yii;
 use yii\db\ActiveRecord;

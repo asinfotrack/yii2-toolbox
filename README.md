@@ -95,21 +95,21 @@ To enable the provided Generators you need to update the gii config as follows:
 	// ...
 	'gii'=>[
 		'class'=>'yii\gii\Module',
-	    	'generators'=>[
-	    		'model'=>[
-	    			'class'=>'asinfotrack\yii2\toolbox\gii\model\Generator',
-	    			'templates'=>[
-	    				'asiModel'=>'@vendor/asinfotrack/yii2-toolbox/gii/model/default',
-	    			],
-	    		],
-	    		'crud'=>[
-	    			'class'=>'asinfotrack\yii2\toolbox\gii\crud\Generator',
-	    			'templates'=>[
-	    				'asiCrud'=>'@vendor/asinfotrack/yii2-toolbox/gii/crud/default',    			
-	    			],
-	    		]
-    	],
-    ],
+		'generators'=>[
+			'model'=>[
+				'class'=>'asinfotrack\yii2\toolbox\gii\model\Generator',
+				'templates'=>[
+					'asiToolboxModel'=>'@vendor/asinfotrack/yii2-toolbox/gii/model/default',
+				],
+			],
+			'crud'=>[
+				'class'=>'asinfotrack\yii2\toolbox\gii\crud\Generator',
+				'templates'=>[
+					'asiToolboxCrud'=>'@vendor/asinfotrack/yii2-toolbox/gii/crud/default',				
+				],
+			],
+		],
+	],
 	// ...
 ],
 ```
