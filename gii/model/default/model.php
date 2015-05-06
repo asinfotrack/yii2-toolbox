@@ -19,7 +19,6 @@ $queryClass = StringHelper::basename($generator->queryClass);
 
 echo "<?php\n";
 ?>
-
 namespace <?= $generator->ns ?>;
 
 use Yii;
@@ -50,18 +49,18 @@ class <?= $className ?> extends <?= '\\' . ltrim($generator->baseClass, '\\') . 
 	{
 		return '<?= $tableName ?>';
 	}
-<?php if (!empty($iconName)): ?>
+		
+<?php if (true && !empty($generator->iconName)): ?>
 	/**
 	 * Returns the font-awesome icon name assigned to this model
 	 * @return string name of the icon
 	 */
 	public static function iconName()
 	{
-		return '<?= $iconName ?>';
+		return '<?= $generator->iconName ?>';
 	}
 	
 <?php endif; ?>
-	
 	/**
 	 * @inheritdoc
 	 */
@@ -102,7 +101,7 @@ class <?= $className ?> extends <?= '\\' . ltrim($generator->baseClass, '\\') . 
 	}
 
 	/**
-	 * Returns a query instance
+	 * Returns an instance of the query-type for this model
 	 * @return <?= $generator->queryClass . "\n"; ?>
 	 */
 	public static function find()

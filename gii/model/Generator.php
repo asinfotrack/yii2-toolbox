@@ -55,4 +55,17 @@ class Generator extends \yii\gii\generators\model\Generator
 		]);
 	}
 	
+	public function generateRules($table)
+	{
+		$rules = parent::generateRules($table);
+		foreach ($rules as &$r) {
+			$r = str_replace(' => ', '=>', $r);
+			
+			$posEndAttr = strpos($r, ']', 2);
+			$attrList = substr($r, 2, $posEndAttr);
+			$r = substr($r, 0, 2) . str_replace(', ', ',', $attrList) . substr($r, $posEndAttr + 2);
+		}
+		return $rules;
+	}
+	
 }

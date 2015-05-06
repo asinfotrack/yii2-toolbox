@@ -15,9 +15,11 @@ echo "<?php\n";
 ?>
 namespace <?= StringHelper::dirname(ltrim($generator->queryClass, '\\')) ?>;
 
-use yii\db\ActiveQuery;
-
-class <?= $queryClass ?> extends ActiveQuery
+/**
+ * Query class for <?= $generator->modelClass ?>-model
+ * @see <?= '\\' . $generator->ns . '\\' . $generator->modelClass . "\n" ?>
+ */
+class <?= $queryClass ?> extends \yii\db\ActiveQuery
 {
 
 	
