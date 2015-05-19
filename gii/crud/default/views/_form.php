@@ -36,7 +36,7 @@ use yii\widgets\ActiveForm;
 } ?>
 
 		<div class="form-group">
-			<?= "<?= " ?>Html::submitButton(Yii::t('sahli/common', $model->isNewRecord ? 'Create' : 'Save'), [
+			<?= "<?= " ?>Html::submitButton(Yii::t('yii', $model->isNewRecord ? 'Create' : 'Save'), [
 				'class'=>$model->isNewRecord ? 'btn btn-success' : 'btn btn-primary'
 			]); ?>
 		</div>
