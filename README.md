@@ -44,8 +44,16 @@ public function actionPdf()
 }
 ```
 
+###### User
+Extends `\yii\web\User` with the ability to check multiple rights at once.
+
+
 
 ### Widgets
+
+###### Button
+The button-widget extends the one provided by yii2. It adds functionality to specify an icon.
+The Icons depend on font-awesome and hence require the yii2-extension `rmrevin/yii2-fontawesome`
 
 ###### Panel
 Renders a Bootstrap-Panel. You can either set its body via attribute or between `begin()` and `end()`.
@@ -65,9 +73,15 @@ Exemplary usage:
 <?php Penel::end(); ?>
 ```
 
-###### Button
-The button-widget extends the one provided by yii2. It adds functionality to specify an icon.
-The Icons depend on font-awesome and hence require the yii2-extension `rmrevin/yii2-fontawesome`
+###### Grid functionality
+The column types provided extend the functionality of the basic `\yii\grid\DataColumn`. The
+class is `AdvancedDataColumn`. It has functionality to align text, set the column with with either
+absolute or percent values etc.
+
+Additionally there are three further column types:
+* `BooleanColumn` optimized for rendering boolean values
+*  `IdColumn` optimized for rendering id values eith with or without code-tags
+* `LinkColumn` renders links (which can be generated using a closure)
 
 
 ### Helpers
@@ -80,11 +94,12 @@ Provides functionality to fetch the most important server vars and to check if c
 extensions are loaded
 
 ###### Timestamp
-This helper is responsible for common tasks associated with UNIX-Timestamps
+This helper is responsible for common tasks associated with UNIX-Timestamps. It also has a
+function to parse dates into timestamps (extracted functionality of the yii date validator)
+
 
 
 ### Gii-Generators
-
 The provided Gii-Generators fix general formatting issues in the default code-templates (eg
 spaces instead of tabs, etc.).
 
