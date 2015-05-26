@@ -50,7 +50,7 @@ class ArchiveQueryBehavior extends \yii\base\Behavior
 	 * Named scope to fetch only unarchived records
 	 * @return \yii\db\ActiveQuery
 	 */
-	public function archived()
+	public function unarchived()
 	{
 		return $this->isArchived(false);
 	}

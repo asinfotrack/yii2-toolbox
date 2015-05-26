@@ -2,6 +2,7 @@
 namespace asinfotrack\yii2\toolbox\behaviors;
 
 use yii\base\InvalidConfigException;
+use yii\db\ActiveRecord;
 
 /**
  * The ArchiveBehavior adds the possibility to archive and unarchive records. This
@@ -52,19 +53,19 @@ class ArchiveBehavior extends \yii\base\Behavior
 	
 	/**
 	 * (non-PHPdoc)
-	 * @see \yii\base\Object::init()
+	 * @see \yii\base\Behavior::attach()
 	 */
-	public function init()
+	public function attach($owner)
 	{
-		parent::init();
-		
-		//assert owner is of type ActiveRecord and has the specified column
-		if (!($this->owner instanceof \yii\db\ActiveRecord)) {
-			throw new InvalidConfigException('The ArchiveBehavior only supports ActiveRecord-models');
+		//assert owner extends class ActiveRecord
+		if (!($owner instanceof ActiveRecord)) {
+			throw new InvalidConfigException('ArchiveBehavior can only be applied to classes extending \yii\db\ActiveRecord');
 		}
-		if ($this->owner->tableSchema->getColumn($this->archiveAttribute) === null) {
-			throw new InvalidConfigException(sprintf('The table %s does not contain a column named %s', $this->owner->tableName(), $this->archiveAttribute));
+		if ($owner->tableSchema->getColumn($this->archiveAttribute) === null) {
+			throw new InvalidConfigException(sprintf('The table %s does not contain a column named %s', $owner->tableName(), $this->archiveAttribute));
 		}
+	
+		parent::attach($owner);
 	}
 	
 	/**
