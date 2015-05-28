@@ -7,7 +7,6 @@ use yii\gii\CodeFile;
 class Generator extends \yii\gii\generators\model\Generator
 {
 
-	public $queryClass;
 	public $iconName;
 
 	/**
@@ -21,8 +20,6 @@ class Generator extends \yii\gii\generators\model\Generator
 	public function rules()
 	{
 		return array_merge(parent::rules(), [
-			[['queryClass'], 'required'],
-			[['queryClass'], 'match', 'pattern' => '/^[\w\\\\]+$/', 'message' => 'Only word characters and backslashes are allowed.'],
 			[['iconName'], 'match', 'pattern' => '/^[\w-]+$/', 'message' => 'Only word characters and \'-\' are allowed.'],
 		]);
 	}
@@ -30,7 +27,6 @@ class Generator extends \yii\gii\generators\model\Generator
 	public function attributeLabels()
 	{
 		return array_merge(parent::attributeLabels(), [
-			'queryClass'=>'Query Class',
 			'iconName'=>'Font-Awesome icon-name',
 		]);
 	}
@@ -38,22 +34,7 @@ class Generator extends \yii\gii\generators\model\Generator
 	public function hints()
 	{
 		return array_merge(parent::hints(), [
-			'queryClass'=>'This is the query class of the new ActiveRecord class. It should be a fully qualified namespaced class name.',
 			'iconName' => 'Name of the font-awesome icon (without "fa-")',
-		]);
-	}
-	
-	public function requiredTemplates()
-	{
-		return array_merge(parent::requiredTemplates(), ['query.php']);
-	}
-	
-	public function generate()
-	{
-		$queryFile = Yii::getAlias('@' . str_replace('\\', '/', ltrim($this->queryClass, '\\') . '.php'));
-		
-		return array_merge(parent::generate(), [
-			new CodeFile($queryFile, $this->render('query.php')),
 		]);
 	}
 	

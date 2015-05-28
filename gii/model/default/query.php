@@ -13,13 +13,13 @@ $queryClass = StringHelper::basename($generator->queryClass);
 
 echo "<?php\n";
 ?>
-namespace <?= StringHelper::dirname(ltrim($generator->queryClass, '\\')) ?>;
+namespace <?= $generator->queryNs ?>;
 
 /**
  * Query class for <?= $generator->modelClass ?>-model
  * @see <?= '\\' . $generator->ns . '\\' . $generator->modelClass . "\n" ?>
  */
-class <?= $queryClass ?> extends \yii\db\ActiveQuery
+class <?= $queryClass ?> extends <?= '\\' . $generator->queryBaseClass . "\n" ?>
 {
 
 	

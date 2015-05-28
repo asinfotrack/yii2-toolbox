@@ -24,7 +24,7 @@ namespace <?= $generator->ns ?>;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
-use <?= $generator->queryClass ?>;
+use <?= $generator->queryNs . '\\' . $generator->queryClass ?>;
 
 /**
  * This is the model class for table "<?= $tableName ?>".
@@ -99,6 +99,7 @@ class <?= $className ?> extends <?= '\\' . ltrim($generator->baseClass, '\\') . 
 <?php endforeach; ?>
 		];
 	}
+<?php if ($generator->generateQuery): ?>
 
 	/**
 	 * Returns an instance of the query-type for this model
@@ -108,7 +109,7 @@ class <?= $className ?> extends <?= '\\' . ltrim($generator->baseClass, '\\') . 
 	{
 		return new <?= $queryClass ?>(get_called_class());
 	}
-	
+<?php endif; ?>
 <?php foreach ($relations as $name => $relation): ?>
 
 	/**
