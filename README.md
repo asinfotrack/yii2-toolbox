@@ -45,7 +45,8 @@ public function actionPdf()
 ```
 
 ###### User
-Extends `\yii\web\User` with the ability to check multiple rights at once.
+Extends `\yii\web\User` with the ability to check multiple rights at once (canAll, 
+canAny, canOne).
 
 
 
@@ -73,7 +74,7 @@ Exemplary usage:
 <?php Penel::end(); ?>
 ```
 
-###### Grid functionality
+###### Grid column-types
 The column types provided extend the functionality of the basic `\yii\grid\DataColumn`. The
 class is `AdvancedDataColumn`. It has functionality to align text, set the column with with either
 absolute or percent values etc.
@@ -97,6 +98,42 @@ extensions are loaded
 This helper is responsible for common tasks associated with UNIX-Timestamps. It also has a
 function to parse dates into timestamps (extracted functionality of the yii date validator)
 
+###### Url
+This helper extends the basic functionality of the Yii2-Url-helper. It provides functionality
+to retrieve information about the currently requested url, such as TLD, subdomains, etc.
+
+
+### Behaviors
+
+###### ArchiveBehavior / ArchiveQueryBehavior
+Enables a model to be archived or not. This is similiar to a soft-delete but with the idea of not
+deleting a record but archive it instead.
+The behavior is fully configurable and there is also a behavior for the corresponding query-class.
+
+
+
+### Validators
+
+###### SelectiveRequiredValidator
+Validator to require a certain amount of fields out of a list to be required. To use the validator
+simply specify the selection of attributes and set how many of it are required:
+
+```php
+public function rules()
+{
+    return [
+        // ...
+        [['phonePrivate','phoneWork','mobile'], SelectiveRequiredValidator::className(), 'errorAttribute'=>'phonePrivate'],
+        // ...
+    ];
+}
+```
+
+### Exceptions
+
+###### ExpiredHttpException
+Throws code 410 marking a link as expired. This is helpful if for example a meeting is over or
+a record was archived.
 
 
 ### Gii-Generators

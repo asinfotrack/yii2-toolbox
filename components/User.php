@@ -88,7 +88,7 @@ class User extends \yii\web\User
 	 * when `$params = []`.
 	 * @return true if the user has exactly one of the provided permissions
 	 */	
-	public function canAny($permissionNames, $params=[], $allowCaching=true)
+	public function canOne($permissionNames, $params=[], $allowCaching=true)
 	{
 		$foundOne = false;
 		foreach ($permissionNames as $p) {
