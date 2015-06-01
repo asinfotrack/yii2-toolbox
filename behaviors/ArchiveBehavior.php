@@ -47,7 +47,7 @@ class ArchiveBehavior extends \yii\base\Behavior
 	public function events()
 	{
 		return [
-			ActiveRecord::EVENT_BEFORE_INSERT=>'beforeInsert',
+			ActiveRecord::EVENT_BEFORE_INSERT=>'onBeforeInsert',
 		];
 	}
 	
@@ -72,7 +72,7 @@ class ArchiveBehavior extends \yii\base\Behavior
 	 * This method is called before a record is inserted. It sets the column to
 	 * the default value if there is one specified
 	 */
-	protected function beforeInsert()
+	public function onBeforeInsert()
 	{
 		if ($this->defaultArchiveValue === null) return;
 		$this->owner->{$this->archiveAttribute} = $this->defaultArchiveValue;
