@@ -135,6 +135,11 @@ public function rules()
 }
 ```
 
+### Console
+
+###### AdvancedMigration
+Has additional functionality simplifying repeating tasks while creating migrations.
+
 ### Exceptions
 
 ###### ExpiredHttpException
