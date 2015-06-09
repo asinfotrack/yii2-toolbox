@@ -87,7 +87,7 @@ Additionally there are three further column types:
 
 ### Helpers
 
-###### Color
+###### ColorHelper
 Makes working with HEX- or RGB-colors easy! It can translate between the two formats,
 lighten or darken colors as well as creating steps between two colors. You can also
 use it to get a colors luminance or validate color-values.
@@ -96,7 +96,7 @@ Short HEX-Formats are supported automatically.
 ###### Html
 Extends the Html-helper of Yii2 with additional functionality
 
-###### Migration
+###### MigrationHelper
 Helper for common tasks concerning migrations (eg checking if a migration was applied, etc).
 
 ###### ServerConfig
