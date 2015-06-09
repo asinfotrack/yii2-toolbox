@@ -1,5 +1,5 @@
 <?php
-namespace asinfotrack\yii2\toolbox\console\migrations;
+namespace asinfotrack\yii2\toolbox\console;
 
 use yii\db\Schema;
 
@@ -11,7 +11,7 @@ use yii\db\Schema;
  * @link http://www.asinfotrack.ch
  * @license MIT
  */
-abstract class AdvancedMigration extends \yii\db\Migration
+abstract class Migration extends \yii\db\Migration
 {
 	
 	/**

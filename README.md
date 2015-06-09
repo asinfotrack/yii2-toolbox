@@ -96,6 +96,9 @@ Short HEX-Formats are supported automatically.
 ###### Html
 Extends the Html-helper of Yii2 with additional functionality
 
+###### Migration
+Helper for common tasks concerning migrations (eg checking if a migration was applied, etc).
+
 ###### ServerConfig
 Provides functionality to fetch the most important server vars and to check if certain
 extensions are loaded
@@ -137,7 +140,7 @@ public function rules()
 
 ### Console
 
-###### AdvancedMigration
+###### Migration
 Has additional functionality simplifying repeating tasks while creating migrations.
 
 ### Exceptions
