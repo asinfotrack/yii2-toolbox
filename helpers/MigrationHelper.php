@@ -1,6 +1,7 @@
 <?php
 namespace asinfotrack\yii2\toolbox\helpers;
 
+use Yii;
 use yii\db\Query;
 use yii\base\InvalidConfigException;
 
