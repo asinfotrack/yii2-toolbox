@@ -45,7 +45,7 @@ class MigrationHelper
 		if (static::$MIGRATION_CACHE !== null) return true;
 		
 		//check if there is a connection
-		if (!$this->hasDbConnection($dbCon) || Yii::$app->db->schema->getTableSchema('{{%migration}}') === null) {
+		if (!static::hasDbConnection() || Yii::$app->db->schema->getTableSchema('{{%migration}}') === null) {
 			return false;
 		}
 		
