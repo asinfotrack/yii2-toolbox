@@ -68,7 +68,6 @@ class MigrationHelper
 	/**
 	 * Returns true if the db-connection is configured and established
 	 * 
-	 * @param string $dbCon name of db connection (defaults to 'db')
 	 * @return boolean true if connected
 	 */
 	protected static function hasDbConnection()
