@@ -63,8 +63,6 @@ abstract class Migration extends \yii\db\Migration
 		$fkCreatedBy = str_replace('`', '', sprintf($str, $tableNameThis, $tableNameUser, 'created'));
 		$fkUpdatedBy = str_replace('`', '', sprintf($str, $tableNameThis, $tableNameUser, 'updated'));
 		
-		die($fkCreatedBy);
-		
 		//create the foreign keys
 		$this->addForeignKey($fkCreatedBy, $table, $createdByField, $userTableName, $userIdField, $createdOnDelete, 'CASCADE');
 		$this->addForeignKey($fkUpdatedBy, $table, $updatedByField, $userTableName, $userIdField, $updatedOnDelete, 'CASCADE');
