@@ -2,10 +2,8 @@
 namespace asinfotrack\yii2\toolbox\helpers;
 
 use Yii;
-use yii\base\InvalidConfigException;
 use yii\db\Query;
-use yii\db\Connection;
-use yii\di\Instance;
+use yii\base\InvalidConfigException;
 
 /**
  * Helper class to work with migrations
@@ -23,14 +21,15 @@ class MigrationHelper
 	 * Checks whether or not a migration was applied or not
 	 * 
 	 * @param string $migrationName name of the migration to look for
+	 * @param string $dbCon name of db connection (defaults to 'db')
+	 * @param string $migrationTable name of the migration table (defaults to 'migration')
 	 * @return boolean true if migration is applied or false if not
 	 * @throws InvalidConfigException if there is no db-connection or the migration table does not exist
 	 */
 	public static function hasMigration($migrationName)
 	{		
 		if (!static::cacheMigrations()) {
-			$msg = Yii::t('app', 'There is no valid db-connection or the migration table does not exist');
-			throw new InvalidConfigException($msg);
+			throw new InvalidConfigException(Yii::t('app', 'There is no valid db-connection or the migration table does not exist'));
 		}
 		return isset(static::$MIGRATION_CACHE[$migrationName]);
 	}
@@ -70,11 +69,11 @@ class MigrationHelper
 	/**
 	 * Returns true if the db-connection is configured and established
 	 *
-	 * @return boolean true if properly configured
+	 * @return boolean true if connected
 	 */
 	protected static function hasDbConnection()
 	{
-		return Instance::ensure('db', Connection::className());
+		return isset(Yii::$app->db);
 	}
 	
 }
