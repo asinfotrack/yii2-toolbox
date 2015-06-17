@@ -99,6 +99,9 @@ Extends the Html-helper of Yii2 with additional functionality
 ###### MigrationHelper
 Helper for common tasks concerning migrations (eg checking if a migration was applied, etc).
 
+###### PrimaryKey
+Functionalities to work with PKs of `\yii\db\ActiveRecord` and to convert them into JSON
+
 ###### ServerConfig
 Provides functionality to fetch the most important server vars and to check if certain
 extensions are loaded
