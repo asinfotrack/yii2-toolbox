@@ -1,6 +1,8 @@
 <?php
 namespace asinfotrack\yii2\toolbox\helpers;
 
+use Yii;
+
 /**
  * This helper extends the basic functionality of the Yii2-Url-helper.
  * It provides functionality to retrieve information about the currently
@@ -22,10 +24,12 @@ class Url extends \yii\helpers\Url
 	 * Caches the data for faster acces in subsequent calls
 	 */
 	protected static function cacheReqData()
-	{		
+	{
 		//fetch relevant vars
 		$host = rtrim(isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'], '/');
 		$hostParts = array_reverse(explode('.', $host));
+		$pathParts = explode('/', Yii::$app->request->pathInfo);
+
 		static::$RCACHE = [
 			'protocol'=>Yii::$app->request->isSecureConnection ? 'https' : 'http',
 			'host'=>$host,
@@ -33,6 +37,8 @@ class Url extends \yii\helpers\Url
 			'queryString'=>Yii::$app->request->queryString,
 			'hostParts'=>$hostParts,
 			'numParts'=>count($hostParts),
+			'pathParts'=>$pathParts,
+			'numPathParts'=>count($pathParts),
 		];
 	}
 	
@@ -117,5 +123,7 @@ class Url extends \yii\helpers\Url
 			return self::$RCACHE['hostParts'][2 + $index];
 		}
 	}
+
+	//TODO: implement url-path comparison
 	
 }
