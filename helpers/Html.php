@@ -1,6 +1,7 @@
 <?php
 namespace asinfotrack\yii2\toolbox\helpers;
 
+use Yii;
 use yii\base\InvalidParamException;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
@@ -93,6 +94,7 @@ class Html extends \yii\helpers\Html
 	 * @param string $listTagName tag name for the list (defaults to <code>ul</code>)
 	 * @throws InvalidParamException if an item is specified in array-form and index \'content\'
 	 * is not set
+	 * @return string the code of the list group
 	 */
 	public function bsListGroup($items, $listOptions=[], $defaultItemOptions=[], $listTagName='ul')
 	{		

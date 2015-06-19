@@ -1,8 +1,6 @@
 <?php
 namespace asinfotrack\yii2\toolbox\helpers;
 
-use yii\base\InvalidParamException;
-
 /**
  * Helper class to get information about server-configuration and loaded
  * PHP-Modules.

@@ -16,12 +16,12 @@ class Url extends \yii\helpers\Url
 {
 	
 	/**
-	 * @var array internal cache for preparsed request data
+	 * @var array internal cache for pre parsed request data
 	 */
 	protected static $RCACHE;
 	
 	/**
-	 * Caches the data for faster acces in subsequent calls
+	 * Caches the data for faster access in subsequent calls
 	 */
 	protected static function cacheReqData()
 	{
@@ -124,6 +124,33 @@ class Url extends \yii\helpers\Url
 		}
 	}
 
-	//TODO: implement url-path comparison
+	/**
+	 * Checks if an url is currently active considering the whole url
+	 * and also the query parts.
+	 *
+	 * @param string $url the url/route to compare to the one currently active.
+	 * This param can be in the same formats as you would pass it to
+	 * @return bool true if the link is active
+	 */
+	public static function isUrlActive($url)
+	{
+		$url = static::to($url);
+		$current = static::current();
+
+		return $current == $url;
+	}
+
+	/**
+	 * Trims the slashes on an url. Whether or not the url is absolute or relative
+	 * will be considered during this so that leading slashes on relative urls won't
+	 * be trimmed.
+	 *
+	 * @param string $url the url to trim
+	 * @return string the trimmed url
+	 */
+	public static function trimSlashes($url)
+	{
+		return static::isRelative($url) ? rtrim($url, '/') : trim($url, '/');
+	}
 	
 }

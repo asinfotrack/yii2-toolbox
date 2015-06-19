@@ -63,8 +63,8 @@ class Timestamp
 	 * 
 	 * @param integer $stamp the timestamp to check
 	 * @param integer $noTimeHour the hour considered as no time part
-	 * @param number $noTimeMinute the minute considered as no time part
-	 * @param number $noTimeSecond the second considered as no time part
+	 * @param integer $noTimeMinute the minute considered as no time part
+	 * @param integer $noTimeSecond the second considered as no time part
 	 * @return boolean true if a time is set differing from the one defined in params 2 to 4
 	 * @throws InvalidParamException if values are illegal
 	 */
@@ -119,7 +119,7 @@ class Timestamp
      * 
 	 * @param string $value string representing date
      * @param string $format the expected date format
-	 * @param unknown $locale
+	 * @param string $locale
      * @param string $timeZone the timezone to use for parsing date and time values.
      * This can be any value that may be passed to [date_default_timezone_set()](http://www.php.net/manual/en/function.date-default-timezone-set.php)
      * e.g. `UTC`, `Europe/Berlin` or `America/Chicago`.
@@ -131,7 +131,6 @@ class Timestamp
 	{
 		if (isset(static::$_dateFormats[$format])) {
 			$formatter = new IntlDateFormatter($locale, static::$_dateFormats[$format], IntlDateFormatter::NONE, 'UTC');
-			$hasTimeInfo = false;
 		} else {
 			// if no time was provided in the format string set time to 0 to get a simple date timestamp
 			$hasTimeInfo = (strpbrk($format, 'ahHkKmsSA') !== false);

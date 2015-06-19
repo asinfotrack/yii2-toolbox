@@ -37,7 +37,7 @@ class ColorHelper
 	}
 	
 	/**
-	 * Creates a definable amount of color steps between two colors. Optinally
+	 * Creates a definable amount of color steps between two colors. Optionally
 	 * the beginning and end colors can be included as well (default).
 	 * The output will be in the same format as $colorFrom
 	 * 
@@ -150,8 +150,8 @@ class ColorHelper
 	 * 
 	 * @param integer[] $rgbArr array containing r, g and b as integers between 0
 	 * and 255
-	 * @param string $withHash if set to true, the hex-vaue will be preceded by a hash ('#')
-	 * @param string $preferThreeChars if set to true the three char representation is returned
+	 * @param boolean $withHash if set to true, the hex-value will be preceded by a hash ('#')
+	 * @param boolean $preferThreeChars if set to true the three char representation is returned
 	 * if possible
 	 * @return boolean|string hex-string or false if the provided rgb-array was invalid
 	 */
@@ -302,7 +302,7 @@ class ColorHelper
 	
 	/**
 	 * Takes either an rgb-array or a hex-string as its input and validates
-	 * it andreturns an rgb-array
+	 * it and returns an rgb-array
 	 * 
 	 * @param string|integer[] $color either hex-string or rgb-array
 	 * @return boolean|integer[] either an rgb-array or false if color is invalid

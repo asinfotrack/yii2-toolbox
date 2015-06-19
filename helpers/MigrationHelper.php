@@ -21,8 +21,6 @@ class MigrationHelper
 	 * Checks whether or not a migration was applied or not
 	 * 
 	 * @param string $migrationName name of the migration to look for
-	 * @param string $dbCon name of db connection (defaults to 'db')
-	 * @param string $migrationTable name of the migration table (defaults to 'migration')
 	 * @return boolean true if migration is applied or false if not
 	 * @throws InvalidConfigException if there is no db-connection or the migration table does not exist
 	 */
