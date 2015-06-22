@@ -41,8 +41,7 @@ class ArchiveBehavior extends \yii\base\Behavior
 	public $unarchivedValue = 0;
 	
 	/**
-	 * (non-PHPdoc)
-	 * @see \yii\base\Behavior::events()
+	 * @inheritdoc
 	 */
 	public function events()
 	{
@@ -52,8 +51,8 @@ class ArchiveBehavior extends \yii\base\Behavior
 	}
 	
 	/**
-	 * (non-PHPdoc)
-	 * @see \yii\base\Behavior::attach()
+	 * @inheritdoc
+	 * @param \yii\db\ActiveRecord $owner
 	 */
 	public function attach($owner)
 	{

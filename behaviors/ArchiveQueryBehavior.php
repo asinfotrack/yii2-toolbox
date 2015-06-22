@@ -33,12 +33,13 @@ class ArchiveQueryBehavior extends \yii\base\Behavior
 		}
 		
 		$value = $isArchived ? $this->modelInstance->archivedValue : $this->modelInstance->unarchivedValue;
-		$this->andWhere([$model->archiveColumn=>$value]);
+		$this->andWhere([$this->modelInstance->archiveAttribute=>$value]);
 		return $this->owner;
 	}
 	
 	/**
 	 * Named scope to fetch only archived records
+	 *
 	 * @return \yii\db\ActiveQuery
 	 */
 	public function archived()
@@ -48,6 +49,7 @@ class ArchiveQueryBehavior extends \yii\base\Behavior
 	
 	/**
 	 * Named scope to fetch only unarchived records
+	 *
 	 * @return \yii\db\ActiveQuery
 	 */
 	public function unarchived()
