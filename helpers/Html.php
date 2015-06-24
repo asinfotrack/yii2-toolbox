@@ -142,5 +142,41 @@ class Html extends \yii\helpers\Html
 		static::addCssClass($listOptions, 'list-group');
 		return static::tag($listTagName, $ret, $listOptions);
 	}
+
+	/**
+	 * This method wraps a search term in a definable tag (defaults to strong) and enables
+	 * highlighting of parts of a string. This is especially useful for highlighting search-
+	 * terms in grid-view.
+	 *
+	 * @param string $haystack the string containing the whole text
+	 * @param string $term the needle to highlight
+	 * @param string $tagName name of the tag the highlighted parts will be wrapped in
+	 * @param array $tagOptions options for the highlight-tag
+	 * @return string the highlighted string
+	 */
+	public static function highlightTerm($haystack, $term=null, $tagName='strong', $tagOptions=[])
+	{
+		//check if nothing to highlight
+		if ($term === null) return $haystack;
+
+		//set vars
+		$pos = 0;
+		$startTag = Html::beginTag($tagName, $tagOptions);
+		$endTag = Html::endTag($tagName);
+		$length = strlen($term);
+
+		$pos = stripos($haystack, $term, $pos);
+		while ($pos !== false) {
+			$haystack = substr($haystack, 0, $pos)
+					  . $startTag
+					  . substr($haystack, $pos, $length)
+					  . $endTag
+					  . substr($haystack, $pos + $length);
+
+			$pos = stripos($haystack, $term, $pos + strlen($startTag) + strlen($endTag));
+		}
+
+		return $haystack;
+	}
 	
 }
