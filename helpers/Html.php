@@ -165,6 +165,7 @@ class Html extends \yii\helpers\Html
 		$endTag = Html::endTag($tagName);
 		$length = strlen($term);
 
+		//highlight the term-occurrences
 		$pos = stripos($haystack, $term, $pos);
 		while ($pos !== false) {
 			$haystack = substr($haystack, 0, $pos)
