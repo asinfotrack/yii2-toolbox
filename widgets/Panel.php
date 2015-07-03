@@ -12,7 +12,7 @@ use yii\helpers\Html;
  * <code>
  * 		<?php Panel::begin(['heading'=>Html::tag('h3', 'Welcome!')]); ?>
  * 			<p>Hello world! This is a simple panel with a heading.</p>
- * 		<?php Penel::end(); ?>
+ * 		<?php Panel::end(); ?>
  * </code>
  * 
  * @author Pascal Mueller, AS infotrack AG
