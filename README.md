@@ -74,6 +74,10 @@ Exemplary usage:
 <?php Penel::end(); ?>
 ```
 
+###### StatsBoxes
+Renders a variable amount of stats boxes with title, icon and a value. This is ideal for a detail view of
+a model.
+
 ###### Grid column-types
 The column types provided extend the functionality of the basic `\yii\grid\DataColumn`. The
 class is `AdvancedDataColumn`. It has functionality to align text, set the column with with either

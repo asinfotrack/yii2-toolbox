@@ -2,7 +2,6 @@
 namespace asinfotrack\yii2\toolbox\widgets;
 
 use yii\helpers\Html;
-use yii\base\InvalidConfigException;
 
 /**
  * This Widget renders a bootstrap-panel. Use it with its begin() and
@@ -87,7 +86,7 @@ class Panel extends \yii\base\Widget
 	{
 		parent::init();
 		
-		//preconfigure panel options
+		//pre configure panel options
 		$this->options['id'] = $this->getId();
 		Html::addCssClass($this->options, 'panel');
 		Html::addCssClass($this->options, empty($this->type) ? self::PANEL_DEFAULT : $this->type);
