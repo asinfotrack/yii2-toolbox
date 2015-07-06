@@ -243,6 +243,7 @@ class ColorHelper
 	 * validate the input so make sure this happened before
 	 * @param integer[] $rgbArr array containing rgb-values
 	 * @param float|float[] $percent
+	 * @return integer[] modified color as rgb-array
 	 */
 	protected static function modifyColor($rgbArr, $percent)
 	{
