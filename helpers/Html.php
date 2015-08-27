@@ -200,13 +200,25 @@ class Html extends \yii\helpers\Html
 		//register asset
 		EmailDisguiseAsset::register(Yii::$app->getView());
 
+		//get email-address and disguise everything
+		if ($email === null) {
+			$hiddenTag = Html::tag('span', Yii::$app->security->generateRandomString(8), ['style'=>'display: none']);
+
+			$address = $text;
+			$clear = str_replace('@', $hiddenTag . Html::tag('span', '@') . $hiddenTag, $address);
+			$clear = str_replace('.', $hiddenTag . Html::tag('span', '.') . $hiddenTag, $clear);
+		} else {
+			$address = $email;
+			$clear = $text;
+		}
+		$href = strrev('mailto:' . str_replace('@', '[at]', $address));
+
 		//prepare options
-		$address = $email === null ? $text : $email;
-		$options['href'] = strrev('mailto:' . str_replace('@', '[at]', $address));
+		$options['href'] = $href;
 		static::addCssClass($options, 'email-disguised');
 
 		//return tag
-		return static::tag('a', $text, $options);
+		return static::tag('a', $clear, $options);
 	}
 	
 }
