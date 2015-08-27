@@ -5,6 +5,7 @@ use Yii;
 use yii\base\InvalidParamException;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
+use asinfotrack\yii2\toolbox\assets\EmailDisguiseAsset;
 
 /**
  * This helper extends the basic functionality of the Yii2-Html-helper.
@@ -178,6 +179,34 @@ class Html extends \yii\helpers\Html
 		}
 
 		return $haystack;
+	}
+
+	/**
+	 * Generates a mailto hyperlink and disguises the email-address. The address is translated when
+	 * link gets clicked.
+	 * @param string $text link body. It will NOT be HTML-encoded. Therefore you can pass in HTML code
+	 * such as an image tag. If this is coming from end users, you should consider [[encode()]]
+	 * it to prevent XSS attacks.
+	 * @param string $email email address. If this is null, the first parameter (link body) will be treated
+	 * as the email address and used.
+	 * @param array $options the tag options in terms of name-value pairs. These will be rendered as
+	 * the attributes of the resulting tag. The values will be HTML-encoded using [[encode()]].
+	 * If a value is null, the corresponding attribute will not be rendered.
+	 * See [[renderTagAttributes()]] for details on how attributes are being rendered.
+	 * @return string the generated mailto link
+	 */
+	public static function mailtoDisguised($text, $email=null, $options=[])
+	{
+		//register asset
+		EmailDisguiseAsset::register(Yii::$app->getView());
+
+		//prepare options
+		$address = $email === null ? $text : $email;
+		$options['href'] = 'mailto:' . strrev(str_replace('@', '[at]', $address));
+		static::addCssClass($options, 'email-disguised');
+
+		//return tag
+		return static::tag('a', $text, $options);
 	}
 	
 }

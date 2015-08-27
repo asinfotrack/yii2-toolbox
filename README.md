@@ -98,7 +98,8 @@ use it to get a colors luminance or validate color-values.
 Short HEX-Formats are supported automatically.
 
 ###### Html
-Extends the Html-helper of Yii2 with additional functionality
+Extends the Html-helper of Yii2 with additional functionality like disguising email-addresses,
+bootstrap-elements, text-highlighting, etc.
 
 ###### MigrationHelper
 Helper for common tasks concerning migrations (eg checking if a migration was applied, etc).
