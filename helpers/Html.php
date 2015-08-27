@@ -4,7 +4,7 @@ namespace asinfotrack\yii2\toolbox\helpers;
 use Yii;
 use yii\base\InvalidParamException;
 use yii\helpers\ArrayHelper;
-use yii\helpers\Url;
+use yii\helpers\Url as UrlOriginal;
 use asinfotrack\yii2\toolbox\assets\EmailDisguiseAsset;
 
 /**
@@ -119,7 +119,7 @@ class Html extends \yii\helpers\Html
 				//prepare url if necessary
 				$isLink = isset($i['url']);
 				if ($isLink) {
-					$itemOptions['href'] = is_array($i['url']) ? Url::to($i['url']) : $i['url'];
+					$itemOptions['href'] = is_array($i['url']) ? UrlOriginal::to($i['url']) : $i['url'];
 				}
 				//bs type
 				if (isset($i['type'])) {
@@ -202,7 +202,7 @@ class Html extends \yii\helpers\Html
 
 		//prepare options
 		$address = $email === null ? $text : $email;
-		$options['href'] = 'mailto:' . strrev(str_replace('@', '[at]', $address));
+		$options['href'] = strrev('mailto:' . str_replace('@', '[at]', $address));
 		static::addCssClass($options, 'email-disguised');
 
 		//return tag

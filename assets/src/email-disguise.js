@@ -8,18 +8,17 @@ $(document).ready(function() {
 
         //fetch initial vars
         var href = $(this).attr('href');
-        var addressDisguised = href.substr(7);
 
         //reverse address
         var chars = [];
-        for (var i=addressDisguised.length - 1; i>=0; i--) {
-            chars.push(addressDisguised.substr(i, 1));
+        for (var i=href.length - 1; i>=0; i--) {
+            chars.push(href.substr(i, 1));
         }
         var address = chars.join('').replace('[at]', '@');
 
         //mark event as handled and open mailto-link
         event.preventDefault();
-        window.location.href = 'mailto:' + address;
+        window.location.href = address;
 
     });
 
