@@ -7,6 +7,8 @@ namespace asinfotrack\yii2\toolbox\behaviors;
  * with the ArchiveBehavior and filtering the models by their archived-
  * state.
  * 
+ * @property \yii\db\ActiveQuery $owner
+ * 
  * @author Pascal Mueller, AS infotrack AG
  * @link http://www.asinfotrack.ch
  * @license MIT
@@ -26,35 +28,15 @@ class ArchiveQueryBehavior extends \yii\base\Behavior
 	 * returned. other wise only unarchived records.
 	 * @return \yii\db\ActiveQuery
 	 */
-	public function isArchived($isArchived)
+	public function archived($isArchived)
 	{
 		if ($this->modelInstance === null) {
 			$this->modelInstance = new $this->owner->modelClass();
 		}
 		
 		$value = $isArchived ? $this->modelInstance->archivedValue : $this->modelInstance->unarchivedValue;
-		$this->andWhere([$this->modelInstance->archiveAttribute=>$value]);
+		$this->owner->andWhere([$this->modelInstance->archiveAttribute=>$value]);
 		return $this->owner;
-	}
-	
-	/**
-	 * Named scope to fetch only archived records
-	 *
-	 * @return \yii\db\ActiveQuery
-	 */
-	public function archived()
-	{
-		return $this->isArchived(true);
-	}
-	
-	/**
-	 * Named scope to fetch only unarchived records
-	 *
-	 * @return \yii\db\ActiveQuery
-	 */
-	public function unarchived()
-	{
-		return $this->isArchived(false);
 	}
 	
 }
