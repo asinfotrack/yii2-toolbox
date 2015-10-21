@@ -23,10 +23,8 @@ class SimpleNav extends \yii\bootstrap\Widget
 	 * - label: string, required, the nav item label.
 	 * - url: optional, the item's URL. Defaults to "#".
 	 * - visible: boolean, optional, whether this menu item is visible. Defaults to true.
-	 * - linkOptions: array, optional, the HTML attributes of the item's link.
-	 * - options: array, optional, the HTML attributes of the item container (LI).
+	 * - options: array, optional, the HTML attributes of the item container (li).
 	 * - active: boolean, optional, whether the item should be on active state or not.
-	 * - dropDownOptions: array, optional, the HTML options that will passed to the [[Dropdown]] widget.
 	 * - items: array|string, optional, the configuration array for creating a [[Dropdown]] widget,
 	 *   or a string representing the dropdown menu. Note that Bootstrap does not support sub-dropdown menus.
 	 *
@@ -94,6 +92,9 @@ class SimpleNav extends \yii\bootstrap\Widget
 	 */
 	protected function renderItem($item, $depth=0)
 	{
+		//visibility
+		if (isset($item['visible']) && $item['visible'] === false) return '';
+
 		//prepare options
 		$options = isset($item['options']) ? $item['options'] : [];
 		Html::addCssClass($options, 'depth-' . $depth);
