@@ -44,9 +44,14 @@ class SimpleNav extends \yii\bootstrap\Widget
 	 */
 	public $entryPrefix;
 	/**
-	 * @var bool whether or not to activate parent elements
+	 * @var bool whether or not to activate items
 	 */
-	public $activateParents = true;
+	public $activateItems = true;
+	/**
+	 * @var \Closure if set, this closure will be called to determine if an item is active.
+	 * The closure should have the signature 'function ($item)' where $item is the item config array.
+	 */
+	public $isActiveCallback;
 	/**
 	 * @var string tag name to use when an item is not a link (no url present)
 	 */
@@ -171,7 +176,12 @@ class SimpleNav extends \yii\bootstrap\Widget
 	protected function isItemActive($item)
 	{
 		if (!isset($item['url'])) return false;
-		return \asinfotrack\yii2\toolbox\helpers\Url::isUrlActive($item['url']);
+
+		if (isset($this->isActiveCallback)) {
+			return call_user_func($this->isActiveCallback, $item);
+		} else {
+			return \asinfotrack\yii2\toolbox\helpers\Url::isUrlActive($item['url']);
+		}
 	}
 
 }

@@ -89,7 +89,7 @@ absolute or percent values etc.
 
 Additionally there are three further column types:
 * `BooleanColumn` optimized for rendering boolean values
-*  `IdColumn` optimized for rendering id values eith with or without code-tags
+* `IdColumn` optimized for rendering id values with or without code-tags
 * `LinkColumn` renders links (which can be generated using a closure)
 
 
