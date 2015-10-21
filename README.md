@@ -74,6 +74,10 @@ Exemplary usage:
 <?php Penel::end(); ?>
 ```
 
+###### SimpleNav
+Simple navigation widget which has the same functionality as the regular nav-widget (`\yii\bootstrap\Nav`) but 
+renders a plain and simple HTML-list which can then be further styled with css. No dropdown...just clean code!
+
 ###### StatsBoxes
 Renders a variable amount of stats boxes with title, icon and a value. This is ideal for a detail view of
 a model.
