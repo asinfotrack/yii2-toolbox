@@ -66,7 +66,7 @@ class SimpleNav extends \yii\bootstrap\Widget
 		Html::addCssClass($this->options, 'nav');
 
 		//activate parents if desired
-		if ($this->activateParents) {
+		if ($this->activateItems) {
 			foreach ($this->items as &$item) {
 				$this->activateItems($item);
 			}
