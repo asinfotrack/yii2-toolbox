@@ -56,6 +56,24 @@ canAny, canOne).
 The button-widget extends the one provided by yii2. It adds functionality to specify an icon.
 The Icons depend on font-awesome and hence require the yii2-extension `rmrevin/yii2-fontawesome`
 
+###### FlashMessages
+This widget renders flash messages automatically. The messages can be automatically retrieved 
+from yiis session-component or be provided via a custom callable.
+
+Example of simple usage rendering yiis session flashes each in its own alert-container:
+```php
+<?= FlashMessages::widget() ?>
+```
+
+Advanced usage with custom callback to provide flash messages:
+```php
+<?= FlashMessages::widget([
+    'loadFlashesCallback'=>function() {
+        return ['info'=>'Hello', 'danger'=>'World!'];
+    },
+]) ?>
+```
+
 ###### Panel
 Renders a Bootstrap-Panel. You can either set its body via attribute or between `begin()` and `end()`.
 The attributes `heading`, `body` and `footer` support setting via string or via Closure returning a string.
