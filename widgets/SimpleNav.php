@@ -42,6 +42,10 @@ class SimpleNav extends \yii\bootstrap\Widget
 	 */
 	public $entryPrefix;
 	/**
+	 * @var bool Whether or not the prefix should be rendered within the anchor-tag
+	 */
+	public $entryPrefixInsideLink = true;
+	/**
 	 * @var bool whether or not to activate items
 	 */
 	public $activateItems = true;
@@ -129,19 +133,23 @@ class SimpleNav extends \yii\bootstrap\Widget
 	protected function createEntry($item)
 	{
 		$label = $item['label'];
+		$prefix = '';
 		if ($this->entryPrefix !== null) {
 			if ($this->entryPrefix instanceof \Closure) {
 				$prefix = call_user_func($this->entryPrefix, $item);
 			} else {
 				$prefix = $this->entryPrefix;
 			}
-			$label = $prefix . $label;
 		}
 
 		if (isset($item['url'])) {
-			return Html::a($label, $item['url']);
+			if ($this->entryPrefixInsideLink) {
+				return Html::a($prefix . $label, $item['url']);
+			} else {
+				return $prefix . Html::a($label, $item['url']);
+			}
 		} else {
-			return Html::tag($this->noLinkTagName, $label);
+			return Html::tag($this->noLinkTagName, $prefix . $label);
 		}
 	}
 
