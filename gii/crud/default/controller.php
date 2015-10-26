@@ -140,7 +140,9 @@ class <?= $controllerClass ?> extends <?= '\\' . ltrim($generator->baseControlle
 	 */
 	public function actionDelete(<?= $actionParams ?>)
 	{
-		$this->findModel(<?= $actionParams ?>)->delete();
+		$model = $this->findModel(<?= $actionParams ?>);
+		$model->delete();
+
 		return $this->redirect(['index']);
 	}
 
