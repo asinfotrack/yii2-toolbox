@@ -12,7 +12,7 @@ $urlParams = $generator->generateUrlParams();
 
 echo "<?php\n";
 ?>
-use asinfotrack\yii2\toolbox\helpers\Html;
+use yii\helpers\Html;
 
 /* @var $this <?= $generator->getViewBaseClass(); ?> */
 /* @var $model <?= ltrim($generator->modelClass, '\\') ?> */

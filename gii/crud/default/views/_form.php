@@ -17,7 +17,7 @@ if (empty($safeAttributes)) {
 
 echo "<?php\n";
 ?>
-use asinfotrack\yii2\toolbox\helpers\Html;
+use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this <?= $generator->getViewBaseClass(); ?> */

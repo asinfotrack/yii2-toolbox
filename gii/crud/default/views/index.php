@@ -13,7 +13,7 @@ $nameAttribute = $generator->getNameAttribute();
 
 echo "<?php\n";
 ?>
-use asinfotrack\yii2\toolbox\helpers\Html;
+use yii\helpers\Html;
 use <?= $generator->indexWidgetType === 'grid' ? "yii\\grid\\GridView" : "yii\\widgets\\ListView" ?>;
 
 /* @var $this <?= $generator->getViewBaseClass(); ?> */
