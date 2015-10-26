@@ -33,7 +33,7 @@ class ArchiveQueryBehavior extends \yii\base\Behavior
 		}
 		
 		$value = $isArchived ? $this->modelInstance->archivedValue : $this->modelInstance->unarchivedValue;
-		$this->andWhere([$this->modelInstance->archiveAttribute=>$value]);
+		$this->owner->andWhere([$this->modelInstance->archiveAttribute=>$value]);
 		return $this->owner;
 	}
 	
