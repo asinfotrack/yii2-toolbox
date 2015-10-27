@@ -30,7 +30,7 @@ class Button extends \yii\bootstrap\Button
 		$this->registerPlugin('button');
 		
 		$icon = empty($this->icon) ? '' : FA::icon($this->icon);
-		$label = Html::tag('span', $this->encodeLabel ? Html::encode($this->label) : $this->label);
+		$label = empty($this->label) ? '' : Html::tag('span', $this->encodeLabel ? Html::encode($this->label) : $this->label);
 		
 		return Html::tag($this->tagName, $icon . $label, $this->options);
 	}
