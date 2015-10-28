@@ -100,6 +100,9 @@ renders a plain and simple HTML-list which can then be further styled with css. 
 Renders a variable amount of stats boxes with title, icon and a value. This is ideal for a detail view of
 a model.
 
+###### TabsWithMemory
+Tabs widget which remembers its active tab via javascript sessionStorage
+
 ###### Grid column-types
 The column types provided extend the functionality of the basic `\yii\grid\DataColumn`. The
 class is `AdvancedDataColumn`. It has functionality to align text, set the column with with either
@@ -148,6 +151,9 @@ to retrieve information about the currently requested url, such as TLD, subdomai
 Enables a model to be archived or not. This is similiar to a soft-delete but with the idea of not
 deleting a record but archive it instead.
 The behavior is fully configurable and there is also a behavior for the corresponding query-class.
+
+###### StateBehavior / StateBehaviorQuery
+Documentation coming soon!
 
 
 
