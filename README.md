@@ -176,6 +176,9 @@ public function rules()
 
 ### Console
 
+###### ConsoleTarget
+Log target which outputs to the console
+
 ###### Migration
 Has additional functionality simplifying repeating tasks while creating migrations.
 
