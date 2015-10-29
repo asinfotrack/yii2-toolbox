@@ -18,7 +18,7 @@ class ConsoleTarget extends \yii\log\Target
 
 	/**
 	 * @var \Closure optional closure to format a line for output. The function
-	 * needs to have the following signature: 'function ($text, $level, $category, $timestamp)'
+	 * needs to have the following signature: 'function ($logTarget, $text, $level, $category, $timestamp)'
 	 */
 	public $formatLineCallback;
 
@@ -49,7 +49,7 @@ class ConsoleTarget extends \yii\log\Target
 
 			//format line
 			if ($this->formatLineCallback != null) {
-				$line = call_user_func($this->formatLineCallback, $text, $level, $category, $timestamp);
+				$line = call_user_func($this->formatLineCallback, $this, $text, $level, $category, $timestamp);
 			} else {
 				$line = $this->formatLine($text, $level, $category, $timestamp);
 			}
@@ -59,7 +59,16 @@ class ConsoleTarget extends \yii\log\Target
 		}
 	}
 
-	protected function formatLine($text, $level, $category, $timestamp)
+	/**
+	 * Default line formatting
+	 *
+	 * @param string $text the actual log-text
+	 * @param integer $level the log level
+	 * @param string $category the log category
+	 * @param integer $timestamp the events timestamp
+	 * @return string the formatted line
+	 */
+	public function formatLine($text, $level, $category, $timestamp)
 	{
 		return sprintf(
 			"%-19s [%-7s] [%s]\n                    %s",
