@@ -152,7 +152,7 @@ Enables a model to be archived or not. This is similiar to a soft-delete but wit
 deleting a record but archive it instead.
 The behavior is fully configurable and there is also a behavior for the corresponding query-class.
 
-###### StateBehavior / StateBehaviorQuery
+###### StateBehavior / StateQueryBehavior
 Documentation coming soon!
 
 

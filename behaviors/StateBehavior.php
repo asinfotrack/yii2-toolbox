@@ -2,6 +2,7 @@
 namespace asinfotrack\yii2\toolbox\behaviors;
 
 use Yii;
+use yii\base\InvalidCallException;
 use yii\base\InvalidConfigException;
 use yii\base\InvalidParamException;
 use yii\db\ActiveRecord;
@@ -42,7 +43,6 @@ class StateBehavior extends \yii\base\Behavior
 	 * - value: the actual value which is persisted in the db (mandatory!). The value
 	 * needs to be either an integer or a string
 	 * - label: the label of the state (mandatory!)
-	 * - allowBackwardsStep: whether or not to allow stepping backwards from this
 	 * step (defaults to false)
 	 * - preconditionCallback: an optional anonymous function with the signature
 	 * 'function($model, $stateConfig)' returning a boolean value to check if the
@@ -173,6 +173,40 @@ class StateBehavior extends \yii\base\Behavior
 		$this->checkAndAdvanceState();
 	}
 
+	public function requestState($stateValue, $saveImmediately=true, $runValidation=false)
+	{
+		/* @var $owner \yii\db\ActiveRecord */
+		$owner = $this->owner;
+
+		//validate state and that it doesn't have it already
+		$this->stateExists($stateValue, true);
+		if ($this->isInState($stateValue)) {
+			$reqStateCfg = $this->getStateConfig($stateValue);
+			$msg = Yii::t('The model is already in the requested state {state}', ['state'=>$reqStateCfg['label']]);
+			throw new InvalidCallException($msg);
+		}
+
+		//get original state for falling back
+		$origState = $owner->{$this->stateAttribute};
+
+		//try advancing
+		$res = true;
+		while (!$this->isInState($stateValue, true)) {
+			if ($this->advanceOneState(false)) continue;
+
+			$res = false;
+			break;
+		}
+
+		//save or return
+		if ($res && $saveImmediately && isset($owner->dirtyAttributes[$this->stateAttribute])) {
+			return $owner->save($runValidation, [$this->stateAttribute]);
+		} else {
+			$owner->{$this->stateAttribute} = $origState;
+			return false;
+		}
+	}
+
 	/**
 	 * Advances the owners state if possible
 	 *
@@ -185,20 +219,31 @@ class StateBehavior extends \yii\base\Behavior
 		/* @var $owner \yii\db\ActiveRecord */
 		$owner = $this->owner;
 
-		while ($this->hasNextState() && $this->meetsStatePreconditions($this->getNextState())) {
-			$curCfg = $this->getStateConfig();
-			$nxtCfg = $this->getStateConfig($this->getNextState());
-
-			if (isset($curCfg['leaveStateCallback'])) call_user_func($curCfg['leaveStateCallback'], $owner, $curCfg);
-			$owner->{$this->stateAttribute} = $nxtCfg['value'];
-			if (isset($nxtCfg['enterStateCallback'])) call_user_func($nxtCfg['enterStateCallback'], $owner, $curCfg);
-
+		while ($this->advanceOneState(true)) {
 			if (!$this->allowMultipleStepAdvancing) break;
 		}
 
 		if ($saveImmediately && isset($owner->dirtyAttributes[$this->stateAttribute])) {
 			$owner->save($runValidation, [$this->stateAttribute]);
 		}
+	}
+
+	protected function advanceOneState($requiresCallback=false)
+	{
+		if (!$this->hasNextState()) return false;
+		if (!$this->meetsStatePreconditions($this->getNextState(), $requiresCallback)) return false;
+
+		/* @var $owner \yii\db\ActiveRecord */
+		$owner = $this->owner;
+
+		$curCfg = $this->getStateConfig();
+		$nxtCfg = $this->getStateConfig($this->getNextState());
+
+		if (isset($curCfg['leaveStateCallback'])) call_user_func($curCfg['leaveStateCallback'], $owner, $curCfg);
+		$owner->{$this->stateAttribute} = $nxtCfg['value'];
+		if (isset($nxtCfg['enterStateCallback'])) call_user_func($nxtCfg['enterStateCallback'], $owner, $curCfg);
+
+		return true;
 	}
 
 	/**
@@ -317,7 +362,7 @@ class StateBehavior extends \yii\base\Behavior
 	 * @return bool true if it exists
 	 * @throws InvalidParamException if it doesn't exist and exception is desired
 	 */
-	protected function stateExists($stateValue, $throwException=false)
+	public function stateExists($stateValue, $throwException=false)
 	{
 		if (isset($this->cacheConfigMap[$stateValue])) {
 			return true;
@@ -337,9 +382,12 @@ class StateBehavior extends \yii\base\Behavior
 	 */
 	protected function validateStateConfig()
 	{
-		if (empty($this->stateConfig)) return false;
-		$config = &$this->stateConfig;
+		if (empty($this->stateConfig)) {
+			$msg = Yii::t('app', 'Empty state configurations are not allowed');
+			throw new InvalidConfigException($msg);
+		}
 
+		$config = &$this->stateConfig;
 		foreach ($config as $i=>$state) {
 			//validate label and value
 			if (empty($state['value']) || empty($state['label'])) {
@@ -361,7 +409,6 @@ class StateBehavior extends \yii\base\Behavior
 			}
 
 			//default settings
-			if (!isset($state['allowBackwardsStep'])) $state['allowBackwardsStep'] = false;
 			if (!isset($state['groups'])) $state['groups'] = [];
 
 			//validate groups
