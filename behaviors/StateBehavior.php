@@ -1,6 +1,8 @@
 <?php
 namespace asinfotrack\yii2\toolbox\behaviors;
 
+use Yii;
+use yii\base\InvalidConfigException;
 use yii\base\InvalidParamException;
 use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
@@ -45,6 +47,10 @@ class StateBehavior extends \yii\base\Behavior
 	 * - preconditionCallback: an optional anonymous function with the signature
 	 * 'function($model, $stateConfig)' returning a boolean value to check if the
 	 * preconditions for a step are met
+	 * - enterStateCallback: an optional anonymous function with the signature
+	 * 'function($model, $stateConfig)' called when a state is entered
+	 * - leaveStateCallback: an optional anonymous function with the signature
+	 * 'function($model, $stateConfig)' called when a state is left
 	 * - bsClass: an optional bootstrap class (eg success, warning, etc.)
 	 * - iconName: an optional icon name which can be used with an icon-font
 	 */
@@ -63,6 +69,12 @@ class StateBehavior extends \yii\base\Behavior
 	public $autoAdvanceBeforeSave = false;
 
 	/**
+	 * @var bool whether or not to allow moving multiple steps within one save (defaults to false).
+	 * This param is only relevant if enableAutoAdvance is set to true.
+	 */
+	public $allowMultipleStepAdvancing = false;
+
+	/**
 	 * @inheritdoc
 	 */
 	public function init()
@@ -70,9 +82,7 @@ class StateBehavior extends \yii\base\Behavior
 		parent::init();
 
 		//validate config
-		if (!$this->validateStateConfig()) {
-			throw new InvalidParamException('The state configuration is not ok...please check the comment of the stateConfig field!');
-		}
+		$this->validateStateConfig();
 
 		//fill cache map
 		foreach ($this->stateConfig as $i=>$config) {
@@ -86,15 +96,17 @@ class StateBehavior extends \yii\base\Behavior
 	 */
 	public function events()
 	{
+		if (!$this->enableAutoAdvance) return [];
+
 		if ($this->autoAdvanceBeforeSave) {
 			return [
-				ActiveRecord::EVENT_BEFORE_INSERT => 'onBeforeInsert',
-				ActiveRecord::EVENT_BEFORE_UPDATE => 'onBeforeUpdate',
+				ActiveRecord::EVENT_BEFORE_INSERT=>'onBeforeInsert',
+				ActiveRecord::EVENT_BEFORE_UPDATE=>'onBeforeUpdate',
 			];
 		} else {
 			return [
-				ActiveRecord::EVENT_AFTER_INSERT => 'onAfterInsert',
-				ActiveRecord::EVENT_AFTER_UPDATE => 'onAfterUpdate',
+				ActiveRecord::EVENT_AFTER_INSERT=>'onAfterInsert',
+				ActiveRecord::EVENT_AFTER_UPDATE=>'onAfterUpdate',
 			];
 		}
 	}
@@ -106,10 +118,16 @@ class StateBehavior extends \yii\base\Behavior
 	{
 		//assert owner extends class ActiveRecord
 		if (!($owner instanceof ActiveRecord)) {
-			throw new InvalidConfigException('StateBehavior can only be applied to classes extending \yii\db\ActiveRecord');
+			$msg = Yii::t('app', 'StateBehavior can only be applied to classes extending \yii\db\ActiveRecord');
+			throw new InvalidConfigException($msg);
 		}
+		//assert owner has state field
 		if ($owner->tableSchema->getColumn($this->stateAttribute) === null) {
-			throw new InvalidConfigException(sprintf('The table %s does not contain a column named %s', $owner->tableName(), $this->stateAttribute));
+			$msg = Yii::t('app', 'The table {tbl} does not contain a column named {col}', [
+				'tbl'=>$owner->tableName(),
+				'col'=>$this->stateAttribute,
+			]);
+			throw new InvalidConfigException($msg);
 		}
 
 		parent::attach($owner);
@@ -122,7 +140,7 @@ class StateBehavior extends \yii\base\Behavior
 	 */
 	public function onBeforeInsert($event)
 	{
-		if ($this->enableAutoAdvance) $this->checkAndAdvanceState();
+		$this->checkAndAdvanceState();
 	}
 
 	/**
@@ -132,7 +150,7 @@ class StateBehavior extends \yii\base\Behavior
 	 */
 	public function onAfterInsert($event)
 	{
-		if ($this->enableAutoAdvance) $this->checkAndAdvanceState();
+		$this->checkAndAdvanceState();
 	}
 
 	/**
@@ -142,7 +160,7 @@ class StateBehavior extends \yii\base\Behavior
 	 */
 	public function onBeforeUpdate($event)
 	{
-		if ($this->enableAutoAdvance) $this->checkAndAdvanceState();
+		$this->checkAndAdvanceState();
 	}
 
 	/**
@@ -152,7 +170,7 @@ class StateBehavior extends \yii\base\Behavior
 	 */
 	public function onAfterUpdate($event)
 	{
-		if ($this->enableAutoAdvance) $this->checkAndAdvanceState();
+		$this->checkAndAdvanceState();
 	}
 
 	/**
@@ -164,39 +182,47 @@ class StateBehavior extends \yii\base\Behavior
 	 */
 	public function checkAndAdvanceState($saveImmediately=true, $runValidation=false)
 	{
-		$curStateConfig = $this->cacheConfigMap[$this->owner->{$this->stateAttribute}];
-		$nextStateConfig = $this->getNextState($curStateConfig['value'], true);
-		if ($nextStateConfig === null) return true;
+		/* @var $owner \yii\db\ActiveRecord */
+		$owner = $this->owner;
 
-		while ($nextStateConfig !== null && $this->hasStatePreconditions($nextStateConfig['value'], true)) {
-			$this->owner->{$this->stateAttribute} = $nextStateConfig['value'];
-			$nextStateConfig = $this->getNextState($nextStateConfig['value'], true);
+		while ($this->hasNextState() && $this->meetsStatePreconditions($this->getNextState())) {
+			$curCfg = $this->getStateConfig();
+			$nxtCfg = $this->getStateConfig($this->getNextState());
+
+			if (isset($curCfg['leaveStateCallback'])) call_user_func($curCfg['leaveStateCallback'], $owner, $curCfg);
+			$owner->{$this->stateAttribute} = $nxtCfg['value'];
+			if (isset($nxtCfg['enterStateCallback'])) call_user_func($nxtCfg['enterStateCallback'], $owner, $curCfg);
+
+			if (!$this->allowMultipleStepAdvancing) break;
 		}
 
-		if (isset($this->owner->dirtyAttributes[$this->stateAttribute]) && $saveImmediately) {
-			$this->owner->save($runValidation, [$this->stateAttribute]);
-		} else {
-			return true;
+		if ($saveImmediately && isset($owner->dirtyAttributes[$this->stateAttribute])) {
+			$owner->save($runValidation, [$this->stateAttribute]);
 		}
 	}
 
 	/**
 	 * Checks if an attribute has a state or not. The states are checked in
-	 * sequential order
+	 * sequential order. If an object has states A, B and C and is currently
+	 * in state C:
+	 * - if calling with B and setting rightNow to false (default) the method returns true
+	 * - if calling with C and setting rightNow to true the method returns true
+	 * - if calling with B and setting rightNow to true the method returns false
 	 *
-	 * @param mixed $stateToCheckValue
-	 * @param bool $rightNow if set to true, the owner needs to have exaclty this state
+	 * @param integer|string $stateValue
+	 * @param bool $rightNow if set to true, the owner needs to have exactly this state
+	 * (defaults to false)
 	 * @return bool true if the
 	 */
-	public function isInState($stateToCheckValue, $rightNow=false)
+	public function isInState($stateValue, $rightNow=false)
 	{
-		$currentState = $this->owner->{$this->stateAttribute};
-		if ($rightNow) return $currentState == $stateToCheckValue;
+		$curVal = $this->owner->{$this->stateAttribute};
+		if ($rightNow) return $curVal == $stateValue;
 
-		foreach (ArrayHelper::getColumn($this->stateConfig, 'value') as $curValue) {
-			if ($curValue == $stateToCheckValue) {
+		foreach (ArrayHelper::getColumn($this->stateConfig, 'value') as $val) {
+			if ($val == $stateValue) {
 				return true;
-			} else if ($curValue == $currentState) {
+			} else if ($val == $curVal) {
 				return false;
 			}
 		}
@@ -209,7 +235,7 @@ class StateBehavior extends \yii\base\Behavior
 	 *
 	 * @return array
 	 */
-	public function stateFilter()
+	public function getStateFilter()
 	{
 		return ArrayHelper::map($this->stateConfig, 'value', 'label');
 	}
@@ -217,11 +243,11 @@ class StateBehavior extends \yii\base\Behavior
 	/**
 	 * Checks if the preconditions for a state are met
 	 *
-	 * @param mixed $stateValue the value of the state to check
+	 * @param integer|string $stateValue the value of the state to check
 	 * @param bool $requiresCallback if set to true and no callback is set, false is returned
 	 * @return bool true if an anonymous function is set and preconditions are met
 	 */
-	public function hasStatePreconditions($stateValue, $requiresCallback=false)
+	public function meetsStatePreconditions($stateValue, $requiresCallback=false)
 	{
 		$config = $this->getStateConfig($stateValue);
 		if (isset($config['preconditionCallback'])) {
@@ -232,33 +258,50 @@ class StateBehavior extends \yii\base\Behavior
 	}
 
 	/**
+	 * Gets the config for a state
 	 *
-	 *
-	 * @param $stateValue
+	 * @param integer|string $stateValue the value to get the config for (defaults to the owners current state)
 	 * @return array config of the state
 	 * @throws InvalidParamException if a state doesn't exist
 	 */
-	public function getStateConfig($stateValue)
+	public function getStateConfig($stateValue=null)
 	{
-		$this->stateExists($stateValue, true);
+		if ($stateValue === null) {
+			$stateValue = $this->owner->{$this->stateAttribute};
+		} else {
+			$this->stateExists($stateValue, true);
+		}
 		return $this->cacheConfigMap[$stateValue];
+	}
+
+	/**
+	 * Returns whether or not there are states after the current one
+	 *
+	 * @return bool true if there is a next state
+	 */
+	public function hasNextState()
+	{
+		return $this->cacheIndexMap[$this->owner->{$this->stateAttribute}] + 1 < count($this->stateConfig);
 	}
 
 	/**
 	 * Returns the next states config or value if there is one. If the current state
 	 * is the last step, null is returned.
 	 *
-	 * @param $currentStateValue the value to get the next state for
+	 * @param integer|string $stateValue the value to get the next state for (defaults to the owners current state)
 	 * @param bool $configInsteadOfValue if set to true, the config of the next state is returned
 	 * @return mixed|array|null either the next states value / config or null if no next state
 	 */
-	public function getNextState($currentStateValue, $configInsteadOfValue=false)
+	public function getNextState($stateValue=null, $configInsteadOfValue=false)
 	{
-		$this->stateExists($currentStateValue, true);
-		$nextIndex = $this->cacheIndexMap[$currentStateValue] + 1;
+		if ($stateValue === null) {
+			$stateValue = $this->owner->{$this->stateAttribute};
+		} else {
+			$this->stateExists($stateValue, true);
+		}
 
-		if (isset($this->stateConfig[$nextIndex])) {
-			$nextConfig = $this->stateConfig[$nextIndex];
+		if ($this->hasNextState()) {
+			$nextConfig = $this->stateConfig[$this->cacheIndexMap[$stateValue] + 1];
 			return $configInsteadOfValue ? $nextConfig : $nextConfig['value'];
 		} else {
 			return null;
@@ -268,7 +311,7 @@ class StateBehavior extends \yii\base\Behavior
 	/**
 	 * Returns whether or not a state exists in the current config
 	 *
-	 * @param $stateValue the actual state value
+	 * @param integer|string $stateValue the actual state value
 	 * @param bool $throwException if set to true an exception will be thrown when the
 	 * state doesn't exist
 	 * @return bool true if it exists
@@ -279,7 +322,8 @@ class StateBehavior extends \yii\base\Behavior
 		if (isset($this->cacheConfigMap[$stateValue])) {
 			return true;
 		} else if ($throwException) {
-			throw new InvalidParamException(sprintf('There is no state %s defined', $stateValue));
+			$msg = Yii::t('app', 'There is no state with the value {val}', ['val'=>$stateValue]);
+			throw new InvalidParamException($msg);
 		} else {
 			return false;
 		}
@@ -289,37 +333,44 @@ class StateBehavior extends \yii\base\Behavior
 	 * Validates the state configuration
 	 *
 	 * @return bool true if config is ok
+	 * @throws \yii\base\InvalidConfigException when config is illegal
 	 */
 	protected function validateStateConfig()
 	{
 		if (empty($this->stateConfig)) return false;
-
 		$config = &$this->stateConfig;
 
 		foreach ($config as $i=>$state) {
+			//validate label and value
 			if (empty($state['value']) || empty($state['label'])) {
-				return false;
+				$msg = Yii::t('app', 'The label and the value of a state are mandatory');
+				throw new InvalidConfigException($msg);
 			}
-
 			if (!is_int($state['value']) && !is_string($state['value'])) {
-				return false;
+				$msg = Yii::t('app', 'The value must be a string or an integer ({lbl})', ['lbl'=>$state['label']]);
+				throw new InvalidConfigException($msg);
 			}
 
-			if (!isset($state['allowBackwardsStep'])) {
-				$state['allowBackwardsStep'] = false;
-			}
-
-			if (isset($state['preconditionCallback']) && !($state['preconditionCallback'] instanceof \Closure)) {
-				return false;
-			}
-
-			if (!isset($state['groups'])) {
-				$state['groups'] = [];
-			} else {
-				foreach ($state['groups'] as &$group) {
-					if (!is_string($group)) return false;
-					$group = strtolower($group);
+			//validate closures
+			$callbackAttributes = ['preconditionCallback', 'enterStateCallback', 'leaveStateCallback'];
+			foreach ($callbackAttributes as $cbAttr) {
+				if (isset($state[$cbAttr]) && !($state[$cbAttr] instanceof \Closure)) {
+					$msg = Yii::t('app', 'For {cb-attr} only closures are allowed', ['cb-attr'=>$cbAttr]);
+					throw new InvalidConfigException($msg);
 				}
+			}
+
+			//default settings
+			if (!isset($state['allowBackwardsStep'])) $state['allowBackwardsStep'] = false;
+			if (!isset($state['groups'])) $state['groups'] = [];
+
+			//validate groups
+			foreach ($state['groups'] as &$group) {
+				if (!is_string($group)) {
+					$msg = Yii::t('app', 'Only strings allowed for group names');
+					throw new InvalidConfigException($msg);
+				}
+				$group = strtolower($group);
 			}
 		}
 
