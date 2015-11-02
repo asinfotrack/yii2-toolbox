@@ -447,7 +447,7 @@ class StateBehavior extends \yii\base\Behavior
 		$foundCurrent = false;
 		foreach (ArrayHelper::getColumn($this->stateConfig, 'value') as $val) {
 			if ($val == $stateValue) {
-				return $foundCurrent ? 1 : -1;
+				return $foundCurrent ? -1 : 1;
 			} else if ($val == $curVal) {
 				$foundCurrent = true;
 			}

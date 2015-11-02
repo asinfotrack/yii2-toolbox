@@ -66,7 +66,7 @@ class StateQueryBehavior extends \yii\base\Behavior
 		$this->modelInstance->stateExists($stateValue, true);
 		//apply to query
 		$this->owner->andWhere(['IN', $this->stateAttribute, $this->getStateSelection($stateValue, static::STATES_LOWER)]);
-		return $this;
+		return $this->owner;
 	}
 
 	/**
@@ -81,7 +81,7 @@ class StateQueryBehavior extends \yii\base\Behavior
 		$this->modelInstance->stateExists($stateValue, true);
 		//apply to query
 		$this->owner->andWhere(['IN', $this->stateAttribute, $this->getStateSelection($stateValue, static::STATES_LOWER_OR_EQUAL)]);
-		return $this;
+		return $this->owner;
 	}
 
 	/**
@@ -108,7 +108,7 @@ class StateQueryBehavior extends \yii\base\Behavior
 			$this->owner->andWhere([$this->stateAttribute=>$stateValue]);
 		}
 
-		return $this;
+		return $this->owner;
 	}
 
 	/**
@@ -123,7 +123,7 @@ class StateQueryBehavior extends \yii\base\Behavior
 		$this->modelInstance->stateExists($stateValue, true);
 		//apply to query
 		$this->owner->andWhere(['IN', $this->stateAttribute, $this->getStateSelection($stateValue, static::STATES_EQUAL_OR_HIGHER)]);
-		return $this;
+		return $this->owner;
 	}
 
 	/**
@@ -138,7 +138,7 @@ class StateQueryBehavior extends \yii\base\Behavior
 		$this->modelInstance->stateExists($stateValue, true);
 		//apply to query
 		$this->owner->andWhere(['IN', $this->stateAttribute, $this->getStateSelection($stateValue, static::STATES_HIGHER)]);
-		return $this;
+		return $this->owner;
 	}
 
 	/**
