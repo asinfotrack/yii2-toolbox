@@ -173,6 +173,15 @@ class StateBehavior extends \yii\base\Behavior
 		$this->checkAndAdvanceState();
 	}
 
+	/**
+	 * Request the model to change into a certain state. The model will try to iterate
+	 * over all the states between its current and the desired state.
+	 *
+	 * @param integer|string $stateValue the desired target state
+	 * @param bool $saveImmediately if set to true, the owner will be saved after setting new state
+	 * @param bool $runValidation if set to true, the owner will be validated before saving
+	 * @return bool true upon success
+	 */
 	public function requestState($stateValue, $saveImmediately=true, $runValidation=false)
 	{
 		/* @var $owner \yii\db\ActiveRecord */
@@ -191,7 +200,7 @@ class StateBehavior extends \yii\base\Behavior
 
 		//try advancing
 		$res = true;
-		while (!$this->isInState($stateValue, true)) {
+		while (!$this->isInState($stateValue)) {
 			if ($this->advanceOneState(false)) continue;
 
 			$res = false;
@@ -228,61 +237,61 @@ class StateBehavior extends \yii\base\Behavior
 		}
 	}
 
-	protected function advanceOneState($requiresCallback=false)
+	/**
+	 * Checks if the owner has a state BEFORE the one provided
+	 *
+	 * @param integer|string $stateValue the value of the state to check
+	 * @return bool
+	 */
+	public function isLowerThanState($stateValue)
 	{
-		if (!$this->hasNextState()) return false;
-		if (!$this->meetsStatePreconditions($this->getNextState(), $requiresCallback)) return false;
-
-		/* @var $owner \yii\db\ActiveRecord */
-		$owner = $this->owner;
-
-		$curCfg = $this->getStateConfig();
-		$nxtCfg = $this->getStateConfig($this->getNextState());
-
-		if (isset($curCfg['leaveStateCallback'])) call_user_func($curCfg['leaveStateCallback'], $owner, $curCfg);
-		$owner->{$this->stateAttribute} = $nxtCfg['value'];
-		if (isset($nxtCfg['enterStateCallback'])) call_user_func($nxtCfg['enterStateCallback'], $owner, $curCfg);
-
-		return true;
+		return $this->compareState($stateValue) == -1;
 	}
 
 	/**
-	 * Checks if an attribute has a state or not. The states are checked in
-	 * sequential order. If an object has states A, B and C and is currently
-	 * in state C:
-	 * - if calling with B and setting rightNow to false (default) the method returns true
-	 * - if calling with C and setting rightNow to true the method returns true
-	 * - if calling with B and setting rightNow to true the method returns false
+	 * Checks if the owner has a state BEFORE or EXACTLY the one provided
 	 *
-	 * @param integer|string $stateValue
-	 * @param bool $rightNow if set to true, the owner needs to have exactly this state
-	 * (defaults to false)
-	 * @return bool true if the
+	 * @param integer|string $stateValue the value of the state to check
+	 * @return bool
 	 */
-	public function isInState($stateValue, $rightNow=false)
+	public function isLowerOrEqualThanState($stateValue)
 	{
-		$curVal = $this->owner->{$this->stateAttribute};
-		if ($rightNow) return $curVal == $stateValue;
-
-		foreach (ArrayHelper::getColumn($this->stateConfig, 'value') as $val) {
-			if ($val == $stateValue) {
-				return true;
-			} else if ($val == $curVal) {
-				return false;
-			}
-		}
-
-		return false;
+		$cmp = $this->compareState($stateValue);
+		return $cmp == -1 || $cmp == 0;
 	}
 
 	/**
-	 * Returns the states as an array for filtering
+	 * Checks if the owner is EXACTLY IN the one provided
 	 *
-	 * @return array
+	 * @param integer|string $stateValue the value of the state to check
+	 * @return bool
 	 */
-	public function getStateFilter()
+	public function isInState($stateValue)
 	{
-		return ArrayHelper::map($this->stateConfig, 'value', 'label');
+		return $this->compareState($stateValue) == 0;
+	}
+
+	/**
+	 * Checks if the owner has EXACTLY the one provided or a HIGHER one
+	 *
+	 * @param integer|string $stateValue the value of the state to check
+	 * @return bool
+	 */
+	public function isEqualOrHigherThanState($stateValue)
+	{
+		$cmp = $this->compareState($stateValue);
+		return $cmp == 0 || $cmp == 1;
+	}
+
+	/**
+	 * Checks if the owner has a state AFTER the one provided
+	 *
+	 * @param integer|string $stateValue the value of the state to check
+	 * @return bool
+	 */
+	public function isHigherThanState($stateValue)
+	{
+		return $this->compareState($stateValue) == 1;
 	}
 
 	/**
@@ -300,6 +309,37 @@ class StateBehavior extends \yii\base\Behavior
 		} else {
 			return !$requiresCallback;
 		}
+	}
+
+	/**
+	 * Returns whether or not a state exists in the current config
+	 *
+	 * @param integer|string $stateValue the actual state value
+	 * @param bool $throwException if set to true an exception will be thrown when the
+	 * state doesn't exist
+	 * @return bool true if it exists
+	 * @throws InvalidParamException if it doesn't exist and exception is desired
+	 */
+	public function stateExists($stateValue, $throwException=false)
+	{
+		if (isset($this->cacheConfigMap[$stateValue])) {
+			return true;
+		} else if ($throwException) {
+			$msg = Yii::t('app', 'There is no state with the value {val}', ['val'=>$stateValue]);
+			throw new InvalidParamException($msg);
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Returns the states as an array for filtering
+	 *
+	 * @return array
+	 */
+	public function getStateFilter()
+	{
+		return ArrayHelper::map($this->stateConfig, 'value', 'label');
 	}
 
 	/**
@@ -354,24 +394,68 @@ class StateBehavior extends \yii\base\Behavior
 	}
 
 	/**
-	 * Returns whether or not a state exists in the current config
+	 * Does the actual work to advance one single state.
+	 * This method calls all the callbacks, sets the new state and saves if desired.
 	 *
-	 * @param integer|string $stateValue the actual state value
-	 * @param bool $throwException if set to true an exception will be thrown when the
-	 * state doesn't exist
-	 * @return bool true if it exists
-	 * @throws InvalidParamException if it doesn't exist and exception is desired
+	 * @param bool|false $requiresCallback if set to true, the state will only be advanced
+	 * if a preconditionCallback is present
+	 * @return bool true upon success
 	 */
-	public function stateExists($stateValue, $throwException=false)
+	protected function advanceOneState($requiresCallback=false)
 	{
-		if (isset($this->cacheConfigMap[$stateValue])) {
-			return true;
-		} else if ($throwException) {
-			$msg = Yii::t('app', 'There is no state with the value {val}', ['val'=>$stateValue]);
-			throw new InvalidParamException($msg);
-		} else {
-			return false;
+		if (!$this->hasNextState()) return false;
+		if (!$this->meetsStatePreconditions($this->getNextState(), $requiresCallback)) return false;
+
+		/* @var $owner \yii\db\ActiveRecord */
+		$owner = $this->owner;
+
+		$curCfg = $this->getStateConfig();
+		$nxtCfg = $this->getStateConfig($this->getNextState());
+
+		if (isset($curCfg['leaveStateCallback'])) call_user_func($curCfg['leaveStateCallback'], $owner, $curCfg);
+		$owner->{$this->stateAttribute} = $nxtCfg['value'];
+		if (isset($nxtCfg['enterStateCallback'])) call_user_func($nxtCfg['enterStateCallback'], $owner, $curCfg);
+
+		return true;
+	}
+
+	/**
+	 * Compares the owners current state with a state provided.
+	 * Following return values:
+	 * -1:	the current state is BEFORE the one provided
+	 *  0:	the owner is EXACTLY IN the provided state
+	 *  1:	the current state is AFTER the one provided
+	 *
+	 * @param integer|string $stateValue the value of the state to check
+	 * @return int either -1, 0 or 1
+	 * @throws \yii\base\InvalidConfigException
+	 */
+	protected function compareState($stateValue)
+	{
+		//validate state
+		$this->stateExists($stateValue, true);
+
+		//get and compare current value
+		$curVal = $this->owner->{$this->stateAttribute};
+		if ($curVal === null) {
+			return -1;
+		} else if ($curVal == $stateValue) {
+			return 0;
 		}
+
+		//compare
+		$foundCurrent = false;
+		foreach (ArrayHelper::getColumn($this->stateConfig, 'value') as $val) {
+			if ($val == $stateValue) {
+				return $foundCurrent ? 1 : -1;
+			} else if ($val == $curVal) {
+				$foundCurrent = true;
+			}
+		}
+
+		//catch running over
+		$msg = Yii::t('app', "The state {state} wasn't found while comparing", ['state'=>$stateValue]);
+		throw new InvalidConfigException($msg);
 	}
 
 	/**
