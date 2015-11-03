@@ -28,7 +28,32 @@ class Html extends \yii\helpers\Html
 	const BS_SM			= 'sm';
 	const BS_MD			= 'md';
 	const BS_LG			= 'lg';
-	
+
+	/**
+	 * Creates a css-class to identify the html-tag by the current controller-,
+	 * action- and module-ids.
+	 *
+	 * On in the index-action of the SiteController this method would return
+	 * site-index. In module cms, within the article controllers index-action
+	 * it would return cms-article-index.
+	 *
+	 * @param string $glue the glue to join the parts (defaults to '-')
+	 * @return string the css-class
+	 */
+	public static function htmlClass($glue='-')
+	{
+		$parts = [
+			$parts[] = Yii::$app->controller->id,
+			$parts[] = Yii::$app->controller->action->id,
+		];
+
+		if (Yii::$app->module !== null) {
+			array_unshift($parts, Yii::$app->module->id);
+		}
+
+		return implode($glue, $parts);
+	}
+
 	/**
 	 * Renders a quantity with its corresponding unit (eg '107.00 kg')
 	 * 
