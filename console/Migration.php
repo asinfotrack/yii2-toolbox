@@ -13,6 +13,20 @@ use yii\db\Schema;
  */
 abstract class Migration extends \yii\db\Migration
 {
+
+	/**
+	 * Returns whether or not a table is empty
+	 *
+	 * @param string $tableName name of the table
+	 * @return bool true if empty
+	 */
+	public function isTableEmpty($tableName)
+	{
+		$tableNameQuoted = $this->getDb()->quoteTableName($tableName);
+		$cmd = sprintf('SELECT COUNT(*) FROM %s', $tableNameQuoted);
+
+		return $this->getDb()->createCommand($cmd)->queryScalar() === 0;
+	}
 	
 	/**
      * Builds and executes a SQL statement for creating a new DB table. This method also
