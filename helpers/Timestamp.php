@@ -27,16 +27,19 @@ class Timestamp
         'long'   => 1, // IntlDateFormatter::LONG,
         'full'   => 0, // IntlDateFormatter::FULL,
     ];
-	
+
 	/**
-	 * Gets todays timestamp without the time part (time will be
-	 * set to 00:00:00).
-	 * 
+	 * Gets today's timestamp without the time part (time will be
+	 * set to 00:00:00). By default the stamp of the local time is
+	 * returned.
+	 *
+	 * @param bool $localTime if set to true (default) the stamp for the local
+	 * time is returned. If false, UTC is retuned
 	 * @return int timestamp
 	 */
-	public static function getTodayStampWithoutTime()
+	public static function getTodayStampWithoutTime($localTime=true)
 	{
-		return mktime(0, 0, 0, date('m'), date('d'), date('Y'));
+		return $localTime ? mktime(0, 0, 0) : gmmktime(0, 0, 0);
 	}
 	
 	/**
@@ -48,11 +51,7 @@ class Timestamp
 	 */
 	public static function removeTime($stamp)
 	{
-		$day = date('d', $stamp);
-		$month = date('m', $stamp);
-		$year = date('Y', $stamp);
-		
-		return mktime(0, 0, 0, $month, $day, $year);
+		return $stamp - ($stamp % 86400);
 	}
 	
 	/**
