@@ -109,6 +109,8 @@ class is `AdvancedDataColumn`. It has functionality to align text, set the colum
 absolute or percent values etc.
 
 Additionally there are three further column types:
+* `AdvancedActionColumn` further functionality for the action column (rights per button, etc.)
+* `AdvancedDataColumn` base class for regular data displaying with advanced functionality
 * `BooleanColumn` optimized for rendering boolean values
 * `IdColumn` optimized for rendering id values with or without code-tags
 * `LinkColumn` renders links (which can be generated using a closure)
