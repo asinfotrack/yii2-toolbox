@@ -13,6 +13,39 @@ The preferred way to install this extension is through [composer](http://getcomp
 
 ### Components
 
+###### ImageResponseFormatter
+Response formatter for images. You need to add the formatter to the config as follows:
+```php
+'response' => [
+	// ...
+	'formatters'=>[
+		'img_jpg'=>[
+			'class'=>'asinfotrack\yii2\toolbox\components\ImageResponseFormatter',
+			'extension'=>'jpg',
+		],
+		'img_png'=>[
+			'class'=>'asinfotrack\yii2\toolbox\components\ImageResponseFormatter',
+			'extension'=>'png',
+		],
+		'img_gif'=>[
+			'class'=>'asinfotrack\yii2\toolbox\components\ImageResponseFormatter',
+			'extension'=>'gif',
+		],
+	],
+	// ...
+],
+```
+
+After that you can use it to output images via actions easily:
+
+```php
+public function actionAvatar()
+{	
+	Yii::$app->response->format = 'img_png';
+	return file_get_contents($pathToMyImage);
+}
+```
+
 ###### PdfResponseFormatter
 Additional response formatter for handling PDF-requests. You need to add the formatter to the config like this:
 ```php

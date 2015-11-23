@@ -1,8 +1,6 @@
 <?php
 namespace asinfotrack\yii2\toolbox\components;
 
-use yii\web\Response;
-
 /**
  * Additional formatter to configure Responses to show PDF-files either
  * in-browser or via force-download.
@@ -26,8 +24,7 @@ class PdfResponseFormatter extends \yii\base\Component implements \yii\web\Respo
 	public $pdfContentType = 'application/pdf';
 	
 	/**
-	 * (non-PHPdoc)
-	 * @see \yii\web\ResponseFormatterInterface::format()
+	 * @inheritdoc
 	 */
 	public function format($response)
 	{
