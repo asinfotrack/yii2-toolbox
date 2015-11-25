@@ -17,6 +17,11 @@ use DateTimeZone;
  */
 class Timestamp
 {
+
+	/**
+	 * Holds the name of the utc timezone
+	 */
+	const TIMEZONE_UTC = 'UTC';
 	
 	/**
 	 * @var array holds the mapping for the intl date-formatter
@@ -29,40 +34,79 @@ class Timestamp
     ];
 
 	/**
-	 * Returns the utc offset of the currently set timezone in php ini
+	 * Returns the utc offset of the currently set timezone in yii config
 	 * in seconds (-43200 through 50400)
 	 *
+	 * @param string $timezone optional timezone (if not specified current timezone is taken)
 	 * @return int offset in number of seconds
 	 */
-	public static function utcOffset()
+	public static function utcOffset($timezone=null)
 	{
-		return intval(date('Z'));
+		if ($timezone === null) {
+			return intval(date('Z'));
+		} else {
+			$tzSpecified = new DateTimeZone($timezone);
+			return $tzSpecified->getOffset(new DateTime('now', $tzSpecified));
+		}
 	}
 
 	/**
-	 * Gets today's timestamp without the time part (time will be
-	 * set to 00:00:00). By default the stamp of the local time is
-	 * returned.
+	 * Converts a utc timestamp into local time timestamp by adding the utc
+	 * offset. That way 00:02:30 in represented in UTC will be offset in a way,
+	 * that the new timestamp represents the same time in the timezone specified.
 	 *
-	 * @param bool $localTime if set to true (default) the stamp for the local
-	 * time is returned. If false, UTC is returned
-	 * @return int timestamp
+	 * @param int $utcTimestamp the utc timestamp
+	 * @param string $timezone the desired timezone (defaults to currently set timezone)
+	 * @return int timestamp representing the same time in local time
 	 */
-	public static function getTodayStampWithoutTime($localTime=true)
+	public static function convertUtcToLocalTime($utcTimestamp, $timezone=null)
 	{
-		return $localTime ? mktime(0, 0, 0) : gmmktime(0, 0, 0);
+		return $utcTimestamp + static::utcOffset($timezone);
+	}
+
+	/**
+	 * Gets the midnight timestamp (00:00:00) of today (default) or a day specifiable via
+	 * params. If no timezone is specified, the currently set timezone via yii config will
+	 * be taken
+	 *
+	 * @param string $timezone the desired timezone (defaults to currently set timezone)
+	 * @param int $month the optional month
+	 * @param int $day the optional day
+	 * @param int $year the optional year
+	 * @return int timestamp the midnight-timestamp in the desired timezone
+	 */
+	public static function getMidnightTimestamp($timezone=null, $month=null, $day=null, $year=null)
+	{
+		$month = $month === null ? date('m') : $month;
+		$day = $day === null ? date('d') : $day;
+		$year = $year === null ? date('Y') : $year;
+
+		if (!checkdate($month, $day, $year)) {
+			$msg = Yii::t('app', 'The date specified does not exist!');
+			throw new InvalidParamException($msg);
+		}
+
+		$offset = static::utcOffset($timezone !== null ? $timezone : Yii::$app->timeZone);
+		return gmmktime(0, 0, 0, $month, $day, $year) + $offset;
 	}
 	
 	/**
-	 * Returns a corrected timestamp which consists only of the date
-	 * part. Hours, minutes and seconds are set to zero.
+	 * This method takes a timestamp and sets is time to midnight on the same day in the
+	 * specified timezone.
 	 * 
-	 * @param int $stamp the timestamp to correct
-	 * @return int the cleaned timestamp
+	 * @param int $timestamp the timestamp to set the time to midnight
+	 * @param string $timezoneSource the timezone to calculate the day for
+	 * @return int the midnight timestamp of the same timezone as timezone source
 	 */
-	public static function removeTime($stamp)
+	public static function makeMidnight($timestamp, $timezoneSource=null)
 	{
-		return $stamp - ($stamp % 86400);
+		$tzSource = new DateTimeZone($timezoneSource === null ? Yii::$app->timeZone : $timezoneSource);
+		$dt = new DateTime();
+		$dt->setTimezone($tzSource);
+		$dt->setTimestamp($timestamp);
+		$dt->setTime(0, 0, 0);
+
+		return intval($dt->format('U'));
 	}
 	
 	/**
@@ -72,22 +116,13 @@ class Timestamp
 	 * Default setting for no time part is 00:00:00.
 	 * 
 	 * @param integer $stamp the timestamp to check
-	 * @param integer $noTimeHour the hour considered as no time part
-	 * @param integer $noTimeMinute the minute considered as no time part
-	 * @param integer $noTimeSecond the second considered as no time part
+	 * @param string $timezone the timezone the timestamp is in (defaults to UTC)
 	 * @return boolean true if a time is set differing from the one defined in params 2 to 4
 	 * @throws InvalidParamException if values are illegal
 	 */
-	public static function hasTime($stamp, $noTimeHour=0, $noTimeMinute=0, $noTimeSecond=0)
+	public static function hasTime($stamp, $timezone=self::TIMEZONE_UTC)
 	{
-		//assert no time values are ok
-		if ($noTimeHour < 0 || $noTimeHour > 23 || $noTimeMinute < 0 || $noTimeMinute > 59 || $noTimeSecond < 0 || $noTimeSecond > 59) {
-			throw new InvalidParamException('Wrong values for no time hour, minute or second received');
-		}
-		
-		//get date parts and compare
-		$d = getdate($stamp);
-		return $d['hours'] != $noTimeHour || $d['minutes'] != $noTimeMinute || $d['seconds'] != $noTimeSecond;
+		return ($stamp + static::utcOffset($timezone)) % 86400 != 0;
 	}
 	
 	/**
