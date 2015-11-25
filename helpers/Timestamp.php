@@ -1,12 +1,12 @@
 <?php
 namespace asinfotrack\yii2\toolbox\helpers;
 
-use IntlDateFormatter;
-use DateTime;
-use DateTimeZone;
 use Yii;
 use yii\base\InvalidParamException;
 use yii\helpers\FormatConverter;
+use IntlDateFormatter;
+use DateTime;
+use DateTimeZone;
 
 /**
  * Helper class for working with UNIX-timestamps
@@ -29,12 +29,23 @@ class Timestamp
     ];
 
 	/**
+	 * Returns the utc offset of the currently set timezone in php ini
+	 * in seconds (-43200 through 50400)
+	 *
+	 * @return int offset in number of seconds
+	 */
+	public static function utcOffset()
+	{
+		return intval(date('Z'));
+	}
+
+	/**
 	 * Gets today's timestamp without the time part (time will be
 	 * set to 00:00:00). By default the stamp of the local time is
 	 * returned.
 	 *
 	 * @param bool $localTime if set to true (default) the stamp for the local
-	 * time is returned. If false, UTC is retuned
+	 * time is returned. If false, UTC is returned
 	 * @return int timestamp
 	 */
 	public static function getTodayStampWithoutTime($localTime=true)
