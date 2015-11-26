@@ -1,25 +1,23 @@
 <?php
 namespace asinfotrack\yii2\toolbox\helpers;
 
-use Yii;
-
 /**
  * This helper extends the basic functionality of the Yii2-Url-helper.
  * It provides functionality to retrieve information about the currently
  * requested url, such as TLD, subdomains, etc.
- * 
+ *
  * @author Pascal Mueller, AS infotrack AG
  * @link http://www.asinfotrack.ch
  * @license MIT
  */
 class Url extends \yii\helpers\Url
 {
-	
+
 	/**
 	 * @var array internal cache for pre parsed request data
 	 */
 	protected static $RCACHE;
-	
+
 	/**
 	 * Caches the data for faster access in subsequent calls
 	 */
@@ -27,54 +25,80 @@ class Url extends \yii\helpers\Url
 	{
 		//fetch relevant vars
 		$host = rtrim(isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'], '/');
+		$pathInfo = !empty($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : (!empty($_SERVER['ORIG_PATH_INFO']) ? $_SERVER['ORIG_PATH_INFO'] : '');
+
 		$hostParts = array_reverse(explode('.', $host));
-		$pathParts = explode('/', Yii::$app->request->pathInfo);
+		$pathParts = explode('/', $pathInfo);
 
 		static::$RCACHE = [
-			'protocol'=>Yii::$app->request->isSecureConnection ? 'https' : 'http',
-			'host'=>$host,
-			'uri'=>$_SERVER['REQUEST_URI'],
-			'queryString'=>Yii::$app->request->queryString,
-			'hostParts'=>$hostParts,
-			'numParts'=>count($hostParts),
-			'pathParts'=>$pathParts,
-			'numPathParts'=>count($pathParts),
+				'protocol'=>!empty($_SERVER['HTTPS']) ? 'https' : 'http',
+				'host'=>$host,
+				'uri'=>$_SERVER['REQUEST_URI'],
+				'queryString'=>$_SERVER['QUERY_STRING'],
+				'hostParts'=>$hostParts,
+				'numParts'=>count($hostParts),
+				'pathParts'=>$pathParts,
+				'numPathParts'=>count($pathParts),
 		];
 	}
-	
+
+	/**
+	 * Checks whether or not this is a localhost
+	 *
+	 * @return bool true if localhost
+	 */
+	public static function isLocalhost()
+	{
+		if (!isset(self::$RCACHE)) static::cacheReqData();
+
+		return in_array(static::$RCACHE['host'], ['::1', '127.0.0.1', 'localhost']);
+	}
+
+	/**
+	 * Returns the host
+	 *
+	 * @return string the host
+	 */
+	public static function getHost()
+	{
+		if (!isset(self::$RCACHE)) static::cacheReqData();
+
+		return static::$RCACHE['host'];
+	}
+
 	/**
 	 * Returns the protocol. In case of a secure connection, this is 'https', otherwise
 	 * 'http'. If $widthColonAndSlashes param is true (default), the colon and slashes
 	 * will be appended.
-	 * 
+	 *
 	 * @param boolean $widthColonAndSlashes if true 'http' -> 'http://'
 	 * @return string the protocol (either http or https)
 	 */
 	public static function getProtocol($widthColonAndSlashes=true)
 	{
 		if (!isset(self::$RCACHE)) static::cacheReqData();
-		
+
 		return $widthColonAndSlashes ? self::$RCACHE['protocol'] . '://' : self::$RCACHE['protocol'];
 	}
-	
+
 	/**
 	 * Returns the TLD part of the requested host name (eg 'com', 'org', etc.). If
 	 * there is no tld (eg localhost), null is returned
-	 * 
+	 *
 	 * @return string|null tld or null if there is none
 	 */
 	public static function getTld()
 	{
 		if (!isset(self::$RCACHE)) static::cacheReqData();
-		
+
 		return self::$RCACHE['numParts'] > 1 ? self::$RCACHE['hostParts'][0] : null;
 	}
-	
+
 	/**
 	 * Returns the actual domain or host-name of the current request.
 	 * This can either be 'yourpage.com' or 'server23' in case of a
 	 * hostname
-	 * 
+	 *
 	 * @return string domain or host
 	 */
 	public static function getDomain()
@@ -88,7 +112,7 @@ class Url extends \yii\helpers\Url
 			return self::$RCACHE['hostParts'][0];
 		}
 	}
-	
+
 	/**
 	 * Powerful method to get the full subdomain or parts of it.
 	 * If no index is provided, the full subdomain will be returned:
@@ -98,20 +122,20 @@ class Url extends \yii\helpers\Url
 	 * 0:	fast
 	 * 1:	super
 	 * 2:	my
-	 * 
-	 * Should there be no subdomain or the index is out of range, 
+	 *
+	 * Should there be no subdomain or the index is out of range,
 	 * null is returned.
-	 * 
+	 *
 	 * @param integer $index optional index to return
 	 * @return null|string either full subdomain, a part of it or null
 	 */
 	public static function getSubdomain($index=null)
 	{
 		if (!isset(self::$RCACHE)) static::cacheReqData();
-		
+
 		//if no more than two parts there is no subdomain
 		if (self::$RCACHE['numParts'] < 3) return null;
-		
+
 		//check if certain index is requested
 		if ($index === null) {
 			//join all subdomain parts and return them
@@ -152,5 +176,5 @@ class Url extends \yii\helpers\Url
 	{
 		return static::isRelative($url) ? rtrim($url, '/') : trim($url, '/');
 	}
-	
+
 }
