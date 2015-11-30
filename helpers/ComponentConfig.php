@@ -12,7 +12,7 @@ use yii\base\InvalidParamException;
  * @link http://www.asinfotrack.ch
  * @license MIT
  */
-class ComponentConfigHelper
+class ComponentConfig
 {
 
 	/**
