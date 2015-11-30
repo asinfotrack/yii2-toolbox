@@ -69,7 +69,7 @@ class ComponentConfig
 	{
 		if ($object instanceof \yii\db\ActiveRecord) return true;
 		if ($throwException) {
-			$msg = Yii::t('app', 'Object is not of type ActiveRecord');
+			$msg = Yii::t('app', 'Object {obj} does not extend ActiveRecord', ['obj'=>get_class($object)]);
 			throw new InvalidConfigException($msg);
 		}
 
