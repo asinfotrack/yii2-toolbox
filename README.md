@@ -157,6 +157,9 @@ lighten or darken colors as well as creating steps between two colors. You can a
 use it to get a colors luminance or validate color-values.
 Short HEX-Formats are supported automatically.
 
+###### ComponentConfigHelper
+Helper class to work with component-configurations
+
 ###### Html
 Extends the Html-helper of Yii2 with additional functionality like disguising email-addresses,
 bootstrap-elements, text-highlighting, etc.
