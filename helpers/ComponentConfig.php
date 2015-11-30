@@ -57,4 +57,23 @@ class ComponentConfigHelper
 		return $found;
 	}
 
+	/**
+	 * Checks whether or not an object is of type active record
+	 *
+	 * @param mixed $object the object to check
+	 * @param bool $throwException whether or not to throw an exception
+	 * @return bool true if of type active record
+	 * @throws \yii\base\InvalidConfigException
+	 */
+	public static function isActiveRecord($object, $throwException=false)
+	{
+		if ($object instanceof \yii\db\ActiveRecord) return true;
+		if ($throwException) {
+			$msg = Yii::t('app', 'Object is not of type ActiveRecord');
+			throw new InvalidConfigException($msg);
+		}
+
+		return false;
+	}
+
 }

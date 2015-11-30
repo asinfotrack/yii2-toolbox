@@ -157,7 +157,7 @@ lighten or darken colors as well as creating steps between two colors. You can a
 use it to get a colors luminance or validate color-values.
 Short HEX-Formats are supported automatically.
 
-###### ComponentConfigHelper
+###### ComponentConfig
 Helper class to work with component-configurations
 
 ###### Html
