@@ -101,7 +101,7 @@ class StateBehavior extends \yii\base\Behavior
 	 * @param bool $runValidation if set to true, the owner will be validated before saving
 	 * @return bool true if ok, false if something went wrong
 	 */
-	public function checkAndAdvanceState($runValidation=false)
+	public function checkAndAdvanceState($runValidation=true)
 	{
 		$transaction = Yii::$app->db->beginTransaction();
 
