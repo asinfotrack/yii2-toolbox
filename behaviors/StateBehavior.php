@@ -57,24 +57,6 @@ class StateBehavior extends \yii\base\Behavior
 	public $stateConfig = [];
 
 	/**
-	 * @var bool if set to true, the corresponding method of this behavior (checkAndAdvanceState)
-	 * is called automatically upon saving this record
-	 */
-	public $enableAutoAdvance = true;
-
-	/**
-	 * @var bool whether or not to do auto-advancing before saving instead of
-	 * after saving
-	 */
-	public $autoAdvanceBeforeSave = false;
-
-	/**
-	 * @var bool whether or not to allow moving multiple steps within one save (defaults to false).
-	 * This param is only relevant if enableAutoAdvance is set to true.
-	 */
-	public $allowMultipleStepAdvancing = false;
-
-	/**
 	 * @inheritdoc
 	 */
 	public function init()
@@ -88,26 +70,6 @@ class StateBehavior extends \yii\base\Behavior
 		foreach ($this->stateConfig as $i=>$config) {
 			$this->cacheConfigMap[$config['value']] = $config;
 			$this->cacheIndexMap[$config['value']] = $i;
-		}
-	}
-
-	/**
-	 * @inheritdoc
-	 */
-	public function events()
-	{
-		if (!$this->enableAutoAdvance) return [];
-
-		if ($this->autoAdvanceBeforeSave) {
-			return [
-				ActiveRecord::EVENT_BEFORE_INSERT=>'onBeforeInsert',
-				ActiveRecord::EVENT_BEFORE_UPDATE=>'onBeforeUpdate',
-			];
-		} else {
-			return [
-				ActiveRecord::EVENT_AFTER_INSERT=>'onAfterInsert',
-				ActiveRecord::EVENT_AFTER_UPDATE=>'onAfterUpdate',
-			];
 		}
 	}
 
@@ -134,43 +96,26 @@ class StateBehavior extends \yii\base\Behavior
 	}
 
 	/**
-	 * Handles insert events
+	 * Advances the owners state if possible
 	 *
-	 * @param \yii\base\ModelEvent $event
+	 * @param bool $runValidation if set to true, the owner will be validated before saving
+	 * @return bool true if ok, false if something went wrong
 	 */
-	public function onBeforeInsert($event)
+	public function checkAndAdvanceState($runValidation=false)
 	{
-		$this->checkAndAdvanceState();
-	}
+		$transaction = Yii::$app->db->beginTransaction();
 
-	/**
-	 * Handles after insert events
-	 *
-	 * @param \yii\db\AfterSaveEvent $event
-	 */
-	public function onAfterInsert($event)
-	{
-		$this->checkAndAdvanceState();
-	}
+		while ($this->hasNextState()) {
+			if ($this->advanceOneState(true)) {
+				if (!$this->saveStateAttribute($runValidation)) {
+					$transaction->rollBack();
+					return false;
+				}
+			}
+		}
 
-	/**
-	 * Handles update events
-	 *
-	 * @param \yii\base\ModelEvent $event
-	 */
-	public function onBeforeUpdate($event)
-	{
-		$this->checkAndAdvanceState();
-	}
-
-	/**
-	 * Handles after update events
-	 *
-	 * @param \yii\db\AfterSaveEvent $event
-	 */
-	public function onAfterUpdate($event)
-	{
-		$this->checkAndAdvanceState();
+		$transaction->commit();
+		return true;
 	}
 
 	/**
@@ -178,15 +123,11 @@ class StateBehavior extends \yii\base\Behavior
 	 * over all the states between its current and the desired state.
 	 *
 	 * @param integer|string $stateValue the desired target state
-	 * @param bool $saveImmediately if set to true, the owner will be saved after setting new state
 	 * @param bool $runValidation if set to true, the owner will be validated before saving
 	 * @return bool true upon success
 	 */
-	public function requestState($stateValue, $saveImmediately=true, $runValidation=false)
+	public function requestState($stateValue, $runValidation=false)
 	{
-		/* @var $owner \yii\db\ActiveRecord */
-		$owner = $this->owner;
-
 		//validate state and that it doesn't have it already
 		$this->stateExists($stateValue, true);
 		if ($this->isInState($stateValue)) {
@@ -195,46 +136,37 @@ class StateBehavior extends \yii\base\Behavior
 			throw new InvalidCallException($msg);
 		}
 
-		//get original state for falling back
-		$origState = $owner->{$this->stateAttribute};
-
 		//try advancing
-		$res = true;
+		$transaction = Yii::$app->db->beginTransaction();
 		while (!$this->isInState($stateValue)) {
-			if ($this->advanceOneState(false)) continue;
-
-			$res = false;
-			break;
+			if ($this->advanceOneState(false)) {
+				if (!$this->saveStateAttribute($runValidation)) {
+					$transaction->rollBack();
+					return false;
+				}
+			}
 		}
 
-		//save or return
-		if ($res && $saveImmediately && isset($owner->dirtyAttributes[$this->stateAttribute])) {
-			return $owner->save($runValidation, [$this->stateAttribute]);
-		} else {
-			$owner->{$this->stateAttribute} = $origState;
-			return false;
-		}
+		$transaction->commit();
+		return true;
 	}
 
 	/**
-	 * Advances the owners state if possible
+	 * Does the actual work to advance one single state.
 	 *
-	 * @param bool $saveImmediately if set to true, the owner will be saved after setting new state
-	 * @param bool $runValidation if set to true, the owner will be validated before saving
-	 * @return bool returns the result of the saving process or true if saving was not desired
+	 * @param bool|false $requiresCallback if set to true, the state will only be advanced
+	 * if a preconditionCallback is present
+	 * @return bool true upon success
 	 */
-	public function checkAndAdvanceState($saveImmediately=true, $runValidation=false)
+	protected function advanceOneState($requiresCallback=false)
 	{
-		/* @var $owner \yii\db\ActiveRecord */
-		$owner = $this->owner;
+		if (!$this->hasNextState()) return false;
+		if (!$this->meetsStatePreconditions($this->getNextState(), $requiresCallback)) return false;
 
-		while ($this->advanceOneState(true)) {
-			if (!$this->allowMultipleStepAdvancing) break;
-		}
+		$nextCfg = $this->getStateConfig($this->getNextState());
+		$this->owner->{$this->stateAttribute} = $nextCfg['value'];
 
-		if ($saveImmediately && isset($owner->dirtyAttributes[$this->stateAttribute])) {
-			$owner->save($runValidation, [$this->stateAttribute]);
-		}
+		return true;
 	}
 
 	/**
@@ -394,32 +326,6 @@ class StateBehavior extends \yii\base\Behavior
 	}
 
 	/**
-	 * Does the actual work to advance one single state.
-	 * This method calls all the callbacks, sets the new state and saves if desired.
-	 *
-	 * @param bool|false $requiresCallback if set to true, the state will only be advanced
-	 * if a preconditionCallback is present
-	 * @return bool true upon success
-	 */
-	protected function advanceOneState($requiresCallback=false)
-	{
-		if (!$this->hasNextState()) return false;
-		if (!$this->meetsStatePreconditions($this->getNextState(), $requiresCallback)) return false;
-
-		/* @var $owner \yii\db\ActiveRecord */
-		$owner = $this->owner;
-
-		$curCfg = $this->getStateConfig();
-		$nxtCfg = $this->getStateConfig($this->getNextState());
-
-		if (isset($curCfg['leaveStateCallback'])) call_user_func($curCfg['leaveStateCallback'], $owner, $curCfg);
-		$owner->{$this->stateAttribute} = $nxtCfg['value'];
-		if (isset($nxtCfg['enterStateCallback'])) call_user_func($nxtCfg['enterStateCallback'], $owner, $curCfg);
-
-		return true;
-	}
-
-	/**
 	 * Compares the owners current state with a state provided.
 	 * Following return values:
 	 * -1:	the current state is BEFORE the one provided
@@ -506,6 +412,51 @@ class StateBehavior extends \yii\base\Behavior
 		}
 
 		return true;
+	}
+
+	/**
+	 * Saves the state attribute
+	 *
+	 * @param bool $runValidation whether or not to validate the state attribute
+	 * @return bool true if successfully saved
+	 */
+	protected function saveStateAttribute($runValidation)
+	{
+		/* @var $owner \yii\db\ActiveRecord */
+		$owner = $this->owner;
+
+		//catch unchanged state attribute
+		if (!$this->hasChangedStateAttribute()) return false;
+
+		//fetch relevant configs
+		$curCfg = $this->getStateConfig($owner->getOldAttribute($this->stateAttribute));
+		$nextCfg = $this->getStateConfig();
+
+		//call leave state callback on old state
+		if (isset($curCfg['leaveStateCallback'])) {
+			call_user_func($curCfg['leaveStateCallback'], $owner, $curCfg);
+		}
+
+		//save it
+		if ($owner->save($runValidation, [$this->stateAttribute])) {
+			//call enter state callback on new state
+			if (isset($nextCfg['enterStateCallback'])) {
+				call_user_func($nextCfg['enterStateCallback'], $owner, $nextCfg);
+			}
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Checks whether or not the state attribute of the owner is dirty
+	 *
+	 * @return bool true if changed
+	 */
+	protected function hasChangedStateAttribute()
+	{
+		return isset($this->owner->dirtyAttributes[$this->stateAttribute]);
 	}
 
 }

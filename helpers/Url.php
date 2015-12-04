@@ -31,14 +31,14 @@ class Url extends \yii\helpers\Url
 		$pathParts = explode('/', $pathInfo);
 
 		static::$RCACHE = [
-				'protocol'=>!empty($_SERVER['HTTPS']) ? 'https' : 'http',
-				'host'=>$host,
-				'uri'=>$_SERVER['REQUEST_URI'],
-				'queryString'=>$_SERVER['QUERY_STRING'],
-				'hostParts'=>$hostParts,
-				'numParts'=>count($hostParts),
-				'pathParts'=>$pathParts,
-				'numPathParts'=>count($pathParts),
+			'protocol'=>!empty($_SERVER['HTTPS']) ? 'https' : 'http',
+			'host'=>$host,
+			'uri'=>$_SERVER['REQUEST_URI'],
+			'queryString'=>$_SERVER['QUERY_STRING'],
+			'hostParts'=>$hostParts,
+			'numParts'=>count($hostParts),
+			'pathParts'=>$pathParts,
+			'numPathParts'=>count($pathParts),
 		];
 	}
 
