@@ -86,8 +86,8 @@ class StateBehavior extends \yii\base\Behavior
 		//assert owner has state field
 		if ($owner->tableSchema->getColumn($this->stateAttribute) === null) {
 			$msg = Yii::t('app', 'The table {tbl} does not contain a column named {col}', [
-				'tbl'=>$owner->tableName(),
-				'col'=>$this->stateAttribute,
+					'tbl'=>$owner->tableName(),
+					'col'=>$this->stateAttribute,
 			]);
 			throw new InvalidConfigException($msg);
 		}
@@ -126,7 +126,7 @@ class StateBehavior extends \yii\base\Behavior
 	 * @param bool $runValidation if set to true, the owner will be validated before saving
 	 * @return bool true upon success
 	 */
-	public function requestState($stateValue, $runValidation=false)
+	public function requestState($stateValue, $runValidation=true)
 	{
 		//validate state and that it doesn't have it already
 		$this->stateExists($stateValue, true);
@@ -144,11 +144,13 @@ class StateBehavior extends \yii\base\Behavior
 					$transaction->rollBack();
 					return false;
 				}
+			} else {
+				break;
 			}
 		}
 
 		$transaction->commit();
-		return true;
+		return $this->isInState($stateValue);
 	}
 
 	/**
