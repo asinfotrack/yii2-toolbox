@@ -111,6 +111,8 @@ class StateBehavior extends \yii\base\Behavior
 					$transaction->rollBack();
 					return false;
 				}
+			} else {
+				break;
 			}
 		}
 
