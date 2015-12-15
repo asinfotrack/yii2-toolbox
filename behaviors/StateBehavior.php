@@ -134,7 +134,7 @@ class StateBehavior extends \yii\base\Behavior
 		$this->stateExists($stateValue, true);
 		if ($this->isInState($stateValue)) {
 			$reqStateCfg = $this->getStateConfig($stateValue);
-			$msg = Yii::t('The model is already in the requested state {state}', ['state'=>$reqStateCfg['label']]);
+			$msg = Yii::t('app', 'The model is already in the requested state {state}', ['state'=>$reqStateCfg['label']]);
 			throw new InvalidCallException($msg);
 		}
 
