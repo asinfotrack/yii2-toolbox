@@ -89,6 +89,38 @@ canAny, canOne).
 The button-widget extends the one provided by yii2. It adds functionality to specify an icon.
 The Icons depend on font-awesome and hence require the yii2-extension `rmrevin/yii2-fontawesome`
 
+###### AjaxToggleButton
+An ajax button to toggle boolean values (1, 0). Together with `AjaxAttributeAction` this makes it
+very easy to toggle boolean flags. The widget-attribute `booleanAttribute` is used only for reading out
+values. Therefore you have to respecify this in the controller-action (step 2 below).
+
+Example of usage together with `AjaxAttributeAction`:
+
+1. Render the button within your view
+```php
+<?= AjaxToggleButton::widget([
+	'model'=>$model,
+	'booleanAttribute'=>'is_archived',
+	'action'=>'toggle-archived',
+	'options'=>['class'=>'btn-primary btn-xs'],
+]);
+```
+
+2. Attach an instance of `AjaxAttributeAction` in the corresponding controller of the model specified:
+```php
+public function actions()
+{
+	return [
+		'toggle-archived'=>[
+			'class'=>AjaxAttributeAction::className(),
+			'targetClass'=>User::className(),
+			'targetAttribute'=>'is_archived',
+		],
+	];
+}
+```
+
+
 ###### FlashMessages
 This widget renders flash messages automatically. The messages can be automatically retrieved 
 from yiis session-component or be provided via a custom callable.
@@ -193,6 +225,14 @@ The behavior is fully configurable and there is also a behavior for the correspo
 ###### StateBehavior / StateQueryBehavior
 Documentation coming soon!
 
+
+### Actions
+
+###### AjaxAttributeAction
+A generic and very convenient action to modify model-values via ajax-calls. See the class comments for how
+to configure this action.
+
+There is also an example further up in the description of `AjaxToggleButton`.
 
 
 ### Validators
