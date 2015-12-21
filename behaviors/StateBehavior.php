@@ -155,7 +155,7 @@ class StateBehavior extends \yii\base\Behavior
 		}
 
 		$transaction->commit();
-		return $this->isInState($stateValue);
+		return $this->isEqualOrHigherThanState($stateValue);
 	}
 
 	/**
