@@ -95,8 +95,6 @@ very easy to toggle boolean flags. The widget-attribute `booleanAttribute` is us
 values. Therefore you have to respecify this in the controller-action (step 2 below).
 
 Example of usage together with `AjaxAttributeAction`:
-
-1. Render the button within your view
 ```php
 <?= AjaxToggleButton::widget([
 	'model'=>$model,
@@ -106,7 +104,7 @@ Example of usage together with `AjaxAttributeAction`:
 ]);
 ```
 
-2. Attach an instance of `AjaxAttributeAction` in the corresponding controller of the model specified:
+Now attach an instance of `AjaxAttributeAction` in the corresponding controller of the model specified:
 ```php
 public function actions()
 {

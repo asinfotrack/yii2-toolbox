@@ -44,6 +44,9 @@ class StateBehavior extends \yii\base\Behavior
 	 * needs to be either an integer or a string
 	 * - label: the label of the state (mandatory!)
 	 * step (defaults to false)
+	 * - autoEnter: boolean value or closure with the signature 'function($model, $stateConfig)'
+	 * returning a boolean value whether or not the state can be entered automatically (defaults to true)
+	 * important: this setting is not relevant if no precondition callback is set
 	 * - preconditionCallback: an optional anonymous function with the signature
 	 * 'function($model, $stateConfig)' returning a boolean value to check if the
 	 * preconditions for a step are met
@@ -86,8 +89,8 @@ class StateBehavior extends \yii\base\Behavior
 		//assert owner has state field
 		if ($owner->tableSchema->getColumn($this->stateAttribute) === null) {
 			$msg = Yii::t('app', 'The table {tbl} does not contain a column named {col}', [
-					'tbl'=>$owner->tableName(),
-					'col'=>$this->stateAttribute,
+				'tbl'=>$owner->tableName(),
+				'col'=>$this->stateAttribute,
 			]);
 			throw new InvalidConfigException($msg);
 		}
@@ -106,7 +109,7 @@ class StateBehavior extends \yii\base\Behavior
 		$transaction = Yii::$app->db->beginTransaction();
 
 		while ($this->hasNextState()) {
-			if ($this->advanceOneState(true)) {
+			if ($this->advanceOneState(false)) {
 				if (!$this->saveStateAttribute($runValidation)) {
 					$transaction->rollBack();
 					return false;
@@ -141,7 +144,7 @@ class StateBehavior extends \yii\base\Behavior
 		//try advancing
 		$transaction = Yii::$app->db->beginTransaction();
 		while (!$this->isInState($stateValue)) {
-			if ($this->advanceOneState(false)) {
+			if ($this->advanceOneState(true)) {
 				if (!$this->saveStateAttribute($runValidation)) {
 					$transaction->rollBack();
 					return false;
@@ -158,16 +161,25 @@ class StateBehavior extends \yii\base\Behavior
 	/**
 	 * Does the actual work to advance one single state.
 	 *
-	 * @param bool|false $requiresCallback if set to true, the state will only be advanced
+	 * @param bool $isManualRequest if set to true, a manual request is indicated
 	 * if a preconditionCallback is present
 	 * @return bool true upon success
 	 */
-	protected function advanceOneState($requiresCallback=false)
+	protected function advanceOneState($isManualRequest)
 	{
 		if (!$this->hasNextState()) return false;
-		if (!$this->meetsStatePreconditions($this->getNextState(), $requiresCallback)) return false;
-
 		$nextCfg = $this->getStateConfig($this->getNextState());
+
+		//check preconditions
+		if (!$this->meetsStatePreconditions($nextCfg['value'])) return false;
+
+		//check auto entering
+		if (!$isManualRequest) {
+			$ae = $nextCfg['autoEnter'];
+			$resAe = $ae instanceof \Closure ? call_user_func($ae, $this->owner, $nextCfg) : $ae;
+			if (!$resAe) return false;
+		}
+
 		$this->owner->{$this->stateAttribute} = $nextCfg['value'];
 
 		return true;
@@ -234,16 +246,15 @@ class StateBehavior extends \yii\base\Behavior
 	 * Checks if the preconditions for a state are met
 	 *
 	 * @param integer|string $stateValue the value of the state to check
-	 * @param bool $requiresCallback if set to true and no callback is set, false is returned
 	 * @return bool true if an anonymous function is set and preconditions are met
 	 */
-	public function meetsStatePreconditions($stateValue, $requiresCallback=false)
+	public function meetsStatePreconditions($stateValue)
 	{
 		$config = $this->getStateConfig($stateValue);
 		if (isset($config['preconditionCallback'])) {
 			return call_user_func($config['preconditionCallback'], $this->owner, $config);
 		} else {
-			return !$requiresCallback;
+			return true;
 		}
 	}
 
@@ -382,7 +393,7 @@ class StateBehavior extends \yii\base\Behavior
 		}
 
 		$config = &$this->stateConfig;
-		foreach ($config as $i=>$state) {
+		foreach ($config as $i=>&$state) {
 			//validate label and value
 			if (empty($state['value']) || empty($state['label'])) {
 				$msg = Yii::t('app', 'The label and the value of a state are mandatory');
@@ -404,6 +415,7 @@ class StateBehavior extends \yii\base\Behavior
 
 			//default settings
 			if (!isset($state['groups'])) $state['groups'] = [];
+			if (!isset($state['autoEnter'])) $state['autoEnter'] = true;
 
 			//validate groups
 			foreach ($state['groups'] as &$group) {
