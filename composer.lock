@@ -58,16 +58,16 @@
         },
         {
             "name": "bower-asset/fontawesome",
-            "version": "v4.4.0",
+            "version": "v4.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FortAwesome/Font-Awesome.git",
-                "reference": "e554555d73a44e0a7d11b0361ad7a5325a5f551c"
+                "reference": "fddd2c240452e6c8990c4ef75e0265b455aa7968"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FortAwesome/Font-Awesome/zipball/e554555d73a44e0a7d11b0361ad7a5325a5f551c",
-                "reference": "e554555d73a44e0a7d11b0361ad7a5325a5f551c",
+                "url": "https://api.github.com/repos/FortAwesome/Font-Awesome/zipball/fddd2c240452e6c8990c4ef75e0265b455aa7968",
+                "reference": "fddd2c240452e6c8990c4ef75e0265b455aa7968",
                 "shasum": ""
             },
             "type": "bower-asset-library",
@@ -356,20 +356,20 @@
         },
         {
             "name": "rmrevin/yii2-fontawesome",
-            "version": "2.12.2",
+            "version": "2.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rmrevin/yii2-fontawesome.git",
-                "reference": "62308687477734c166753de0ad9e2333dc7dce32"
+                "reference": "2efbfacb22be59f373d11a7e3dfa9213e2ba18a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rmrevin/yii2-fontawesome/zipball/62308687477734c166753de0ad9e2333dc7dce32",
-                "reference": "62308687477734c166753de0ad9e2333dc7dce32",
+                "url": "https://api.github.com/repos/rmrevin/yii2-fontawesome/zipball/2efbfacb22be59f373d11a7e3dfa9213e2ba18a9",
+                "reference": "2efbfacb22be59f373d11a7e3dfa9213e2ba18a9",
                 "shasum": ""
             },
             "require": {
-                "bower-asset/fontawesome": "4.4.*",
+                "bower-asset/fontawesome": "4.5.*",
                 "php": ">=5.4.0",
                 "yiisoft/yii2": "2.0.*"
             },
@@ -404,7 +404,7 @@
                 "font",
                 "yii"
             ],
-            "time": "2015-11-20 09:17:45"
+            "time": "2015-11-26 15:24:53"
         },
         {
             "name": "yiisoft/yii2",
