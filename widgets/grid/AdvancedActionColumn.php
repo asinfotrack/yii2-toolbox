@@ -6,7 +6,7 @@ use yii\base\InvalidConfigException;
 
 /**
  * Advanced action column with functionality to show buttons depending on a
- * users role
+ * users role and has dynamic templates per row.
  *
  * @author Pascal Mueller, AS infotrack AG
  * @link http://www.asinfotrack.ch
@@ -14,6 +14,22 @@ use yii\base\InvalidConfigException;
  */
 class AdvancedActionColumn extends \yii\grid\ActionColumn
 {
+
+	/**
+	 * @var string|\Closure the value of the initial template variable to
+	 * enable dynamic templates on a per row basis
+	 */
+	protected $templateInternal;
+
+	/**
+	 * @var string|\Closure same functionality as the original implementation
+	 * of `ActionColumn`-class, but with the possibility to set a closure instead
+	 * of a fixed string. This way the template will be evaluated for each row.
+	 *
+	 * The callback needs to have its signature as follows:
+	 * `function ($model, $key, $index)`
+	 */
+	public $template;
 
 	/**
 	 * @var array holding the right-configuration for each button.
@@ -31,6 +47,11 @@ class AdvancedActionColumn extends \yii\grid\ActionColumn
 	public function init()
 	{
 		parent::init();
+
+		//copy template value to internal var
+		if ($this->template instanceof \Closure) {
+			$this->templateInternal = $this->template;
+		}
 
 		//iterate over rights
 		foreach ($this->buttonRights as $name=>$value) {
@@ -64,5 +85,19 @@ class AdvancedActionColumn extends \yii\grid\ActionColumn
 			throw new InvalidConfigException($msg);
 		}
 	}
+
+	/**
+	 * @inheritdoc
+	 */
+	protected function renderDataCellContent($model, $key, $index)
+	{
+		//update the value of the template string for the current row
+		if ($this->templateInternal !== null) {
+			$this->template = call_user_func($this->templateInternal, $model, $key, $index);
+		}
+
+		return parent::renderDataCellContent($model, $key, $index);
+	}
+
 
 }
