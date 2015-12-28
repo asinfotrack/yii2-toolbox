@@ -29,7 +29,7 @@ class AdvancedActionColumn extends \yii\grid\ActionColumn
 	 * The callback needs to have its signature as follows:
 	 * `function ($model, $key, $index)`
 	 */
-	public $template;
+	public $template = '{view} {update} {delete}';
 
 	/**
 	 * @var array holding the right-configuration for each button.
