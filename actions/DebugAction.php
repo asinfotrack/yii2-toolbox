@@ -278,15 +278,14 @@ class DebugAction extends \yii\base\Action
 			'Locale'=>Yii::$app->formatter->locale,
 			'Language'=>Yii::$app->language,
 			'Source lang'=>Yii::$app->sourceLanguage,
-			'Timezone'=>function() {
+			'Timezone'=>Yii::$app->timeZone,
+			'Local time ' . Yii::$app->timeZone=>function() {
 				$dtCur = new \DateTime('now', new \DateTimeZone(Yii::$app->timeZone));
+				return $dtCur->format('d.m.Y H:i:s') . ' ' . Html::tag('span', 'UTC-offset: ' . $dtCur->getOffset() . 's', ['class'=>'text-muted']);
+			},
+			'Local time UTC'=>function() {
 				$dtUtc = new \DateTime('now', new \DateTimeZone('UTC'));
-				return Yii::$app->timeZone
-					. Html::beginTag('small', ['text-muted']) . Html::tag('br')
-					. 'local time: ' . $dtCur->format('d.m.Y H:i:s') . Html::tag('br')
-					. 'UTC-offset: ' . $dtCur->getOffset() . 's' . Html::tag('br')
-					. 'UTC time: ' . $dtUtc->format('d.m.Y H:i:s')
-					. Html::endTag('small');
+				return $dtUtc->format('d.m.Y H:i:s');
 			},
 		];
 	}
