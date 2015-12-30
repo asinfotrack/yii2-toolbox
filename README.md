@@ -232,6 +232,32 @@ to configure this action.
 
 There is also an example further up in the description of `AjaxToggleButton`.
 
+###### DebugAction
+The debug action shows you relevant information about the current configuration of the hosting. It also
+shows you all kind of configs right in the browser.
+
+To enable it, all you have to to is add it to the `actions()`-method of a controller of your choice and
+provide a view to render its contents into.
+
+```php
+public function actions()
+{
+    return [
+        // ...
+        [
+            'class'=>'asinfotrack\yii2\toolbox\actions\DebugAction',
+            'view'=>'//site/debugging',
+        ]
+        // ...
+    ];
+}
+```
+
+Within that view you simply output the contents with this statement:
+
+```php
+<?= $content ?>
+```
 
 ### Validators
 
