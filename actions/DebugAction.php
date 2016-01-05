@@ -274,8 +274,10 @@ class DebugAction extends \yii\base\Action
 	 */
 	protected function sectionLocalization()
 	{
+		$f = Yii::$app->formatter;
+
 		return [
-			'Locale'=>Yii::$app->formatter->locale,
+			'Locale'=>$f->locale,
 			'Language'=>Yii::$app->language,
 			'Source lang'=>Yii::$app->sourceLanguage,
 			'Timezone'=>Yii::$app->timeZone,
@@ -287,6 +289,10 @@ class DebugAction extends \yii\base\Action
 				$dtUtc = new \DateTime('now', new \DateTimeZone('UTC'));
 				return $dtUtc->format('d.m.Y H:i:s');
 			},
+			'Date format'=>$this->valueCode($f->dateFormat),
+			'Time format'=>$this->valueCode($f->timeFormat),
+			'DateTime format'=>$this->valueCode($f->datetimeFormat),
+			'Boolean format'=>$this->valueVarDump($f->booleanFormat),
 		];
 	}
 

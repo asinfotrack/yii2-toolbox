@@ -49,7 +49,7 @@ class StateQueryBehavior extends \yii\base\Behavior
 		//get config from instance
 		if ($this->stateConfig === null || $this->stateAttribute === null) {
 			$this->modelInstance = new $this->owner->modelClass();
-			$this->stateAttribute = $this->modelInstance->stateAttribute;
+			$this->stateAttribute = $this->modelInstance->tableName() . '.' . $this->modelInstance->stateAttribute;
 			$this->stateConfig = $this->modelInstance->stateConfig;
 		}
 	}
