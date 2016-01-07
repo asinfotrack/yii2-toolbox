@@ -58,6 +58,39 @@ class AjaxToggleButton extends Button
 	public $booleanFormat;
 
 	/**
+	 * @var string holds the css class being active when the attribute is true
+	 */
+	public $buttonClassOn = 'btn-success';
+
+	/**
+	 * @var string holds the css class being active when the attribute is false
+	 */
+	public $buttonClassOff = 'btn-primary';
+
+	/**
+	 * @var string name of the js event triggered on window object upon successful toggling.
+	 * The js-listener should have four params: `function(event, btn, pk, newVal)`:
+	 *
+	 * - event: 		the jquery event-object
+	 * - btn: 			reference to the button node in the dom
+	 * - pk: 			object holding the pk of the changed model
+	 * - newVal: 		boolean indicating the new value of the attribute changed
+	 */
+	public $jsEventSuccess = 'ajax-toggle-button:success';
+
+	/**
+	 * @var string name of js event triggered on window object upon error while toggling
+	 * The js listener should have five params: `function(event, btn, pk, textStatus, errorThrown)`:
+	 *
+	 * - event: 		the jquery event-object
+	 * - btn: 			reference to the button node in the dom
+	 * - pk: 			object holding the pk of the changed model
+	 * - textStatus: 	the status text as received by jquery ajax
+	 * - errorThrown: 	the error thrown as received by jquery ajax
+	 */
+	public $jsEventError = 'ajax-toggle-button:error';
+
+	/**
 	 * @inheritdoc
 	 */
 	public function init()
@@ -72,7 +105,7 @@ class AjaxToggleButton extends Button
 
 		//assert action is set
 		if (empty($this->action)) {
-			$msg = Yii::t('app', 'Please sepcify an action to call');
+			$msg = Yii::t('app', 'Please specify an action to call');
 			throw new InvalidConfigException($msg);
 		}
 
@@ -105,11 +138,23 @@ class AjaxToggleButton extends Button
 		}
 
 		Html::addCssClass($this->options, 'widget-ajax-button');
+		if ($this->model->{$this->booleanAttribute}) {
+			Html::removeCssClass($this->options, $this->buttonClassOff);
+			Html::addCssClass($this->options, $this->buttonClassOn);
+		} else {
+			Html::removeCssClass($this->options, $this->buttonClassOn);
+			Html::addCssClass($this->options, $this->buttonClassOff);
+		}
+
 		$this->options['data']['current-value'] = $this->model->{$this->booleanAttribute};
 		$this->options['data']['pjax'] = 0;
 		$this->options['data']['boolean-format'] = $this->booleanFormat;
 		$this->options['data']['ajax-params'] = $params;
 		$this->options['data']['ajax-method'] = $this->ajaxMethod;
+		$this->options['data']['event-success'] = $this->jsEventSuccess;
+		$this->options['data']['event-error'] = $this->jsEventError;
+		$this->options['data']['class-on'] = $this->buttonClassOn;
+		$this->options['data']['class-off'] = $this->buttonClassOff;
 
 		return Html::a($this->createLabel(), $this->ajaxUrl, $this->options);
 	}
