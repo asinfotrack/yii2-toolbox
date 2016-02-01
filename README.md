@@ -190,6 +190,9 @@ Short HEX-Formats are supported automatically.
 ###### ComponentConfig
 Helper class to work with component-configurations
 
+###### DropdownHelper
+Makes working with drop downs easier. Especially if you need additional options per item
+
 ###### Html
 Extends the Html-helper of Yii2 with additional functionality like disguising email-addresses,
 bootstrap-elements, text-highlighting, etc.
