@@ -1,6 +1,10 @@
 <?php
 namespace asinfotrack\yii2\toolbox\helpers;
 
+use yii\base\Object;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Json;
+
 /**
  * Helper for dropdown lists
  *
@@ -49,12 +53,26 @@ class DropdownHelper
 			$valTo = $to instanceof \Closure ? call_user_func($to, $model) : $model->{$to};
 			$items[$valFrom] = $valTo;
 
-			//item options
+			//check if there are item options or continue
 			if (empty($dataAttributes)) continue;
+
+			//fetch item options
 			$itemOptions[$valFrom] = [];
 			foreach ($dataAttributes as $dataAttr) {
 				if (!isset($itemOptions[$valFrom]['data'])) $itemOptions[$valFrom]['data'] = [];
-				$itemOptions[$valFrom]['data'][$dataAttr] = $model->{$dataAttr};
+
+				//prepare
+				$parts = explode('.', $dataAttr);
+				$identifier = implode('-', $parts);
+
+				//fetch value
+				$valOrObj = $model;
+				foreach ($parts as $part) {
+					$valOrObj = $valOrObj->{$part};
+				}
+
+				//set options
+				$itemOptions[$valFrom]['data'][$identifier] = $valOrObj instanceof Object || is_array($valOrObj) ? Json::encode($valOrObj) : $valOrObj;
 			}
 		}
 
