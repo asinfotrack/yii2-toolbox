@@ -13,6 +13,55 @@ The preferred way to install this extension is through [composer](http://getcomp
 
 ### Components
 
+###### MemoryUrlManager
+This URL manager implements memory-functionality for urls. This enables for example to keep
+the state (sorting, filtering and paging) of a GridView across requests. The default configuration
+saves this data in the session variable and appends the params to the links.
+
+The usage is very easy. Simply set this class as the url manager in your Yii-config and specify the
+additional attributes according to the example below and the documentation within the class.
+
+Example of a config:
+```php
+// ...
+'urlManager'=>[
+	'class'=>'\asinfotrack\yii2\toolbox\components\MemoryUrlManager',
+	
+	'memoryMap'=>[
+
+		//the controller
+		'mycontroller'=>[
+			//the action
+			'myindexaction'=>[
+				//regex rules...if a param matches a rule it will be memorized
+				'/^SearchForm/',
+				//if a rule is specified like this, the regex is only enabled if the callback returns true
+				'page'=>function() {
+					return rand(0,1) == 1;
+				},
+			],
+		],
+
+		//modules work the same, except they have one level more
+		'mymodule'=>[
+			'mymodulecontroller'=>[
+				//the action
+				'mymoduleaction'=>[
+					//regex rules...if a param matches a rule it will be memorized
+					'/^MyForm/',
+				],
+			],
+		],
+
+	],
+],
+// ...
+```
+
+Each entry in the `memoryMap` can be a string representing a regex to match params to save. You can
+optionally use the regex-rule as key and a callback returning a boolean as the value. In this case
+the rule is only active when the callback returns true
+
 ###### ImageResponseFormatter
 Response formatter for images. You need to add the formatter to the config as follows:
 ```php
