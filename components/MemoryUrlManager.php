@@ -2,6 +2,7 @@
 namespace asinfotrack\yii2\toolbox\components;
 
 use Yii;
+use yii\base\Application;
 
 /**
  * This URL manager implements memory-functionality for urls. This enables for example to keep
