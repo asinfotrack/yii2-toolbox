@@ -1,6 +1,8 @@
 <?php
 namespace asinfotrack\yii2\toolbox\components;
 
+use Yii;
+
 /**
  * This URL manager implements memory-functionality for urls. This enables for example to keep
  * the state (sorting, filtering and paging) of a GridView across requests. The default configuration

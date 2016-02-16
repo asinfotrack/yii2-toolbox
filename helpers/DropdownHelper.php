@@ -2,7 +2,6 @@
 namespace asinfotrack\yii2\toolbox\helpers;
 
 use yii\base\Object;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 
 /**
