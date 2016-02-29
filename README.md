@@ -7,6 +7,16 @@ The preferred way to install this extension is through [composer](http://getcomp
 
 	"asinfotrack/yii2-toolbox": "dev-master"
 
+## Changelog
+
+###### 0.8.1 (currently under development)
+
+- Geocoding helper added
+
+###### [v0.8.0](https://github.com/asinfotrack/yii2-toolbox/releases/tag/0.8.0)
+
+- first stable release
+
 
 ## Contents
 
