@@ -43,7 +43,7 @@ class Url extends \yii\helpers\Url
 	}
 
 	/**
-	 * Checks whether or not this is a localhost
+	 * Checks whether or not the request comes from the localhost
 	 *
 	 * @return bool true if localhost
 	 */
@@ -52,6 +52,30 @@ class Url extends \yii\helpers\Url
 		if (!isset(self::$RCACHE)) static::cacheReqData();
 
 		return in_array(static::$RCACHE['host'], ['::1', '127.0.0.1', 'localhost']);
+	}
+
+	/**
+	 * This method checks whether or not the request comes from a certain ip range
+	 *
+	 * @param string|array $range either a range specified as a single string with asterisks (`192.168.1.*`)
+	 * as placeholders, or an array containing a from and a to address (`['192.168.1.1', '192.168.1.10']`).
+	 * @return bool true if in range
+	 */
+	public static function isInIpRange($range)
+	{
+		//get from and to addresses and translate them into numeric format
+		if (!is_array($range)) {
+			$from = ip2long(str_replace('*', '1', $range));
+			$to = ip2long(str_replace('*', '255', $range));
+		} else {
+			$from = ip2long($range[0]);
+			$to = ip2long($range[1]);
+		}
+
+		//get request ip
+		$ipReq = ip2long(static::$RCACHE['host']);
+
+		return $ipReq >= $from && $ipReq <= $to;
 	}
 
 	/**
