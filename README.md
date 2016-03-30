@@ -9,10 +9,11 @@ The preferred way to install this extension is through [composer](http://getcomp
 
 ## Changelog
 
-###### 0.8.1 (currently under development)
+###### v0.8.1 (currently under development)
 
 - Geocoding helper added
 - Query helper added
+- Url helper extended with `isInIpRange()`-method
 
 ###### [v0.8.0](https://github.com/asinfotrack/yii2-toolbox/releases/tag/0.8.0)
 
