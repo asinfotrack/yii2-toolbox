@@ -12,6 +12,7 @@ The preferred way to install this extension is through [composer](http://getcomp
 ###### 0.8.1 (currently under development)
 
 - Geocoding helper added
+- Query helper added
 
 ###### [v0.8.0](https://github.com/asinfotrack/yii2-toolbox/releases/tag/0.8.0)
 
@@ -265,6 +266,9 @@ Helper for common tasks concerning migrations (eg checking if a migration was ap
 
 ###### PrimaryKey
 Functionalities to work with PKs of `\yii\db\ActiveRecord` and to convert them into JSON
+
+###### QueryHelper
+Recurring tasks while working wth ActiveQueries
 
 ###### ServerConfig
 Provides functionality to fetch the most important server vars and to check if certain
