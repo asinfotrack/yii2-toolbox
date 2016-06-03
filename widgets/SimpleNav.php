@@ -24,6 +24,7 @@ class SimpleNav extends \yii\bootstrap\Widget
 	 * - url: optional, the item's URL. Defaults to "#".
 	 * - visible: boolean, optional, whether this menu item is visible. Defaults to true.
 	 * - options: array, optional, the HTML attributes of the item container (li).
+	 * - itemOptions: array, optional, the HTML attributes for the actual link- or span-tag
 	 * - active: boolean, optional, whether the item should be on active state or not.
 	 * - items: array|string, optional, the configuration array for creating a [[Dropdown]] widget,
 	 *   or a string representing the dropdown menu. Note that Bootstrap does not support sub-dropdown menus.
@@ -142,14 +143,15 @@ class SimpleNav extends \yii\bootstrap\Widget
 			}
 		}
 
+		$itemOptions = isset($item['itemOptions']) ? $item['itemOptions'] : [];
 		if (isset($item['url'])) {
 			if ($this->entryPrefixInsideLink) {
-				return Html::a($prefix . $label, $item['url']);
+				return Html::a($prefix . $label, $item['url'], $itemOptions);
 			} else {
-				return $prefix . Html::a($label, $item['url']);
+				return $prefix . Html::a($label, $item['url'], $itemOptions);
 			}
 		} else {
-			return Html::tag($this->noLinkTagName, $prefix . $label);
+			return Html::tag($this->noLinkTagName, $prefix . $label, $itemOptions);
 		}
 	}
 
