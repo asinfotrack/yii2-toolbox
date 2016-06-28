@@ -11,10 +11,10 @@ $(document).ready(function() {
 
         //reverse address
         var chars = [];
-        for (var i=href.length - 1; i>=0; i--) {
+        for (var i=href.length - 1; i>=7; i--) {
             chars.push(href.substr(i, 1));
         }
-        var address = chars.join('').replace('[at]', '@');
+        var address = href.substr(0, 7) + chars.join('').replace('[at]', '@');
 
         //mark event as handled and open mailto-link
         event.preventDefault();

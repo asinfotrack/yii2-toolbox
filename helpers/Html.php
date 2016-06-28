@@ -236,7 +236,7 @@ class Html extends \yii\helpers\Html
 			$address = $email;
 			$clear = $text;
 		}
-		$href = strrev('mailto:' . str_replace('@', '[at]', $address));
+		$href = 'mailto:' . strrev(str_replace('@', '[at]', $address));
 
 		//prepare options
 		$options['href'] = $href;
