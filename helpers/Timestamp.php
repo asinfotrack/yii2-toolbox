@@ -196,7 +196,7 @@ class Timestamp
 		$dt->setTimestamp($timestamp);
 		$dt->setTime(0, 0, 0);
 
-		return $dt->getTimestamp();
+		return $dt->getTimestamp() + $dt->getOffset();
 	}
 
 	/**
