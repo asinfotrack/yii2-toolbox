@@ -5,11 +5,15 @@ Yii2-Toolbox is a collection of useful helpers, widgets etc. extending the basic
 ## Installation
 The preferred way to install this extension is through [composer](http://getcomposer.org/download/).
 
-	"asinfotrack/yii2-toolbox": "dev-master"
+	"asinfotrack/yii2-toolbox": "0.8.*"
 
 ## Changelog
 
-###### v0.8.1 (currently under development)
+###### [v0.8.2](https://github.com/asinfotrack/yii2-toolbox/releases/tag/0.8.2)
+
+- Resolved compatibility issue of `AdvancedActionColumn` when template was specified as a callback with Yii 2.0.11
+
+###### [v0.8.1](https://github.com/asinfotrack/yii2-toolbox/releases/tag/0.8.1)
 
 - Geocoding helper added
 - Query helper added

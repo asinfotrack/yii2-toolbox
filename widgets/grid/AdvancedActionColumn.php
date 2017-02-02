@@ -64,6 +64,18 @@ class AdvancedActionColumn extends \yii\grid\ActionColumn
 	}
 
 	/**
+	 * @inheritdoc
+	 */
+	protected function initDefaultButton($name, $iconName, $additionalOptions = [])
+	{
+		if ($this->template instanceof \Closure) {
+			return null;
+		} else {
+			parent::initDefaultButton($name, $iconName, $additionalOptions = []);
+		}
+	}
+
+	/**
 	 * Checks if a button should be displayed or not, depending on the defined
 	 * right configuration for a button.
 	 *
