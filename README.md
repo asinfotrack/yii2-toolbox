@@ -146,6 +146,10 @@ public function actionPdf()
 Extends `\yii\web\User` with the ability to check multiple rights at once (canAll, 
 canAny, canOne).
 
+###### ProgressiveImageGd and ProgressiveImageImagick
+Both classes extend the image drivers of `yurkinx/yii2-image` to enable progressive encoding of jpg-files.
+To use it, simply call the factory-class `asinfotrack\yii2\toolbox\helpers\ImageFactory::createInstance($path, $driver=self::DRIVER_GD)`
+to get an instance and proceed working. Make sure either GD- or Imagick-Library is enabled.
 
 
 ### Widgets
@@ -265,6 +269,10 @@ reverse geocoding
 ###### Html
 Extends the Html-helper of Yii2 with additional functionality like disguising email-addresses,
 bootstrap-elements, text-highlighting, etc.
+
+###### ImageFactory
+Factory-class to create instances of image drivers. To use it, simply call `createInstance($path, $driver=self::DRIVER_GD)`
+to get an instance and proceed working. Make sure either GD- or Imagick-Library is enabled.
 
 ###### MigrationHelper
 Helper for common tasks concerning migrations (eg checking if a migration was applied, etc).
