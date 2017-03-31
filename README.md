@@ -5,9 +5,17 @@ Yii2-Toolbox is a collection of useful helpers, widgets etc. extending the basic
 ## Installation
 The preferred way to install this extension is through [composer](http://getcomposer.org/download/).
 
-	"asinfotrack/yii2-toolbox": "0.8.*"
+	"asinfotrack/yii2-toolbox": "~0.8.4"
 
 ## Changelog
+
+###### [v0.8.4](https://github.com/asinfotrack/yii2-toolbox/releases/tag/0.8.4)
+
+- Video-widget added
+
+###### [v0.8.3](https://github.com/asinfotrack/yii2-toolbox/releases/tag/0.8.3)
+
+- General-dependency update and adding image-functionality
 
 ###### [v0.8.2](https://github.com/asinfotrack/yii2-toolbox/releases/tag/0.8.2)
 
@@ -234,6 +242,9 @@ a model.
 
 ###### TabsWithMemory
 Tabs widget which remembers its active tab via javascript sessionStorage
+
+###### Video
+Wrapper-widget to simplify work with video tag
 
 ###### Grid column-types
 The column types provided extend the functionality of the basic `\yii\grid\DataColumn`. The
