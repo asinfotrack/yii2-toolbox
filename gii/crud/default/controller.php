@@ -30,8 +30,8 @@ use yii\web\NotFoundHttpException;
 use <?= ltrim($generator->modelClass, '\\') ?>;
 use <?= ltrim($generator->searchModelClass, '\\') . (isset($searchModelAlias) ? " as $searchModelAlias" : "") ?>;
 
-/* @var $model <?= $modelClass; ?> */ 
-/* @var $searchModel <?= isset($searchModelAlias) ? $searchModelAlias : $searchModelClass; ?> */ 
+/* @var $model <?= $generator->modelClass; ?> */
+/* @var $searchModel <?= isset($searchModelAlias) ? $searchModelAlias : $generator->searchModelClass; ?> */
 
 class <?= $controllerClass ?> extends <?= '\\' . ltrim($generator->baseControllerClass, '\\') . "\n" ?>
 {
@@ -58,10 +58,6 @@ class <?= $controllerClass ?> extends <?= '\\' . ltrim($generator->baseControlle
 		];
 	}
 
-	/**
-	 * Lists all <?= $modelClass ?> models
-	 * @return mixed
-	 */
 	public function actionIndex()
 	{
 		$searchModel = new <?= isset($searchModelAlias) ? $searchModelAlias : $searchModelClass ?>();
@@ -73,11 +69,6 @@ class <?= $controllerClass ?> extends <?= '\\' . ltrim($generator->baseControlle
 		]);
 	}
 
-	/**
-	 * Displays a single <?= $modelClass ?> model
-	 * <?= implode("\n\t * ", $actionParamComments) . "\n" ?>
-	 * @return mixed
-	 */
 	public function actionView(<?= $actionParams ?>)
 	{
 		$model = $this->findModel(<?= $actionParams ?>);
@@ -89,7 +80,7 @@ class <?= $controllerClass ?> extends <?= '\\' . ltrim($generator->baseControlle
 
 	public function actionCreate()
 	{
-		$model = new <?= $modelClass ?>;
+		$model = new <?= $modelClass ?>();
         $loaded = $model->load(Yii::$app->request->post());
 
 		if ($loaded && $model->save()) {
@@ -127,8 +118,8 @@ class <?= $controllerClass ?> extends <?= '\\' . ltrim($generator->baseControlle
 	 * Find a model by its primary key
      *
 	 * <?= implode("\n\t * ", $actionParamComments) . "\n" ?>
-	 * @return <?=				   $modelClass ?> the loaded model
-	 * @throws NotFoundHttpException if the model cannot be found
+	 * @return <?= $generator->modelClass ?> the loaded model
+	 * @throws \yii\web\NotFoundHttpException if the model cannot be found
 	 */
 	protected function findModel(<?= $actionParams ?>)
 	{

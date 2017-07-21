@@ -21,21 +21,20 @@ use yii\widgets\ActiveForm;
 /* @var $form \yii\widgets\ActiveForm */
 /* @var $model \<?= ltrim($generator->modelClass, '\\') ?> */
 ?>
-
 <?= "<?php " ?>$form = ActiveForm::begin(); ?>
 
-    <?= "<?= " ?>$form->errorSummary($model); ?>
+<?= "<?= " ?>$form->errorSummary($model); ?>
 
-<?php foreach ($safeAttributes as $attribute) {
-echo "\t\t<?= " . $generator->generateActiveField($attribute) . " ?>\n";
-} ?>
+<?php foreach ($safeAttributes as $attribute): ?>
+<?= sprintf("<?= %s ?>\n", $generator->generateActiveField($attribute)) ?>
+<?php endforeach; ?>
 
-    <hr/>
+<hr/>
 
-    <div class="form-group">
-        <?= "<?= " ?>Html::submitButton(Yii::t('yii', $model->isNewRecord ? 'Create' : 'Save'), [
-            'class'=>$model->isNewRecord ? 'btn btn-success' : 'btn btn-primary'
-        ]); ?>
-    </div>
+<div class="form-group">
+	<?= "<?= " ?>Html::submitButton(Yii::t('yii', $model->isNewRecord ? 'Create' : 'Save'), [
+		'class'=>$model->isNewRecord ? 'btn btn-success' : 'btn btn-primary'
+	]); ?>
+</div>
 
 <?= "<?php " ?>ActiveForm::end(); ?>

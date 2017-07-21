@@ -23,9 +23,6 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use <?= ltrim($generator->modelClass, '\\') . (isset($modelAlias) ? " as $modelAlias" : "") . ";\n" ?>
 
-/**
- * <?= $searchModelClass ?> represents the model behind the search form about `<?= $generator->modelClass ?>`.
- */
 class <?= $searchModelClass ?> extends <?= '\\' . ltrim($generator->modelClass, '\\') . (isset($modelAlias) ? " as $modelAlias" : "") . "\n" ?>
 {
 
@@ -39,44 +36,44 @@ class <?= $searchModelClass ?> extends <?= '\\' . ltrim($generator->modelClass, 
 		];
 	}
 
-    /**
-     * @inheritdoc
-     */
+	/**
+	 * @inheritdoc
+	 */
 	public function scenarios()
 	{
 		//bypass scenarios() implementation of the parent class
 		return Model::scenarios();
 	}
 
-    /**
-     * Creates a data provider instance with the search query applied
-     *
-     * @param array $params the search params
-     * @return \yii\data\ActiveDataProvider the configured data provider
-     */
+	/**
+	 * Creates a data provider instance with the search query applied
+	 *
+	 * @param array $params the search params
+	 * @return \yii\data\ActiveDataProvider the configured data provider
+	 */
 	public function search($params)
 	{
-        //create query instance
+		//create query instance
 		$query = <?= isset($modelAlias) ? $modelAlias : $modelClass ?>::find();
 
-        //create data provider instance
+		//create data provider instance
 		$dataProvider = new ActiveDataProvider([
 			'query'=>$query,
-            /*
-            'sort'=>[
-                'defaultOrder'=>[
-                    'my_first_column'=>SORT_ASC,
-                    'my_second_column'=>SORT_ASC,
-                ],
-            ],
-            */
+			/*
+			'sort'=>[
+				'defaultOrder'=>[
+					'my_first_column'=>SORT_ASC,
+					'my_second_column'=>SORT_ASC,
+				],
+			],
+			*/
 		]);
 
-        //load the data
-        $this->load($params);
+		//load the data
+		$this->load($params);
 
-        //apply filtering conditions
-        <?= implode("\n        ", $searchConditions) ?>
+		//apply filtering conditions
+		<?= implode("\n\t\t", str_replace(' => ', '=>', $searchConditions)) ?>
 
 		return $dataProvider;
 	}

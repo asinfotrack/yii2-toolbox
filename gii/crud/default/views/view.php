@@ -12,7 +12,9 @@ use yii\widgets\DetailView;
 /* @var $this \<?= ltrim($generator->viewBaseClass, '\\') ?> */
 /* @var $model \<?= ltrim($generator->modelClass, '\\') ?> */
 
-$this->title = Yii::t('app, 'Detail of ' . $model-><?= $generator->getNameAttribute() ?>);
+$this->title = Yii::t('<?= $generator->messageCategory ?>', 'Detail of {name}', [
+	'name'=>$model-><?= $generator->getNameAttribute() ?>,
+]);
 ?>
 
 <?= "<?= " ?>DetailView::widget([
