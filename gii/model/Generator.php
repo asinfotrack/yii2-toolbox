@@ -24,7 +24,7 @@ class Generator extends \yii\gii\generators\model\Generator
 	{
 		return array_merge(parent::rules(), [
 			[['iconName'], 'default', 'value'=>'question'],
-			[['iconName'], 'match', 'pattern' => '/^\w+([\w-]*)\w+$/', 'message' => 'Only word characters and \'-\' are allowed.'],
+			[['iconName'], 'match', 'pattern'=>'/^\w+([\w-]*)\w+$/', 'message'=>'Only word characters and \'-\' are allowed.'],
 		]);
 	}
 
@@ -44,7 +44,7 @@ class Generator extends \yii\gii\generators\model\Generator
 	public function hints()
 	{
 		return array_merge(parent::hints(), [
-			'iconName' => 'Name of the FontAwesome icon (without "fa-")',
+			'iconName'=>'Name of the FontAwesome icon (without "fa-")',
 		]);
 	}
 
