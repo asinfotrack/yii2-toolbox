@@ -23,7 +23,7 @@ class Generator extends \yii\gii\generators\model\Generator
 	public function rules()
 	{
 		return array_merge(parent::rules(), [
-			[['iconName'], 'match', 'pattern' => '/^[\w-]+$/', 'message' => 'Only word characters and \'-\' are allowed.'],
+			[['iconName'], 'match', 'pattern' => '/^\w+([\w-]*)\w+$/', 'message' => 'Only word characters and \'-\' are allowed.'],
 		]);
 	}
 
