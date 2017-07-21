@@ -1,29 +1,24 @@
 <?php
-
 use yii\helpers\Inflector;
 use yii\helpers\StringHelper;
 
-/**
- * @var yii\web\View $this
- * @var yii\gii\generators\crud\Generator $generator
- */
+/* @var $this \yii\web\View $this */
+/* @var $generator \asinfotrack\yii2\toolbox\gii\crud\Generator */
 
 echo "<?php\n";
 ?>
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-/* @var $this <?= $generator->getViewBaseClass(); ?> */
-/* @var $form yii\widgets\ActiveForm */
-/* @var $model <?= ltrim($generator->modelClass, '\\') ?> */
+/* @var $this \<?= ltrim($generator->viewBaseClass, '\\') ?> */
+/* @var $form \yii\widgets\ActiveForm */
+/* @var $model \<?= ltrim($generator->modelClass, '\\') ?> */
 ?>
 
-<div class="<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>-search">
-
-	<?= "<?php " ?>$form = ActiveForm::begin([
-		'action' => ['index'],
-		'method' => 'get',
-	]); ?>
+<?= "<?php " ?>$form = ActiveForm::begin([
+    'action' => ['index'],
+    'method' => 'get',
+]); ?>
 
 <?php
 $count = 0;
@@ -36,11 +31,9 @@ foreach ($generator->getColumnNames() as $attribute) {
 }
 ?>
 
-		<div class="form-group">
-			<?= "<?= " ?>Html::submitButton(<?= $generator->generateString('Speichern') ?>, ['class' => 'btn btn-primary']) ?>
-			<?= "<?= " ?>Html::resetButton(<?= $generator->generateString('Zurücksetzen') ?>, ['class' => 'btn btn-default']) ?>
-		</div>
+    <div class="form-group">
+        <?= "<?= " ?>Html::submitButton(<?= $generator->generateString('Speichern') ?>, ['class' => 'btn btn-primary']) ?>
+        <?= "<?= " ?>Html::resetButton(<?= $generator->generateString('Zurücksetzen') ?>, ['class' => 'btn btn-default']) ?>
+    </div>
 
-	<?= "<?php " ?>ActiveForm::end(); ?>
-
-</div>
+<?= "<?php " ?>ActiveForm::end(); ?>

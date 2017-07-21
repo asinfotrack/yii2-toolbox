@@ -1,12 +1,9 @@
 <?php
-
 use yii\helpers\Inflector;
 use yii\helpers\StringHelper;
 
-/**
- * @var yii\web\View $this
- * @var yii\gii\generators\crud\Generator $generator
- */
+/* @var $this \yii\web\View $this */
+/* @var $generator \asinfotrack\yii2\toolbox\gii\crud\Generator */
 
 $urlParams = $generator->generateUrlParams();
 
@@ -14,10 +11,10 @@ echo "<?php\n";
 ?>
 use yii\helpers\Html;
 
-/* @var $this <?= $generator->getViewBaseClass(); ?> */
-/* @var $model <?= ltrim($generator->modelClass, '\\') ?> */
+/* @var $this \<?= ltrim($generator->viewBaseClass, '\\') ?> */
+/* @var $model \<?= ltrim($generator->modelClass, '\\') ?> */
 
-$this->title = 'Update <?= ltrim($generator->generateString('{modelClass}', ['modelClass' => Inflector::camel2words(StringHelper::basename($generator->modelClass))]), '\'') ?>;
+$this->title = Yii::t('app', 'Update <?= ltrim($generator->generateString('{modelClass}', ['modelClass' => Inflector::camel2words(StringHelper::basename($generator->modelClass))]), '\'') ?>');
 ?>
 
 <?= "<?= " ?>$this->render('partials/_form', [

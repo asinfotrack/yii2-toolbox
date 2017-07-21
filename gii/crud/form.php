@@ -1,18 +1,17 @@
 <?php
-/**
- * @var yii\web\View $this
- * @var yii\widgets\ActiveForm $form
- * @var yii\gii\generators\crud\Generator $generator
- */
+use yii\helpers\Html;
 
-echo $form->field($generator, 'modelClass');
-echo $form->field($generator, 'searchModelClass');
-echo $form->field($generator, 'controllerClass');
-echo $form->field($generator, 'baseControllerClass');
-echo $form->field($generator, 'moduleID');
-echo $form->field($generator, 'indexWidgetType')->dropDownList([
-    'grid' => 'GridView',
-    'list' => 'ListView',
-]);
-echo $form->field($generator, 'enableI18N')->checkbox();
-echo $form->field($generator, 'messageCategory');
+/* @var $this \yii\web\View */
+/* @var $form \yii\widgets\ActiveForm */
+/* @var $generator \asinfotrack\yii2\toolbox\gii\crud\Generator */
+
+echo Html::beginTag('fieldset');
+echo Html::tag('legend', 'Custom');
+echo $form->field($generator, 'viewBaseClass')->textInput(['placeholder'=>'e.g. "\app\components\View"']);
+echo Html::endTag('fieldset');
+
+
+echo Html::beginTag('fieldset');
+echo Html::tag('legend', 'Standard');
+require(Yii::getAlias('@vendor/yiisoft/yii2-gii/generators/crud/form.php'));
+echo Html::endTag('fieldset');

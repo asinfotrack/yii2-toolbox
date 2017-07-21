@@ -1,14 +1,11 @@
 <?php
-
 use yii\helpers\Inflector;
 use yii\helpers\StringHelper;
 
-/**
- * @var yii\web\View $this
- * @var yii\gii\generators\crud\Generator $generator
- */
+/* @var $this \yii\web\View $this */
+/* @var $generator \asinfotrack\yii2\toolbox\gii\crud\Generator */
+/* @var $model \yii\db\ActiveRecord */
 
-/** @var \yii\db\ActiveRecord $model */
 $model = new $generator->modelClass;
 $safeAttributes = $model->safeAttributes();
 if (empty($safeAttributes)) {
@@ -20,27 +17,25 @@ echo "<?php\n";
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-/* @var $this <?= $generator->getViewBaseClass(); ?> */
-/* @var $form yii\widgets\ActiveForm */
-/* @var $model <?= ltrim($generator->modelClass, '\\') ?> */
+/* @var $this \<?= ltrim($generator->viewBaseClass, '\\') ?> */
+/* @var $form \yii\widgets\ActiveForm */
+/* @var $model \<?= ltrim($generator->modelClass, '\\') ?> */
 ?>
 
-<div class="<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>-form">
+<?= "<?php " ?>$form = ActiveForm::begin(); ?>
 
-	<?= "<?php " ?>$form = ActiveForm::begin(); ?>
-
-		<?= "<?= " ?>$form->errorSummary($model); ?>
+    <?= "<?= " ?>$form->errorSummary($model); ?>
 
 <?php foreach ($safeAttributes as $attribute) {
-	echo "\t\t<?= " . $generator->generateActiveField($attribute) . " ?>\n";
+echo "\t\t<?= " . $generator->generateActiveField($attribute) . " ?>\n";
 } ?>
 
-		<div class="form-group">
-			<?= "<?= " ?>Html::submitButton(Yii::t('yii', $model->isNewRecord ? 'Create' : 'Save'), [
-				'class'=>$model->isNewRecord ? 'btn btn-success' : 'btn btn-primary'
-			]); ?>
-		</div>
+    <hr/>
 
-	<?= "<?php " ?>ActiveForm::end(); ?>
+    <div class="form-group">
+        <?= "<?= " ?>Html::submitButton(Yii::t('yii', $model->isNewRecord ? 'Create' : 'Save'), [
+            'class'=>$model->isNewRecord ? 'btn btn-success' : 'btn btn-primary'
+        ]); ?>
+    </div>
 
-</div>
+<?= "<?php " ?>ActiveForm::end(); ?>

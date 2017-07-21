@@ -1,12 +1,9 @@
 <?php
-
 use yii\helpers\Inflector;
 use yii\helpers\StringHelper;
 
-/**
- * @var yii\web\View $this
- * @var yii\gii\generators\crud\Generator $generator
- */
+/* @var $this \yii\web\View $this */
+/* @var $generator \asinfotrack\yii2\toolbox\gii\crud\Generator */
 
 $urlParams = $generator->generateUrlParams();
 $nameAttribute = $generator->getNameAttribute();
@@ -16,13 +13,12 @@ echo "<?php\n";
 use yii\helpers\Html;
 use <?= $generator->indexWidgetType === 'grid' ? "yii\\grid\\GridView" : "yii\\widgets\\ListView" ?>;
 
-/* @var $this <?= $generator->getViewBaseClass(); ?> */
-/* @var $dataProvider yii\data\ActiveDataProvider */
-/* @var $searchModel <?= ltrim($generator->searchModelClass, '\\') ?> */
+/* @var $this \<?= ltrim($generator->viewBaseClass, '\\') ?> */
+/* @var $dataProvider \yii\data\ActiveDataProvider */
+/* @var $searchModel \<?= ltrim($generator->searchModelClass, '\\') ?> */
 
-$this->title = <?= $generator->generateString(Inflector::pluralize(Inflector::camel2words(StringHelper::basename($generator->modelClass)))) ?>;
+$this->title = Yii::t('app', '<?= $generator->generateString(Inflector::pluralize(Inflector::camel2words(StringHelper::basename($generator->modelClass)))) ?>');
 ?>
-
 <?= "<?php " . ($generator->indexWidgetType === 'grid' ? "// " : "") ?>echo $this->render('partials/_search', ['model' => $searchModel]); ?>
 
 <?php if ($generator->indexWidgetType === 'grid'): ?>
@@ -30,17 +26,17 @@ $this->title = <?= $generator->generateString(Inflector::pluralize(Inflector::ca
 	'dataProvider'=>$dataProvider,
 	'filterModel'=>$searchModel,
 	'columns'=>[
-		['class'=>'yii\grid\SerialColumn'],
+		[
+            'class'=>'yii\grid\SerialColumn',
+        ],
 
 <?php
 $count = 0;
 if (($tableSchema = $generator->getTableSchema()) === false) {
 	foreach ($generator->getColumnNames() as $name) {
-		if (++$count < 6) {
-			echo "		'" . $name . "',\n";
-		} else {
-			echo "		//'" . $name . "',\n";
-		}
+        echo "		[\n";
+        echo "			'attribute'=>'" . $name . "',\n";
+        echo "		],\n";
 	}
 } else {
 	foreach ($tableSchema->columns as $column) {
@@ -54,7 +50,9 @@ if (($tableSchema = $generator->getTableSchema()) === false) {
 }
 ?>
 
-		['class'=>'yii\grid\ActionColumn'],
+		[
+            'class'=>'asinfotrack\yii2\toolbox\widgets\grid\AdvancedActionColumn',
+        ],
 	],
 ]); ?>
 <?php else: ?>

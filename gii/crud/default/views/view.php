@@ -1,12 +1,6 @@
 <?php
-
-use yii\helpers\Inflector;
-use yii\helpers\StringHelper;
-
-/**
- * @var yii\web\View $this
- * @var yii\gii\generators\crud\Generator $generator
- */
+/* @var $this \yii\web\View $this */
+/* @var $generator \asinfotrack\yii2\toolbox\gii\crud\Generator */
 
 $urlParams = $generator->generateUrlParams();
 
@@ -15,10 +9,10 @@ echo "<?php\n";
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
-/* @var $this <?= $generator->getViewBaseClass(); ?> */
-/* @var $model <?= ltrim($generator->modelClass, '\\') ?> */
+/* @var $this \<?= ltrim($generator->viewBaseClass, '\\') ?> */
+/* @var $model \<?= ltrim($generator->modelClass, '\\') ?> */
 
-$this->title = 'Detail of ' . $model-><?= $generator->getNameAttribute() ?>;
+$this->title = Yii::t('app, 'Detail of ' . $model-><?= $generator->getNameAttribute() ?>);
 ?>
 
 <?= "<?= " ?>DetailView::widget([

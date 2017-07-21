@@ -1,14 +1,9 @@
 <?php
-
 use yii\db\ActiveRecordInterface;
 use yii\helpers\StringHelper;
 
-/**
- * This is the template for generating a CRUD controller class file.
- *
- * @var yii\web\View $this
- * @var yii\gii\generators\crud\Generator $generator
- */
+/* @var $this \yii\web\View $this */
+/* @var $generator \asinfotrack\yii2\toolbox\gii\crud\Generator */
 
 $controllerClass = StringHelper::basename($generator->controllerClass);
 $modelClass = StringHelper::basename($generator->modelClass);
@@ -38,9 +33,6 @@ use <?= ltrim($generator->searchModelClass, '\\') . (isset($searchModelAlias) ? 
 /* @var $model <?= $modelClass; ?> */ 
 /* @var $searchModel <?= isset($searchModelAlias) ? $searchModelAlias : $searchModelClass; ?> */ 
 
-/**
- * <?= $controllerClass ?> implements the CRUD actions for <?= $modelClass ?> model.
- */
 class <?= $controllerClass ?> extends <?= '\\' . ltrim($generator->baseControllerClass, '\\') . "\n" ?>
 {
 
@@ -67,7 +59,7 @@ class <?= $controllerClass ?> extends <?= '\\' . ltrim($generator->baseControlle
 	}
 
 	/**
-	 * Lists all <?= $modelClass ?> models.
+	 * Lists all <?= $modelClass ?> models
 	 * @return mixed
 	 */
 	public function actionIndex()
@@ -82,7 +74,7 @@ class <?= $controllerClass ?> extends <?= '\\' . ltrim($generator->baseControlle
 	}
 
 	/**
-	 * Displays a single <?= $modelClass ?> model.
+	 * Displays a single <?= $modelClass ?> model
 	 * <?= implode("\n\t * ", $actionParamComments) . "\n" ?>
 	 * @return mixed
 	 */
@@ -95,16 +87,12 @@ class <?= $controllerClass ?> extends <?= '\\' . ltrim($generator->baseControlle
 		]);
 	}
 
-	/**
-	 * Creates a new <?= $modelClass ?> model.
-	 * If creation is successful, the browser will be redirected to the 'view' page.
-	 * @return mixed
-	 */
 	public function actionCreate()
 	{
 		$model = new <?= $modelClass ?>;
+        $loaded = $model->load(Yii::$app->request->post());
 
-		if ($model->load(Yii::$app->request->post()) && $model->save()) {
+		if ($loaded && $model->save()) {
 			return $this->redirect(['view', <?= str_replace(' => ', '=>', $urlParams) ?>]);
 		} else {
 			return $this->render('create', [
@@ -113,17 +101,12 @@ class <?= $controllerClass ?> extends <?= '\\' . ltrim($generator->baseControlle
 		}
 	}
 
-	/**
-	 * Updates an existing <?= $modelClass ?> model.
-	 * If update is successful, the browser will be redirected to the 'view' page.
-	 * <?= implode("\n\t * ", $actionParamComments) . "\n" ?>
-	 * @return mixed
-	 */
 	public function actionUpdate(<?= $actionParams ?>)
 	{
 		$model = $this->findModel(<?= $actionParams ?>);
+        $loaded = $model->load(Yii::$app->request->post());
 
-		if ($model->load(Yii::$app->request->post()) && $model->save()) {
+		if ($loaded && $model->save()) {
 			return $this->redirect(['view', <?= str_replace(' => ', '=>', $urlParams); ?>]);
 		} else {
 			return $this->render('update', [
@@ -132,12 +115,6 @@ class <?= $controllerClass ?> extends <?= '\\' . ltrim($generator->baseControlle
 		}
 	}
 
-	/**
-	 * Deletes an existing <?= $modelClass ?> model.
-	 * If deletion is successful, the browser will be redirected to the 'index' page.
-	 * <?= implode("\n\t * ", $actionParamComments) . "\n" ?>
-	 * @return mixed
-	 */
 	public function actionDelete(<?= $actionParams ?>)
 	{
 		$model = $this->findModel(<?= $actionParams ?>);
@@ -147,8 +124,8 @@ class <?= $controllerClass ?> extends <?= '\\' . ltrim($generator->baseControlle
 	}
 
 	/**
-	 * Finds the <?= $modelClass ?> model based on its primary key value.
-	 * If the model is not found, a 404 HTTP exception will be thrown.
+	 * Find a model by its primary key
+     *
 	 * <?= implode("\n\t * ", $actionParamComments) . "\n" ?>
 	 * @return <?=				   $modelClass ?> the loaded model
 	 * @throws NotFoundHttpException if the model cannot be found
@@ -168,8 +145,7 @@ if (count($pks) === 1) {
 ?>
 		$model = <?= $modelClass ?>::findOne(<?= $condition ?>);
 		if ($model !== null) return $model;
-		
-		throw new NotFoundHttpException('Die angeforderte Seite existiert nicht.');
+		throw new NotFoundHttpException('The requested page does not exist.');
 	}
 	
 }

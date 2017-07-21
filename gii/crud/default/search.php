@@ -1,18 +1,13 @@
 <?php
-
 use yii\helpers\StringHelper;
 
-/**
- * This is the template for generating CRUD search class of the specified model.
- *
- * @var yii\web\View $this
- * @var yii\gii\generators\crud\Generator $generator
- */
+/* @var $this \yii\web\View $this */
+/* @var $generator \asinfotrack\yii2\toolbox\gii\crud\Generator */
 
 $modelClass = StringHelper::basename($generator->modelClass);
 $searchModelClass = StringHelper::basename($generator->searchModelClass);
 if ($modelClass === $searchModelClass) {
-    $modelAlias = $modelClass . 'Model';
+	$modelAlias = $modelClass . 'Model';
 }
 $rules = $generator->generateSearchRules();
 $labels = $generator->generateSearchLabels();
@@ -34,34 +29,56 @@ use <?= ltrim($generator->modelClass, '\\') . (isset($modelAlias) ? " as $modelA
 class <?= $searchModelClass ?> extends <?= '\\' . ltrim($generator->modelClass, '\\') . (isset($modelAlias) ? " as $modelAlias" : "") . "\n" ?>
 {
 
-    public function rules()
-    {
-        return [
-            <?= implode(",\n            ", $rules) ?>,
-        ];
-    }
+	/**
+	 * @inheritdoc
+	 */
+	public function rules()
+	{
+		return [
+			<?= implode(",\n            ", $rules) ?>,
+		];
+	}
 
-    public function scenarios()
-    {
-        // bypass scenarios() implementation in the parent class
-        return Model::scenarios();
-    }
+    /**
+     * @inheritdoc
+     */
+	public function scenarios()
+	{
+		//bypass scenarios() implementation of the parent class
+		return Model::scenarios();
+	}
 
-    public function search($params)
-    {
-        $query = <?= isset($modelAlias) ? $modelAlias : $modelClass ?>::find();
+    /**
+     * Creates a data provider instance with the search query applied
+     *
+     * @param array $params the search params
+     * @return \yii\data\ActiveDataProvider the configured data provider
+     */
+	public function search($params)
+	{
+        //create query instance
+		$query = <?= isset($modelAlias) ? $modelAlias : $modelClass ?>::find();
 
-        $dataProvider = new ActiveDataProvider([
-            'query'=>$query,
-        ]);
+        //create data provider instance
+		$dataProvider = new ActiveDataProvider([
+			'query'=>$query,
+            /*
+            'sort'=>[
+                'defaultOrder'=>[
+                    'my_first_column'=>SORT_ASC,
+                    'my_second_column'=>SORT_ASC,
+                ],
+            ],
+            */
+		]);
 
-        if (!($this->load($params) && $this->validate())) {
-            return $dataProvider;
-        }
+        //load the data
+        $this->load($params);
 
-        <?= implode("\n\t\t", $searchConditions) ?>
+        //apply filtering conditions
+        <?= implode("\n        ", $searchConditions) ?>
 
-        return $dataProvider;
-    }
-    
+		return $dataProvider;
+	}
+
 }
