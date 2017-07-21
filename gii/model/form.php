@@ -1,20 +1,19 @@
 <?php
+
+use yii\helpers\Html;
+
 /* @var $this yii\web\View */
 /* @var $form yii\widgets\ActiveForm */
 /* @var $generator yii\gii\generators\form\Generator */
 
-echo $form->field($generator, 'tableName');
-echo $form->field($generator, 'modelClass');
-echo $form->field($generator, 'ns');
-echo $form->field($generator, 'baseClass');
-echo $form->field($generator, 'generateQuery')->checkbox();
-echo $form->field($generator, 'queryClass');
-echo $form->field($generator, 'queryNs');
-echo $form->field($generator, 'queryBaseClass');
-echo $form->field($generator, 'db');
-echo $form->field($generator, 'useTablePrefix')->checkbox();
-echo $form->field($generator, 'generateRelations')->checkbox();
-echo $form->field($generator, 'generateLabelsFromComments')->checkbox();
-echo $form->field($generator, 'enableI18N')->checkbox();
-echo $form->field($generator, 'messageCategory');
-echo $form->field($generator, 'iconName')->textInput(['placeholder'=>'question']);
+echo Html::beginTag('div', ['class'=>'page-header']);
+echo Html::tag('h2', 'Custom', ['class'=>'h3']);
+echo Html::endTag('div');
+
+echo $form->field($generator, 'iconName')->textInput(['placeholder'=>'e.g. "calendar"']);
+
+echo Html::beginTag('div', ['class'=>'page-header']);
+echo Html::tag('h2', 'Standard', ['class'=>'h3']);
+echo Html::endTag('div');
+
+require(Yii::getAlias('@vendor/yiisoft/yii2-gii/generators/model/form.php'));
