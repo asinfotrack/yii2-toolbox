@@ -2,18 +2,14 @@
 use yii\helpers\ArrayHelper;
 use yii\helpers\StringHelper;
 
-/**
- * This is the template for generating the model class of a specified table.
- *
- * @var yii\web\View $this
- * @var yii\gii\generators\model\Generator $generator
- * @var string $tableName full table name
- * @var string $className class name
- * @var yii\db\TableSchema $tableSchema
- * @var string[] $labels list of attribute labels (name => label)
- * @var string[] $rules list of validation rules
- * @var array $relations list of relations (name => relation declaration)
- */
+/* @var $this \yii\web\View  */
+/* @var $generator \asinfotrack\yii2\toolbox\gii\model\Generator */
+/* @var $tableName string*/
+/* @var $className string */
+/* @var $tableSchema yii\db\TableSchema */
+/* @var $labels string[] list of attribute labels (name => label) */
+/* @var $rules string[] list of validation rules */
+/* @var $relations array list of relations (name => relation declaration) */
 
 $queryClass = StringHelper::basename($generator->queryClass);
 

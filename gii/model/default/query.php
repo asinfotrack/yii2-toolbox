@@ -1,13 +1,8 @@
 <?php
-
-
 use yii\helpers\StringHelper;
-/**
- * This is the template for generating CRUD query class of the specified model.
- *
- * @var yii\web\View $this
- * @var asinfotrack\gii\model\Generator $generator
- */
+
+/* @var $this \yii\web\View $this */
+/* @var $generator \asinfotrack\yii2\toolbox\gii\model\Generator */
 
 $queryClass = StringHelper::basename($generator->queryClass);
 
@@ -15,13 +10,20 @@ echo "<?php\n";
 ?>
 namespace <?= $generator->queryNs ?>;
 
-/**
- * Query class for <?= $generator->modelClass ?>-model
- * @see <?= '\\' . $generator->ns . '\\' . $generator->modelClass . "\n" ?>
- */
 class <?= $queryClass ?> extends <?= '\\' . $generator->queryBaseClass . "\n" ?>
 {
 
-	
+	/**
+	 * @inheritdoc
+	 */
+	public function prepare($builder)
+	{
+		//default ordering
+		if (empty($this->orderBy)) {
+			//add default ordering scope here if desired
+		}
+
+		return parent::prepare($builder);
+	}
 
 }
