@@ -25,8 +25,8 @@ echo "<?php\n";
 namespace <?= $generator->ns ?>;
 
 use Yii;
-use yii\behaviors\TimestampBehavior;
 use yii\behaviors\BlameableBehavior;
+use yii\behaviors\TimestampBehavior;
 use <?= $generator->queryNs . '\\' . $generator->queryClass ?>;
 
 /**
