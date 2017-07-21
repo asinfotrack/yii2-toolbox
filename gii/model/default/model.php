@@ -1,5 +1,5 @@
 <?php
-
+use yii\helpers\ArrayHelper;
 use yii\helpers\StringHelper;
 
 /**
@@ -16,6 +16,13 @@ use yii\helpers\StringHelper;
  */
 
 $queryClass = StringHelper::basename($generator->queryClass);
+
+//reorder relations
+ksort($relations);
+$createdRelation = ArrayHelper::remove($relations, 'CreatedBy');
+if ($createdRelation !== null) $relations['CreatedBy'] = $createdRelation;
+$updatedRelation = ArrayHelper::remove($relations, 'UpdatedBy');
+if ($updatedRelation !== null) $relations['UpdatedBy'] = $updatedRelation;
 
 echo "<?php\n";
 ?>
