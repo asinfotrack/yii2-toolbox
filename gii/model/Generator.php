@@ -4,6 +4,9 @@ namespace asinfotrack\yii2\toolbox\gii\model;
 class Generator extends \yii\gii\generators\model\Generator
 {
 
+	/**
+	 * @var string name of the font-awesome icon
+	 */
 	public $iconName;
 
 	/**
@@ -14,6 +17,9 @@ class Generator extends \yii\gii\generators\model\Generator
 		return 'ASi Model-Generator';
 	}
 
+	/**
+	 * @inheritdoc
+	 */
 	public function rules()
 	{
 		return array_merge(parent::rules(), [
@@ -21,6 +27,9 @@ class Generator extends \yii\gii\generators\model\Generator
 		]);
 	}
 
+	/**
+	 * @inheritdoc
+	 */
 	public function attributeLabels()
 	{
 		return array_merge(parent::attributeLabels(), [
@@ -28,6 +37,9 @@ class Generator extends \yii\gii\generators\model\Generator
 		]);
 	}
 
+	/**
+	 * @inheritdoc
+	 */
 	public function hints()
 	{
 		return array_merge(parent::hints(), [
@@ -35,6 +47,9 @@ class Generator extends \yii\gii\generators\model\Generator
 		]);
 	}
 
+	/**
+	 * @inheritdoc
+	 */
 	public function generateRules($table)
 	{
 		$rules = parent::generateRules($table);
