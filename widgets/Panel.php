@@ -79,8 +79,7 @@ class Panel extends \yii\base\Widget
 	public $footerOptions = [];
 	
 	/**
-	 * (non-PHPdoc)
-	 * @see \yii\base\Object::init()
+	 * @inheritdoc
 	 */
 	public function init()
 	{
@@ -106,8 +105,7 @@ class Panel extends \yii\base\Widget
 	}
 	
 	/**
-	 * (non-PHPdoc)
-	 * @see \yii\base\Widget::run()
+	 * @inheritdoc
 	 */
 	public function run()
 	{
@@ -132,6 +130,7 @@ class Panel extends \yii\base\Widget
 	/**
 	 * Returns contents of one of the content vars (heading, body, footer) either
 	 * directly (if it is a string) or via calling its closure
+	 *
 	 * @param string $varName name of the content var to render / return
 	 * @return string rendered content
 	 */

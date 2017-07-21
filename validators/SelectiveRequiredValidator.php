@@ -2,8 +2,8 @@
 namespace asinfotrack\yii2\toolbox\validators;
 
 use Yii;
-use yii\validators\RequiredValidator;
 use yii\base\InvalidConfigException;
+use yii\validators\RequiredValidator;
 
 /**
  * Validator to require a certain amount of fields out of a list to be required.
@@ -28,7 +28,7 @@ class SelectiveRequiredValidator extends \yii\validators\Validator
 {
 	
 	/**
-	 * @var integer the number of fields beeing required
+	 * @var integer the number of fields being required
 	 */
 	public $numRequired = 1;
 	
@@ -49,8 +49,7 @@ class SelectiveRequiredValidator extends \yii\validators\Validator
 	public $message;
 	
 	/**
-	 * (non-PHPdoc)
-	 * @see \yii\validators\Validator::init()
+	 * @inheritdoc
 	 */
 	public function init()
 	{
@@ -71,8 +70,7 @@ class SelectiveRequiredValidator extends \yii\validators\Validator
 	}
 	
 	/**
-	 * (non-PHPdoc)
-	 * @see \yii\validators\Validator::validateAttributes()
+	 * @inheritdoc
 	 */
 	public function validateAttributes($model, $attributes=null)
 	{

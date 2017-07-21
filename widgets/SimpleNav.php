@@ -32,29 +32,35 @@ class SimpleNav extends \yii\bootstrap\Widget
 	 * If a menu item is a string, it will be rendered directly without HTML encoding.
 	 */
     public $items;
+
 	/**
 	 * @var integer max depth of items to render
 	 */
 	public $maxDepth;
+
 	/**
 	 * @var string|\Closure either a fixed string or a closure returning a string
 	 * which will be prepended to each label text. The closure should have the signature
 	 * 'function ($item)' where $item is the item config array.
 	 */
 	public $entryPrefix;
+
 	/**
 	 * @var bool Whether or not the prefix should be rendered within the anchor-tag
 	 */
 	public $entryPrefixInsideLink = true;
+
 	/**
 	 * @var bool whether or not to activate items
 	 */
 	public $activateItems = true;
+
 	/**
 	 * @var \Closure if set, this closure will be called to determine if an item is active.
 	 * The closure should have the signature 'function ($item)' where $item is the item config array.
 	 */
 	public $isActiveCallback;
+
 	/**
 	 * @var string tag name to use when an item is not a link (no url present)
 	 */

@@ -2,7 +2,6 @@
 namespace asinfotrack\yii2\toolbox\helpers;
 
 use Yii;
-use yii\base\Exception;
 use yii\base\InvalidConfigException;
 use yii\helpers\Json;
 

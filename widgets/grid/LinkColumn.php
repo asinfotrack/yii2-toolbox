@@ -16,15 +16,14 @@ class LinkColumn extends \asinfotrack\yii2\toolbox\widgets\grid\AdvancedDataColu
 {
 		
 	/**
-	 * @var string|array|Closure can hold a static url string, a closure in the format
+	 * @var string|array|\Closure can hold a static url string, a closure in the format
 	 * `function ($model, $key, $index, $widget)` or an array containing a route as used.
 	 * width <code>Url::to($route)</code>
 	 */
 	public $link;
 	
 	/**
-	 * (non-PHPdoc)
-	 * @see asinfotrack\yii2\toolbox\widgets\grid\AdvancedDataColumn::init()
+	 * @inheritdoc
 	 */
 	public function init()
 	{
@@ -38,8 +37,7 @@ class LinkColumn extends \asinfotrack\yii2\toolbox\widgets\grid\AdvancedDataColu
 	}
 	
 	/**
-	 * (non-PHPdoc)
-	 * @see \yii\grid\DataColumn::renderDataCellContent()
+	 * @inheritdoc
 	 */
 	protected function renderDataCellContent($model, $key, $index)
 	{

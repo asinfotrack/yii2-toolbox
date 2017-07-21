@@ -1,8 +1,6 @@
 <?php
 namespace asinfotrack\yii2\toolbox\helpers;
 
-use Yii;
-
 /**
  * Helper class to work with queries and abstract reoccuring tasks
  *

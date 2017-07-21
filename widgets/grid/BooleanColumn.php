@@ -19,8 +19,7 @@ class BooleanColumn extends \asinfotrack\yii2\toolbox\widgets\grid\AdvancedDataC
 	private static $BOOL_FILTER;
 	
 	/**
-	 * (non-PHPdoc)
-	 * @see \asinfotrack\yii2\toolbox\widgets\grid\AdvancedDataColumn::init()
+	 * @inheritdoc
 	 */
 	public function init()
 	{

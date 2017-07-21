@@ -27,8 +27,7 @@ class Generator extends \yii\gii\generators\crud\Generator
     }
     
     /**
-     * (non-PHPdoc)
-     * @see \yii\gii\generators\crud\Generator::generateSearchRules()
+     * @inheritdoc
      */
     public function generateSearchRules()
     {
@@ -44,8 +43,7 @@ class Generator extends \yii\gii\generators\crud\Generator
     }
     
     /**
-     * (non-PHPdoc)
-     * @see \yii\gii\generators\crud\Generator::generateActiveField($attribute)
+     * @inheritdoc
      */
     public function generateActiveField($attribute)
     {
@@ -53,8 +51,7 @@ class Generator extends \yii\gii\generators\crud\Generator
     }
     
     /**
-     * (non-PHPdoc)
-     * @see \yii\gii\generators\crud\Generator::generate()
+     * @inheritdoc
      */
     public function generate()
     {

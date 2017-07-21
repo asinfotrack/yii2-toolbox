@@ -23,6 +23,7 @@ class ServerConfig
 	
 	/**
 	 * Returns the version of the running php executable.
+	 *
 	 * @return string the version
 	 */
 	public static function phpVersion()
@@ -32,6 +33,7 @@ class ServerConfig
 	
 	/**
 	 * Returns the path of the PHP-ini-file currently in use
+	 *
 	 * @return string path to ini-file
 	 */
 	public static function phpIniPath()
@@ -41,6 +43,7 @@ class ServerConfig
 	
 	/**
 	 * Returns the ini-setting for max execution time
+	 *
 	 * @return integer number of seconds
 	 */
 	public static function phpMaxExecutionTime()
@@ -50,6 +53,7 @@ class ServerConfig
 	
 	/**
 	 * Returns the MB-value of the memory limit
+	 *
 	 * @param $trimUnit boolean if true, the return value will be an int without the unit ('M')
 	 * @return integer|string number in MB or string containing number and unit
 	 */
@@ -60,8 +64,9 @@ class ServerConfig
 	}
 	
 	/**
-	 * Checks whether or not an axtension is loaded via its identifier string
+	 * Checks whether or not an extension is loaded via its identifier string
 	 * (eg GD2 has 'gd' or MemCache has 'memcache')
+	 *
 	 * @param string $identifier true if loaded
 	 * @return boolean
 	 */
@@ -72,6 +77,7 @@ class ServerConfig
 	
 	/**
 	 * Whether or not PHP-OPcache is loaded
+	 *
 	 * @return boolean true if loaded
 	 */
 	public static function extOpCacheLoaded()
@@ -81,6 +87,7 @@ class ServerConfig
 	
 	/**
 	 * Whether or not PHP-OPcache is loaded and enabled
+	 *
 	 * @return boolean true if loaded
 	 */
 	public static function opCacheEnabled()
@@ -92,6 +99,7 @@ class ServerConfig
 	
 	/**
 	 * Whether or not memcache is loaded
+	 *
 	 * @return boolean true if loaded
 	 */
 	public static function extMemCacheLoaded()
@@ -101,6 +109,7 @@ class ServerConfig
 	
 	/**
 	 * Whether or not the curl-extension is loaded
+	 *
 	 * @return boolean true if loaded
 	 */
 	public static function extCurlLoaded()
@@ -110,6 +119,7 @@ class ServerConfig
 	
 	/**
 	 * Whether or not the odbc-extension is loaded
+	 *
 	 * @return boolean true if loaded
 	 */
 	public static function extOdbcLoaded()
@@ -128,6 +138,7 @@ class ServerConfig
 	
 	/**
 	 * Whether or not the gd-extension is loaded
+	 *
 	 * @return boolean true if loaded
 	 */
 	public static function extGdLoaded()
@@ -137,6 +148,7 @@ class ServerConfig
 	
 	/**
 	 * Whether or not the imagick-extension is loaded
+	 *
 	 * @return boolean true if loaded
 	 */
 	public static function extImagickLoaded()
@@ -146,6 +158,7 @@ class ServerConfig
 	
 	/**
 	 * Whether or not the openSSL-extension is loaded
+	 *
 	 * @return boolean true if loaded
 	 */
 	public static function extOpenSSLLoaded()
@@ -157,7 +170,7 @@ class ServerConfig
 	 * This function takes several EXT_-constants of this class combined and checks 
 	 * if they are available. If the requirements are met, true is returned.
 	 * 
-	 * @param string|string[] $extConst either one or an array of extension constants
+	 * @param string|string[] $extConstants either one or an array of extension constants
 	 * @param boolean $requireAll if set to true, all passed extensions must be available,
 	 * otherwise only one of them is enough (defaults to true). This second param is only
 	 * relevant if the first param is an array

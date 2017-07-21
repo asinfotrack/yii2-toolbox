@@ -23,11 +23,12 @@
 	"require": {
 		"php": ">=5.4.0",
 		
-		"yiisoft/yii2": "2.0.*",
-	  	"yiisoft/yii2-bootstrap": "*",
-		"yiisoft/yii2-codeception": "~2.0.0",
+		"yiisoft/yii2": "~2.0.6",
+		"yiisoft/yii2-bootstrap": "~2.0.0",
+		"yiisoft/yii2-gii": "~2.0.0",
 
-		"rmrevin/yii2-fontawesome": ">=2.9.0",
+		"codeception/codeception": "~2.3.0",
+		"rmrevin/yii2-fontawesome": "~2.16",
 		"yurkinx/yii2-image": "~1.1"
 	},
 	

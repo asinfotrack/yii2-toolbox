@@ -209,6 +209,7 @@ class Html extends \yii\helpers\Html
 	/**
 	 * Generates a mailto hyperlink and disguises the email-address. The address is translated when
 	 * link gets clicked.
+	 *
 	 * @param string $text link body. It will NOT be HTML-encoded. Therefore you can pass in HTML code
 	 * such as an image tag. If this is coming from end users, you should consider [[encode()]]
 	 * it to prevent XSS attacks.

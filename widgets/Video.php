@@ -29,12 +29,12 @@ class Video extends \yii\base\Widget
 	public $urls = [];
 
 	/**
-	 * @var integer width attribute for the video tag
+	 * @var integer|string width attribute for the video tag
 	 */
 	public $width;
 
 	/**
-	 * @var integer height attribute for the video tag
+	 * @var integer|string height attribute for the video tag
 	 */
 	public $height;
 
