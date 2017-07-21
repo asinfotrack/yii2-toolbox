@@ -56,6 +56,7 @@ class <?= $className ?> extends <?= '\\' . ltrim($generator->baseClass, '\\') . 
 <?php if (true && !empty($generator->iconName)): ?>
 	/**
 	 * Returns the font-awesome icon name assigned to this model
+	 *
 	 * @return string name of the icon
 	 */
 	public static function iconName()
@@ -88,7 +89,9 @@ class <?= $className ?> extends <?= '\\' . ltrim($generator->baseClass, '\\') . 
 	 */
 	public function rules()
 	{
-		return [<?= "\n			" . implode(",\n			", $rules) . ",\n		" ?>];
+		return [
+			<?= implode(",\n			", $rules) . ',' ?>
+		];
 	}
 
 	/**
@@ -97,16 +100,17 @@ class <?= $className ?> extends <?= '\\' . ltrim($generator->baseClass, '\\') . 
 	public function attributeLabels()
 	{
 		return [
-		<?php foreach ($labels as $name => $label): ?>
-			<?= "'$name'=>" . $generator->generateString($label) . ",\n" ?>
-		<?php endforeach; ?>
+	<?php foreach ($labels as $name => $label): ?>
+		<?= "'$name'=>" . $generator->generateString($label) . ",\n" ?>
+	<?php endforeach; ?>
 		];
 	}
 <?php if ($generator->generateQuery): ?>
 
 	/**
 	 * Returns an instance of the query-type for this model
-	 * @return <?= $generator->queryClass . "\n"; ?>
+	 *
+	 * @return <?= $generator->queryNs . '\\' . $generator->queryClass ?>;
 	 */
 	public static function find()
 	{
