@@ -49,7 +49,7 @@ class <?= $className ?> extends <?= '\\' . ltrim($generator->baseClass, '\\') . 
 	{
 		return '<?= $tableName ?>';
 	}
-		
+
 <?php if (true && !empty($generator->iconName)): ?>
 	/**
 	 * Returns the font-awesome icon name assigned to this model
@@ -59,25 +59,25 @@ class <?= $className ?> extends <?= '\\' . ltrim($generator->baseClass, '\\') . 
 	{
 		return '<?= $generator->iconName ?>';
 	}
-	
+
 <?php endif; ?>
 	/**
 	 * @inheritdoc
 	 */
 	public function behaviors()
-    {
-        return [
-        	'timestamp'=>[
-	    		'class'=>TimestampBehavior::className(),
-	    		'createdAtAttribute'=>'created',
-	    		'updatedAtAttribute'=>'updated',
-        	],
-        	'blameable'=>[
-	    		'class'=>BlameableBehavior::className(),
-	    		'createdByAttribute'=>'created_by',
-	    		'updatedByAttribute'=>'updated_by',
-        	],
-        ];
+	{
+		return [
+			'timestamp'=>[
+				'class'=>TimestampBehavior::className(),
+				'createdAtAttribute'=>'created',
+				'updatedAtAttribute'=>'updated',
+			],
+			'blameable'=>[
+				'class'=>BlameableBehavior::className(),
+				'createdByAttribute'=>'created_by',
+				'updatedByAttribute'=>'updated_by',
+			],
+		];
 	}
 
 	/**
@@ -94,9 +94,9 @@ class <?= $className ?> extends <?= '\\' . ltrim($generator->baseClass, '\\') . 
 	public function attributeLabels()
 	{
 		return [
-<?php foreach ($labels as $name => $label): ?>
+		<?php foreach ($labels as $name => $label): ?>
 			<?= "'$name'=>" . $generator->generateString($label) . ",\n" ?>
-<?php endforeach; ?>
+		<?php endforeach; ?>
 		];
 	}
 <?php if ($generator->generateQuery): ?>
