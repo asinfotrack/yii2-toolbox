@@ -1,8 +1,6 @@
 <?php
 namespace asinfotrack\yii2\toolbox\console;
 
-use Yii;
-
 /**
  * An extended console controller providing additional functionality
  *
@@ -12,7 +10,5 @@ use Yii;
  */
 abstract class Controller extends \yii\console\Controller
 {
-	
-	
-	
+
 }

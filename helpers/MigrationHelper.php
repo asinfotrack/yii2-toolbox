@@ -7,47 +7,47 @@ use yii\base\InvalidConfigException;
 
 /**
  * Helper class to work with migrations
- * 
+ *
  * @author Pascal Mueller, AS infotrack AG
  * @link http://www.asinfotrack.ch
  * @license MIT
  */
 class MigrationHelper
 {
-	
+
 	protected static $MIGRATION_CACHE;
-	
+
 	/**
 	 * Checks whether or not a migration was applied or not
-	 * 
+	 *
 	 * @param string $migrationName name of the migration to look for
 	 * @return boolean true if migration is applied or false if not
 	 * @throws InvalidConfigException if there is no db-connection or the migration table does not exist
 	 */
 	public static function hasMigration($migrationName)
-	{		
+	{
 		if (!static::cacheMigrations()) {
 			throw new InvalidConfigException(Yii::t('app', 'There is no valid db-connection or the migration table does not exist'));
 		}
 		return isset(static::$MIGRATION_CACHE[$migrationName]);
 	}
-	
+
 	/**
 	 * Caches the migrations internally in a static var for
 	 * faster access in subsequent calls
-	 * 
+	 *
 	 * @return boolean true if caching was successful
 	 */
 	protected static function cacheMigrations()
 	{
 		//check if already cached
 		if (static::$MIGRATION_CACHE !== null) return true;
-		
+
 		//check if there is a connection
 		if (!static::hasDbConnection() || Yii::$app->db->schema->getTableSchema('{{%migration}}') === null) {
 			return false;
 		}
-		
+
 		//load the data
 		static::$MIGRATION_CACHE = [];
 		$migrationData = (new Query())
@@ -55,15 +55,15 @@ class MigrationHelper
 			->from('{{%migration}}')
 			->orderBy(['apply_time'=>SORT_ASC])
 			->all();
-		
+
 		//fill the cache
 		foreach ($migrationData as $migration) {
 			static::$MIGRATION_CACHE[$migration['version']] = $migration['apply_time'];
 		}
-		
+
 		return true;
 	}
-	
+
 	/**
 	 * Returns true if the db-connection is configured and established
 	 *
@@ -73,5 +73,5 @@ class MigrationHelper
 	{
 		return isset(Yii::$app->db);
 	}
-	
+
 }

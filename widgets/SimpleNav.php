@@ -31,7 +31,7 @@ class SimpleNav extends \yii\bootstrap\Widget
 	 *
 	 * If a menu item is a string, it will be rendered directly without HTML encoding.
 	 */
-    public $items;
+	public $items;
 
 	/**
 	 * @var integer max depth of items to render

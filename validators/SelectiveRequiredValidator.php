@@ -8,7 +8,7 @@ use yii\validators\RequiredValidator;
 /**
  * Validator to require a certain amount of fields out of a list to be required.
  * To use the validator simply specify the selection of attributes and set how many of it are required:
- * 
+ *
  * <code>
  * public function rules()
  * {
@@ -26,35 +26,35 @@ use yii\validators\RequiredValidator;
  */
 class SelectiveRequiredValidator extends \yii\validators\Validator
 {
-	
+
 	/**
 	 * @var integer the number of fields being required
 	 */
 	public $numRequired = 1;
-	
+
 	/**
 	 * @var string the attribute name to add the error-message to. If not
 	 * set, the message will be added to all attributes.
 	 */
 	public $errorAttribute;
-	
+
 	/**
-     * @var string the user-defined error message. It may contain the following placeholders which
-     * will be replaced accordingly by the validator:
-     *
-     * - `{num}`: the number of values required (@see $numRequired)
-     * - `{attributes}`: list of all attributes of which several (@see $numRequired) are required
-     * - `{errorAttribute}`: the label of the attribute receiving the error msg (if defined)
+	 * @var string the user-defined error message. It may contain the following placeholders which
+	 * will be replaced accordingly by the validator:
+	 *
+	 * - `{num}`: the number of values required (@see $numRequired)
+	 * - `{attributes}`: list of all attributes of which several (@see $numRequired) are required
+	 * - `{errorAttribute}`: the label of the attribute receiving the error msg (if defined)
 	 */
 	public $message;
-	
+
 	/**
 	 * @inheritdoc
 	 */
 	public function init()
 	{
 		parent::init();
-		
+
 		//assert valid config
 		if (count($this->attributes) < 2) {
 			throw new InvalidConfigException('The SelectiveRequiredValidator needs at least two attributes');
@@ -62,13 +62,13 @@ class SelectiveRequiredValidator extends \yii\validators\Validator
 		if ($this->numRequired < 1 || $this->numRequired >= count($this->attributes)) {
 			throw new InvalidConfigException('numRequired needs to be bigger than 0 and smaller than the number of attributes defined');
 		}
-				
+
 		//prepare error message
-        if ($this->message === null) {
-        	$this->message = 'At least {num,plural,=1{one} other{#}} of the attributes {attributes} {num2, plural, =1{is} other{are}} required';
-        }
+		if ($this->message === null) {
+			$this->message = 'At least {num,plural,=1{one} other{#}} of the attributes {attributes} {num2, plural, =1{is} other{are}} required';
+		}
 	}
-	
+
 	/**
 	 * @inheritdoc
 	 */
@@ -80,7 +80,7 @@ class SelectiveRequiredValidator extends \yii\validators\Validator
 		} else {
 			$attributes = $this->attributes;
 		}
-		
+
 		//validate all attributes with the required validator
 		$reqVal = new RequiredValidator();
 		$numOk = 0;
@@ -89,17 +89,17 @@ class SelectiveRequiredValidator extends \yii\validators\Validator
 			$labelList[] = $model->getAttributeLabel($attr);
 			if ($reqVal->validate($model->{$attr})) $numOk++;
 		}
-		
+
 		//check if ok or add error message
 		if ($numOk < $this->numRequired) {
-			//prepare message			
+			//prepare message
 			$msg = Yii::t('yii', $this->message, [
 				'num'=>$this->numRequired,
 				'num2'=>$this->numRequired,
 				'attributes'=>implode(', ', $labelList),
 				'errorAttribute'=>$this->errorAttribute,
 			]);
-			
+
 			//decide where to add the message
 			if ($this->errorAttribute !== null) {
 				$this->addError($model, $this->errorAttribute, $msg);
@@ -110,5 +110,5 @@ class SelectiveRequiredValidator extends \yii\validators\Validator
 			}
 		}
 	}
-	
+
 }

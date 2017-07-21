@@ -44,6 +44,6 @@ class PrimaryKey
 		$arrPk = [];
 		foreach ($pk as $pkCol) $arrPk[$pkCol] = $model->{$pkCol};
 		return Json::encode($arrPk);
-    }
+	}
 
 }

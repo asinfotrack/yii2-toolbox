@@ -4,14 +4,14 @@ namespace asinfotrack\yii2\toolbox\helpers;
 /**
  * Helper class to get information about server-configuration and loaded
  * PHP-Modules.
- * 
+ *
  * @author Pascal Mueller, AS infotrack AG
  * @link http://www.asinfotrack.ch
  * @license MIT
  */
 class ServerConfig
 {
-	
+
 	const EXT_OPCACHE 	= 'Zend OPcache';
 	const EXT_MEMCACHE	= 'memcache';
 	const EXT_CURL 		= 'curl';
@@ -20,7 +20,7 @@ class ServerConfig
 	const EXT_GD		= 'gd';
 	const EXT_IMAGICK	= 'imagick';
 	const EXT_OPENSSL	= 'openssl';
-	
+
 	/**
 	 * Returns the version of the running php executable.
 	 *
@@ -30,7 +30,7 @@ class ServerConfig
 	{
 		return phpversion();
 	}
-	
+
 	/**
 	 * Returns the path of the PHP-ini-file currently in use
 	 *
@@ -40,7 +40,7 @@ class ServerConfig
 	{
 		return php_ini_loaded_file();
 	}
-	
+
 	/**
 	 * Returns the ini-setting for max execution time
 	 *
@@ -50,7 +50,7 @@ class ServerConfig
 	{
 		return intval(ini_get('max_execution_time'));
 	}
-	
+
 	/**
 	 * Returns the MB-value of the memory limit
 	 *
@@ -62,7 +62,7 @@ class ServerConfig
 		$val = ini_get('memory_limit');
 		return $trimUnit ? intval($val) : $val;
 	}
-	
+
 	/**
 	 * Checks whether or not an extension is loaded via its identifier string
 	 * (eg GD2 has 'gd' or MemCache has 'memcache')
@@ -74,7 +74,7 @@ class ServerConfig
 	{
 		return extension_loaded($identifier);
 	}
-	
+
 	/**
 	 * Whether or not PHP-OPcache is loaded
 	 *
@@ -84,7 +84,7 @@ class ServerConfig
 	{
 		return static::extLoaded(self::EXT_OPCACHE);
 	}
-	
+
 	/**
 	 * Whether or not PHP-OPcache is loaded and enabled
 	 *
@@ -96,7 +96,7 @@ class ServerConfig
 		$status = opcache_get_status();
 		return $status['opcache_enabled'];
 	}
-	
+
 	/**
 	 * Whether or not memcache is loaded
 	 *
@@ -106,7 +106,7 @@ class ServerConfig
 	{
 		return static::extLoaded(static::EXT_MEMCACHE);
 	}
-	
+
 	/**
 	 * Whether or not the curl-extension is loaded
 	 *
@@ -116,7 +116,7 @@ class ServerConfig
 	{
 		return static::extLoaded(static::EXT_CURL);
 	}
-	
+
 	/**
 	 * Whether or not the odbc-extension is loaded
 	 *
@@ -126,7 +126,7 @@ class ServerConfig
 	{
 		return static::extLoaded(static::EXT_ODBC);
 	}
-	
+
 	/**
 	 * Whether or not the internationalization-extension is loaded
 	 * @return boolean true if loaded
@@ -135,7 +135,7 @@ class ServerConfig
 	{
 		return static::extLoaded(static::EXT_INTL);
 	}
-	
+
 	/**
 	 * Whether or not the gd-extension is loaded
 	 *
@@ -145,7 +145,7 @@ class ServerConfig
 	{
 		return static::extLoaded(static::EXT_GD);
 	}
-	
+
 	/**
 	 * Whether or not the imagick-extension is loaded
 	 *
@@ -155,7 +155,7 @@ class ServerConfig
 	{
 		return static::extLoaded(static::EXT_IMAGICK);
 	}
-	
+
 	/**
 	 * Whether or not the openSSL-extension is loaded
 	 *
@@ -165,11 +165,11 @@ class ServerConfig
 	{
 		return static::extLoaded(static::EXT_OPENSSL);
 	}
-	
+
 	/**
-	 * This function takes several EXT_-constants of this class combined and checks 
+	 * This function takes several EXT_-constants of this class combined and checks
 	 * if they are available. If the requirements are met, true is returned.
-	 * 
+	 *
 	 * @param string|string[] $extConstants either one or an array of extension constants
 	 * @param boolean $requireAll if set to true, all passed extensions must be available,
 	 * otherwise only one of them is enough (defaults to true). This second param is only
@@ -191,5 +191,5 @@ class ServerConfig
 			return static::extLoaded($extConstants);
 		}
 	}
-	
+
 }

@@ -9,21 +9,21 @@ use asinfotrack\yii2\toolbox\assets\EmailDisguiseAsset;
 
 /**
  * This helper extends the basic functionality of the Yii2-Html-helper.
- * 
+ *
  * @author Pascal Mueller, AS infotrack AG
  * @link http://www.asinfotrack.ch
  * @license MIT
  */
 class Html extends \yii\helpers\Html
 {
-	
+
 	const BS_DEFAULT 	= 'default';
 	const BS_PRIMARY 	= 'primary';
 	const BS_SUCCESS	= 'success';
 	const BS_INFO		= 'info';
 	const BS_WARNING	= 'warning';
 	const BS_DANGER		= 'danger';
-	
+
 	const BS_XS			= 'xs';
 	const BS_SM			= 'sm';
 	const BS_MD			= 'md';
@@ -56,7 +56,7 @@ class Html extends \yii\helpers\Html
 
 	/**
 	 * Renders a quantity with its corresponding unit (eg '107.00 kg')
-	 * 
+	 *
 	 * @param float $value the quantity
 	 * @param string $unit the unit descriptor string
 	 * @param integer $decimals number of decimals
@@ -64,15 +64,15 @@ class Html extends \yii\helpers\Html
 	 * @return string generated html-code
 	 */
 	public static function valueWithUnit($value, $unit, $decimals=2, $muted=true)
-	{		
+	{
 		return Yii::$app->formatter->asDecimal($value, $decimals)
 			   . ' '
 			   . $muted ? static::tag('span', $unit, ['class'=>'text-muted']) : $unit;
 	}
-	
+
 	/**
 	 * Creates a bootstrap-badge
-	 * 
+	 *
 	 * @param string $content the content of the badge
 	 * @param boolean $encode whether or not to encode the content (defaults to true)
 	 * @return string generated html-code
@@ -81,10 +81,10 @@ class Html extends \yii\helpers\Html
 	{
 		return static::tag('span', $encode ? static::encode($content) : $content, ['class'=>'badge']);
 	}
-	
+
 	/**
 	 * Creates a bootstrap label
-	 * 
+	 *
 	 * @param string $content the content of the label
 	 * @param string $type the bootstrap type (eg alert, danger, etc.) which can be
 	 * set via constants of this class
@@ -94,10 +94,10 @@ class Html extends \yii\helpers\Html
 	public static function bsLabel($content, $type=self::BS_DEFAULT, $encode=true)
 	{
 		return static::tag('span', $encode ? static::encode($content) : $content, [
-			'class'=>'label label-' . $type,	
+			'class'=>'label label-' . $type,
 		]);
 	}
-	
+
 	/**
 	 * Creates a bootstrap list group.
 	 * Each item can be specified as a simple string or an array. Subsequent are
@@ -112,7 +112,7 @@ class Html extends \yii\helpers\Html
 	 * - active		boolean|\Closure	either a boolean value or an anonymous function returning
 	 * 									a boolean value
 	 * - badgeVal	string				content of an optional badge rendered inside the item
-	 * 
+	 *
 	 * @param string[]|mixed[] $items collection of items (each can be string or array)
 	 * @param mixed[] $listOptions options for the list tag
 	 * @param mixed[] $defaultItemOptions default options for list items (can be overriden in
@@ -123,11 +123,11 @@ class Html extends \yii\helpers\Html
 	 * @return string the code of the list group
 	 */
 	public function bsListGroup($items, $listOptions=[], $defaultItemOptions=[], $listTagName='ul')
-	{		
+	{
 		//prepare vars
 		static::addCssClass($defaultItemOptions, 'list-group-item');
 		$ret = '';
-		
+
 		//iterate over items
 		foreach ($items as $i) {
 			if (is_array($i)) {
@@ -163,7 +163,7 @@ class Html extends \yii\helpers\Html
 				$ret .= static::tag('li', $i, $defaultItemOptions);
 			}
 		}
-		
+
 		//enclose and return
 		static::addCssClass($listOptions, 'list-group');
 		return static::tag($listTagName, $ret, $listOptions);
@@ -246,5 +246,5 @@ class Html extends \yii\helpers\Html
 		//return tag
 		return static::tag('a', $clear, $options);
 	}
-	
+
 }
