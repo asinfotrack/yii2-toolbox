@@ -31,9 +31,12 @@ class ArchiveQueryBehavior extends \yii\base\Behavior
 		if ($this->modelInstance === null) {
 			$this->modelInstance = new $this->owner->modelClass();
 		}
-		
+
+		$column = sprintf('%s.%s', $this->modelInstance->tableName(), $this->modelInstance->archiveAttribute);
 		$value = $isArchived ? $this->modelInstance->archivedValue : $this->modelInstance->unarchivedValue;
-		$this->owner->andWhere([$this->modelInstance->archiveAttribute=>$value]);
+
+		$this->owner->andWhere([$column=>$value]);
+
 		return $this->owner;
 	}
 	

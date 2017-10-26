@@ -9,6 +9,10 @@ The preferred way to install this extension is through [composer](http://getcomp
 
 ## Changelog
 
+###### [v0.8.6] *WORK IN PROGRESS!*
+
+- Bugfix with ArchiveBehavior where table-name was missing (lead to conflicts with relations)
+
 ###### [v0.8.5](https://github.com/asinfotrack/yii2-toolbox/releases/tag/0.8.5)
 
 - General-dependency update
