@@ -17,7 +17,7 @@ use yii\helpers\Html;
  *
  * @author Pascal Mueller, AS infotrack AG
  * @link http://www.asinfotrack.ch
- * @license MIT
+ * @license AS infotrack AG license / MIT, see provided license file
  */
 class Panel extends \yii\base\Widget
 {

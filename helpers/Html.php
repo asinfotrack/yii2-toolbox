@@ -12,7 +12,7 @@ use asinfotrack\yii2\toolbox\assets\EmailDisguiseAsset;
  *
  * @author Pascal Mueller, AS infotrack AG
  * @link http://www.asinfotrack.ch
- * @license MIT
+ * @license AS infotrack AG license / MIT, see provided license file
  */
 class Html extends \yii\helpers\Html
 {

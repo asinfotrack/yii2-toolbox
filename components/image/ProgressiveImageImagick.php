@@ -7,7 +7,7 @@ namespace asinfotrack\yii2\toolbox\components\image;
  *
  * @author Pascal Mueller, AS infotrack AG
  * @link http://www.asinfotrack.ch
- * @license MIT
+ * @license AS infotrack AG license / MIT, see provided license file
  */
 class ProgressiveImageImagick extends \yii\image\drivers\Image_Imagick
 {
