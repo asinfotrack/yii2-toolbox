@@ -13,7 +13,7 @@ The preferred way to install this extension is through [composer](http://getcomp
 
 - Updated license
 - Bugfix in archive behavior where already set archived value would be overwritten during insert
-- Removed dependency from codeception as it is not needed and bloats the extension
+- Removed dependency from codeception as it is unneeded and bloats the extension
 
 ###### [v0.8.6](https://github.com/asinfotrack/yii2-toolbox/releases/tag/0.8.6)
 
