@@ -5,7 +5,7 @@
 	"description": "Yii2-Toolbox is a collection of useful helpers, widgets etc. extending the basic functionality of Yii2",
 	"keywords": ["yii2", "toolbox", "widgets", "helpers", "bundle"],
 
-	"license": "AS infotrack AG license / MIT, see provided license file",
+	"license": "MIT",
 	"authors": [
 		{
 			"name": "Pascal Mueller",
