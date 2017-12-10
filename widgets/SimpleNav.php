@@ -39,9 +39,10 @@ class SimpleNav extends \yii\bootstrap\Widget
 	public $maxDepth;
 
 	/**
-	 * @var string|\Closure either a fixed string or a closure returning a string
-	 * which will be prepended to each label text. The closure should have the signature
-	 * 'function ($item)' where $item is the item config array.
+	 * @var string|callable either a fixed string or a callable returning a string
+	 * which will be prepended to each label text. The callable should have the signature
+	 * 'function ($item, $depth)' where $item is the item config array and $depth the current
+	 * depth of the item.
 	 */
 	public $entryPrefix;
 
@@ -56,8 +57,8 @@ class SimpleNav extends \yii\bootstrap\Widget
 	public $activateItems = true;
 
 	/**
-	 * @var \Closure if set, this closure will be called to determine if an item is active.
-	 * The closure should have the signature 'function ($item)' where $item is the item config array.
+	 * @var callable if set, this callable will be called to determine if an item is active.
+	 * The callable should have the signature 'function ($item)' where $item is the item config array.
 	 */
 	public $isActiveCallback;
 
@@ -114,7 +115,7 @@ class SimpleNav extends \yii\bootstrap\Widget
 
 		//prepare returned code
 		$ret = Html::beginTag('li', $options);
-		$ret .= $this->createEntry($item);
+		$ret .= $this->createEntry($item, $depth);
 
 		//render children recursively
 		if (isset($item['items']) && ($this->maxDepth === null || ($this->maxDepth !== null && $depth + 1 <= $this->maxDepth))) {
@@ -135,15 +136,16 @@ class SimpleNav extends \yii\bootstrap\Widget
 	 * is present it will be a link or otherwise the in the options defined tag
 	 *
 	 * @param array $item the item config
+	 * @param int $depth the depth of the item to create
 	 * @return string the resulting html code
 	 */
-	protected function createEntry($item)
+	protected function createEntry($item, $depth)
 	{
 		$label = $item['label'];
 		$prefix = '';
 		if ($this->entryPrefix !== null) {
-			if ($this->entryPrefix instanceof \Closure) {
-				$prefix = call_user_func($this->entryPrefix, $item);
+			if (is_callable($this->entryPrefix)) {
+				$prefix = call_user_func($this->entryPrefix, $item, $depth);
 			} else {
 				$prefix = $this->entryPrefix;
 			}
@@ -194,7 +196,7 @@ class SimpleNav extends \yii\bootstrap\Widget
 	{
 		if (!isset($item['url'])) return false;
 
-		if (isset($this->isActiveCallback)) {
+		if (is_callable($this->isActiveCallback)) {
 			return call_user_func($this->isActiveCallback, $item);
 		} else {
 			return \asinfotrack\yii2\toolbox\helpers\Url::isUrlActive($item['url']);
