@@ -5,7 +5,7 @@ use Yii;
 use yii\base\InvalidConfigException;
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
-use rmrevin\yii\fontawesome\FA;
+use asinfotrack\yii2\toolbox\components\Icon;
 
 /**
  * Renders stats-boxes containing a title, an optional icon and a value
@@ -44,6 +44,13 @@ class StatsBoxes extends \yii\base\Widget
 	 * @var string the tag used for the headers within the box. defaults to span.
 	 */
 	public $headerTagName = 'span';
+
+	/**
+	 * @var callable optional callable to create icons in a custom way. If
+	 * implemented, the callback should have the signature `function ($iconName)`
+	 * and return the html code of the icon.
+	 */
+	public $createIconCallback;
 
 	/**
 	 * @inheritdoc
@@ -131,7 +138,9 @@ class StatsBoxes extends \yii\base\Widget
 
 		//header
 		echo Html::beginTag('div', ['class'=>'stats-box-header']);
-		if (isset($boxData['headerIcon'])) echo FA::icon($boxData['headerIcon']);
+		if (isset($boxData['headerIcon'])) {
+			echo $this->createIcon($boxData['headerIcon']);
+		}
 		echo Html::tag($this->headerTagName, $boxData['header']);
 		echo Html::endTag('div');
 
@@ -145,6 +154,21 @@ class StatsBoxes extends \yii\base\Widget
 
 		echo Html::endTag('div');
 		echo Html::endTag('div');
+	}
+
+	/**
+	 * Creates the icons as used by the buttons
+	 *
+	 * @param string $iconName the name of the icon to use
+	 * @return string the final html code of the icon
+	 */
+	protected function createIcon($iconName)
+	{
+		if (is_callable($this->createIconCallback)) {
+			return call_user_func($this->createIconCallback, $iconName);
+		} else {
+			return Icon::create($iconName);
+		}
 	}
 
 }

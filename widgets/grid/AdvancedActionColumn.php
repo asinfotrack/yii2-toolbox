@@ -4,6 +4,7 @@ namespace asinfotrack\yii2\toolbox\widgets\grid;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
+use asinfotrack\yii2\toolbox\components\Icon;
 
 /**
  * Advanced action column with functionality to show buttons depending on a
@@ -139,7 +140,7 @@ class AdvancedActionColumn extends \yii\grid\ActionColumn
 		if (is_callable($this->createIconCallback)) {
 			return call_user_func($this->createIconCallback, $iconName);
 		} else {
-			return Html::tag('span', '', ['class'=>'glyphicon glyphicon-' . $iconName]);
+			return Icon::create($iconName);
 		}
 	}
 

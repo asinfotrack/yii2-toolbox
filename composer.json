@@ -27,7 +27,6 @@
 		"yiisoft/yii2-bootstrap": "~2.0.0",
 		"yiisoft/yii2-gii": "~2.0.0",
 
-		"rmrevin/yii2-fontawesome": "~2.16",
 		"yurkinx/yii2-image": "~1.1"
 	},
 
