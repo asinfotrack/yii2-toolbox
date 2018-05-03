@@ -5,9 +5,13 @@ Yii2-Toolbox is a collection of useful helpers, widgets etc. extending the basic
 ## Installation
 The preferred way to install this extension is through [composer](http://getcomposer.org/download/).
 
-	"asinfotrack/yii2-toolbox": "~0.8.9"
+	"asinfotrack/yii2-toolbox": "~0.8.10"
 
 ## Changelog
+
+###### [v0.8.10](https://github.com/asinfotrack/yii2-toolbox/releases/tag/0.8.10)
+
+- Adding icon component for centralized icon handling
 
 ###### [v0.8.9](https://github.com/asinfotrack/yii2-toolbox/releases/tag/0.8.9)
 
