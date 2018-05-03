@@ -12,6 +12,8 @@ The preferred way to install this extension is through [composer](http://getcomp
 ###### [v0.8.10](https://github.com/asinfotrack/yii2-toolbox/releases/tag/0.8.10)
 
 - Adding icon component for centralized icon handling
+- WATCH OUT: The [font awesome library](https://github.com/rmrevin/yii2-fontawesome) is now optional 
+  and must be included manually in your project. It will then be used automatically if present.
 
 ###### [v0.8.9](https://github.com/asinfotrack/yii2-toolbox/releases/tag/0.8.9)
 
