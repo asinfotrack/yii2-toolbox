@@ -46,7 +46,7 @@ class TabsWithMemory extends \yii\bootstrap\Tabs
 		JqueryAsset::register($this->getView());
 		BootstrapAsset::register($this->getView());
 
-		$js = new JsExpression("
+		$js = new JsExpression(<<<JS
 			var widgetClass = 'widget-memory-tabs';
 			var storageName = 'widget-memory-tabs';
 
@@ -70,7 +70,9 @@ class TabsWithMemory extends \yii\bootstrap\Tabs
 				};
 
 				var saveData = function(dataObj) {
+					console.log('data to be saved is: '+ dataObj);
 					dataStr = JSON.stringify(dataObj);
+					console.log('data to be saved is: '+ dataStr);
 					" . $this->storageType . ".setItem(storageName, dataStr);
 				};
 
@@ -81,12 +83,25 @@ class TabsWithMemory extends \yii\bootstrap\Tabs
 
 					$('#' + tabId + ' li:eq(' + index + ') a').tab('show');
 				};
+				
+				var getBaseUrlByAnchor = function(url) {
+					var hashTagIndex = url.indexOf('#',0);
+					if (hashTagIndex === -1) return null;
+					return url.substring(0, hashTagIndex);
+				};
 
 				var initIndexes = function() {
 					var data = loadData();
 					var curUrl = window.location.href;
-					if (data[curUrl] == null) return;
-
+					if (data[curUrl] == null) {
+						var baseUrl = getBaseUrlByAnchor(curUrl);
+						if (baseUrl === null) {
+							return;
+						} else if (data[baseUrl] == null) {
+							return;
+						}
+						curUrl = baseUrl;
+					}
 					var tabs = $('.' + widgetClass);
 					tabs.each(function(i, el) {
 						var tabId = $(this).attr('id');
@@ -99,8 +114,20 @@ class TabsWithMemory extends \yii\bootstrap\Tabs
 
 				var setIndex = function(tabId, index) {
 					var curUrl = window.location.href;
+					var baseUrl = getBaseUrlByAnchor(curUrl);
+
 					var data = loadData();
-					if (data[curUrl] == null) data[curUrl] = {};
+					
+					if(data[curUrl] == null) {
+						if (baseUrl !== null && data[baseUrl] == null) {
+							data[baseUrl] = {};
+						} else if (baseUrl === null) {
+							data[curUrl] = {};
+						} else {
+							curUrl = baseUrl;
+						}
+					}
+
 					data[curUrl][tabId] = index;
 
 					saveData(data);
@@ -115,7 +142,8 @@ class TabsWithMemory extends \yii\bootstrap\Tabs
 
 				initIndexes();
 			}
-		");
+JS
+);
 		$this->view->registerJs($js);
 
 		static::$JS_REGISTERED = true;
