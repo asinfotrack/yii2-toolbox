@@ -53,8 +53,8 @@ class TabsWithMemory extends \yii\bootstrap\Tabs
 			var hasStorage = function() {
 				var test = 'test';
 				try {
-					" . $this->storageType . ".setItem(test, test);
-					" . $this->storageType . ".removeItem(test);
+					{$this->storageType}.setItem(test, test);
+					{$this->storageType}.removeItem(test);
 					return true;
 				} catch(e) {
 					return false;
@@ -64,16 +64,14 @@ class TabsWithMemory extends \yii\bootstrap\Tabs
 			if (hasStorage) {
 
 				var loadData = function() {
-					var dataStr = " . $this->storageType . ".getItem(storageName);
+					var dataStr = {$this->storageType}.getItem(storageName);
 					if (dataStr == null) return {};
 					return JSON.parse(dataStr);
 				};
 
 				var saveData = function(dataObj) {
-					console.log('data to be saved is: '+ dataObj);
 					dataStr = JSON.stringify(dataObj);
-					console.log('data to be saved is: '+ dataStr);
-					" . $this->storageType . ".setItem(storageName, dataStr);
+					{$this->storageType}.setItem(storageName, dataStr);
 				};
 
 				var activateIndex = function(tabId, index) {
