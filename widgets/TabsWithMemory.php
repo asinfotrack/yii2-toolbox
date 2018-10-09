@@ -7,7 +7,7 @@ use yii\web\JqueryAsset;
 use yii\web\JsExpression;
 
 /**
- * Tabs widget which remembers its active tab via javascript sessionStorage
+ * Tabs widget which remembers its active tab via javascript storage
  *
  * @author Pascal Mueller, AS infotrack AG
  * @link http://www.asinfotrack.ch
@@ -20,6 +20,11 @@ class TabsWithMemory extends \yii\bootstrap\Tabs
 	 * @var bool static marker to show if js was registered before
 	 */
 	protected static $JS_REGISTERED = false;
+
+	/**
+	 * @var string defines which type of storage should be used. eg sessionStorage, localStorage etc.
+	 */
+	public $storageType = 'sessionStorage';
 
 	/**
 	 * @inheritdoc
@@ -48,8 +53,8 @@ class TabsWithMemory extends \yii\bootstrap\Tabs
 			var hasStorage = function() {
 				var test = 'test';
 				try {
-					sessionStorage.setItem(test, test);
-					sessionStorage.removeItem(test);
+					" . $this->storageType . ".setItem(test, test);
+					" . $this->storageType . ".removeItem(test);
 					return true;
 				} catch(e) {
 					return false;
@@ -59,14 +64,14 @@ class TabsWithMemory extends \yii\bootstrap\Tabs
 			if (hasStorage) {
 
 				var loadData = function() {
-					var dataStr = sessionStorage.getItem(storageName);
+					var dataStr = " . $this->storageType . ".getItem(storageName);
 					if (dataStr == null) return {};
 					return JSON.parse(dataStr);
 				};
 
 				var saveData = function(dataObj) {
 					dataStr = JSON.stringify(dataObj);
-					sessionStorage.setItem(storageName, dataStr);
+					" . $this->storageType . ".setItem(storageName, dataStr);
 				};
 
 				var activateIndex = function(tabId, index) {
