@@ -16,15 +16,19 @@ use yii\web\JsExpression;
 class TabsWithMemory extends \yii\bootstrap\Tabs
 {
 
+	const STORAGE_SESSION = 'sessionStorage';
+	const STORAGE_LOCAL = 'localStorage';
+
 	/**
 	 * @var bool static marker to show if js was registered before
 	 */
 	protected static $JS_REGISTERED = false;
 
 	/**
-	 * @var string defines which type of storage should be used. eg sessionStorage, localStorage etc.
+	 * @var string defines which type of storage should be used. the two possible
+	 * options are available as constants in the widget.
 	 */
-	public $storageType = 'sessionStorage';
+	public $storageType = self::STORAGE_SESSION;
 
 	/**
 	 * @inheritdoc
