@@ -9,6 +9,18 @@ The preferred way to install this extension is through [composer](http://getcomp
 
 ## Changelog
 
+###### [v0.8.13](https://github.com/asinfotrack/yii2-toolbox/releases/tag/0.8.13)
+
+- bug fix tab memory js
+
+###### [v0.8.12](https://github.com/asinfotrack/yii2-toolbox/releases/tag/0.8.12)
+
+- bug fix tab memory with anchor
+
+###### [v0.8.11](https://github.com/asinfotrack/yii2-toolbox/releases/tag/0.8.11)
+
+- added option to change storage type
+
 ###### [v0.8.10](https://github.com/asinfotrack/yii2-toolbox/releases/tag/0.8.10)
 
 - Adding icon component for centralized icon handling
