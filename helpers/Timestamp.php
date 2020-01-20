@@ -58,7 +58,7 @@ class Timestamp
 		$dt = new \DateTime('now', $tz);
 		$dt->setTimestamp($utcTimestamp);
 
-		return $utcTimestamp+$dt->getOffset();
+		return $utcTimestamp + $dt->getOffset();
 	}
 
 	/**
