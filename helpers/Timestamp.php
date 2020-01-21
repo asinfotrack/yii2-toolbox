@@ -309,7 +309,7 @@ class Timestamp
 	{
 		$month = $month ?? intval(date('m'));
 		$day = $day ?? intval(date('d'));
-		$year = $month ?? intval(date('Y'));
+		$year = $year ?? intval(date('Y'));
 
 		$tz = new \DateTimeZone($timeZone ?? Yii::$app->timeZone);
 		$dt = new \DateTime('now', $tz);
