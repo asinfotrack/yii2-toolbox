@@ -1,6 +1,7 @@
 <?php
 namespace asinfotrack\yii2\toolbox\widgets;
 
+use Yii;
 use yii\bootstrap\BootstrapAsset;
 use yii\helpers\Html;
 use yii\web\JqueryAsset;
@@ -31,13 +32,37 @@ class TabsWithMemory extends \yii\bootstrap\Tabs
 	public $storageType = self::STORAGE_SESSION;
 
 	/**
+	 * @var string optional: Defines the key to be used to store the tab index
+	 */
+	public $storageKey;
+
+	/**
 	 * @inheritdoc
 	 */
 	public function init()
 	{
 		parent::init();
+
+		if (null === $this->storageKey) {
+			$this->storageKey = $this->generateStorageKey();
+		}
+		if (!isset($this->options['data'])) {
+			$this->options['data'] = [];
+		}
+		$this->options['data']['storage-key'] = $this->storageKey;
+
 		Html::addCssClass($this->options, 'widget-memory-tabs');
 		$this->registerJs();
+	}
+
+	/**
+	 * Gets a default storage key which is the current absolute url.
+	 *
+	 * @return string The current absolute url
+	 */
+	protected function generateStorageKey()
+	{
+		return Yii::$app->request->absoluteUrl;
 	}
 
 	/**
@@ -49,6 +74,7 @@ class TabsWithMemory extends \yii\bootstrap\Tabs
 
 		JqueryAsset::register($this->getView());
 		BootstrapAsset::register($this->getView());
+
 
 		$js = new JsExpression(<<<JS
 			var widgetClass = 'widget-memory-tabs';
@@ -69,7 +95,7 @@ class TabsWithMemory extends \yii\bootstrap\Tabs
 
 				var loadData = function() {
 					var dataStr = {$this->storageType}.getItem(storageName);
-					if (dataStr == null) return {};
+					if (dataStr === null || dataStr.length === 0) return {};
 					return JSON.parse(dataStr);
 				};
 
@@ -94,44 +120,24 @@ class TabsWithMemory extends \yii\bootstrap\Tabs
 
 				var initIndexes = function() {
 					var data = loadData();
-					var curUrl = window.location.href;
-					if (data[curUrl] == null) {
-						var baseUrl = getBaseUrlByAnchor(curUrl);
-						if (baseUrl === null) {
-							return;
-						} else if (data[baseUrl] == null) {
-							return;
-						}
-						curUrl = baseUrl;
-					}
-					var tabs = $('.' + widgetClass);
-					tabs.each(function(i, el) {
-						var tabId = $(this).attr('id');
-						if (tabId != null) {
-							var index = data[curUrl][tabId];
+					var widgets = document.querySelectorAll('.' + widgetClass);
+					widgets.forEach(function(widget) {
+						var jqWidget = $(widget);
+						var storageKey = jqWidget.data('storage-key');
+
+						var tabId = jqWidget.attr('id');
+						if (tabId !== null) {
+							var index = data[storageKey][tabId];
 							activateIndex(tabId, index);
 						}
 					});
 				};
 
 				var setIndex = function(tabId, index) {
-					var curUrl = window.location.href;
-					var baseUrl = getBaseUrlByAnchor(curUrl);
-
 					var data = loadData();
-					
-					if(data[curUrl] == null) {
-						if (baseUrl !== null && data[baseUrl] == null) {
-							data[baseUrl] = {};
-						} else if (baseUrl === null) {
-							data[curUrl] = {};
-						} else {
-							curUrl = baseUrl;
-						}
-					}
-
-					data[curUrl][tabId] = index;
-
+					var jqWidget = $('#' + tabId);
+					var storageKey = jqWidget.data('storage-key');
+					data[storageKey][tabId] = index;
 					saveData(data);
 				};
 
@@ -150,5 +156,4 @@ JS
 
 		static::$JS_REGISTERED = true;
 	}
-
 }
