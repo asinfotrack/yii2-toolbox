@@ -1,11 +1,11 @@
 # Changelog
 ###### [v1.0.3](https://github.com/asinfotrack/yii2-toolbox/releases/tag/1.0.3)
 
-- fixed javascript erros in Toolbox
+- fixed javascript erros in TabsWithMemory
 
 ###### [v1.0.2](https://github.com/asinfotrack/yii2-toolbox/releases/tag/1.0.2)
 
-- added `$storageKey` to Toolbox
+- added `$storageKey` to TabsWithMemory
 
 ###### [v1.0.1](https://github.com/asinfotrack/yii2-toolbox/releases/tag/1.0.1)
 
