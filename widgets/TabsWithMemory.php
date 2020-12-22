@@ -126,8 +126,10 @@ class TabsWithMemory extends \yii\bootstrap\Tabs
 
 						var tabId = jqWidget.attr('id');
 						if (tabId !== null) {
-							var index = data[storageKey][tabId];
-							activateIndex(tabId, index);
+							if (undefined !== data[storageKey]) {
+								var index = data[storageKey][tabId];
+									activateIndex(tabId, index);	
+							}
 						}
 					});
 				};
@@ -136,6 +138,9 @@ class TabsWithMemory extends \yii\bootstrap\Tabs
 					var data = loadData();
 					var jqWidget = $('#' + tabId);
 					var storageKey = jqWidget.data('storage-key');
+					if (undefined === data[storageKey]) {
+						data[storageKey] = {};
+					}
 					data[storageKey][tabId] = index;
 					saveData(data);
 				};

@@ -1,4 +1,8 @@
 # Changelog
+###### [v1.0.3](https://github.com/asinfotrack/yii2-toolbox/releases/tag/1.0.3)
+
+- fixed javascript erros in Toolbox
+
 ###### [v1.0.2](https://github.com/asinfotrack/yii2-toolbox/releases/tag/1.0.2)
 
 - added `$storageKey` to Toolbox
