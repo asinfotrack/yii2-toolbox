@@ -75,7 +75,6 @@ class TabsWithMemory extends \yii\bootstrap\Tabs
 		JqueryAsset::register($this->getView());
 		BootstrapAsset::register($this->getView());
 
-
 		$js = new JsExpression(<<<JS
 			var widgetClass = 'widget-memory-tabs';
 			var storageName = 'widget-memory-tabs';
