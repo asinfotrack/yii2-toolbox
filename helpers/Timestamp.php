@@ -125,8 +125,7 @@ class Timestamp
 	 */
 	public static function getMidnightTimestampFirstOfMonth(string $timeZone = null, int $month = null, int $year = null) : int
 	{
-		$dt = static::createDateTimeInstance($timeZone, $month, null, $year);
-		$dt->setDate($year, $month, 1);
+		$dt = static::createDateTimeInstance($timeZone, $month, 1, $year);
 		$dt->setTime(0, 0, 0);
 		return $dt->getTimestamp();
 	}
@@ -143,8 +142,7 @@ class Timestamp
 	 */
 	public static function getMidnightTimestampLastOfMonth(string $timeZone = null, int $month = null, int $year = null) : int
 	{
-		$dt = static::createDateTimeInstance($timeZone, $month, null, $year);
-		$dt->setDate($year, $month, 1);
+		$dt = static::createDateTimeInstance($timeZone, $month, 1, $year);
 		$dt->modify('+1 month');
 		$dt->modify('-1 day');
 		$dt->setTime(0, 0, 0);
@@ -313,7 +311,7 @@ class Timestamp
 
 		$tz = new \DateTimeZone($timeZone ?? Yii::$app->timeZone);
 		$dt = new \DateTime('now', $tz);
-		$dt->setDate($year, $month, $day);
+		$dt->setDate($year ?? $dt->format('Y'), $month ?? $dt->format('m'), $day ?? $dt->format('d'));
 
 		return $dt;
 	}
