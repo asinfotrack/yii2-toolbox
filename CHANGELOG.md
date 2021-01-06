@@ -1,4 +1,8 @@
 # Changelog
+###### [v1.0.5](https://github.com/asinfotrack/yii2-toolbox/releases/tag/1.0.5)
+
+- removed redundant method call setDate in Timestamp
+
 ###### [v1.0.4](https://github.com/asinfotrack/yii2-toolbox/releases/tag/1.0.4)
 
 - disabled libxml_use_internal_errors in DebugAction
