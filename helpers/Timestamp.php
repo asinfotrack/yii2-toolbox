@@ -311,7 +311,7 @@ class Timestamp
 
 		$tz = new \DateTimeZone($timeZone ?? Yii::$app->timeZone);
 		$dt = new \DateTime('now', $tz);
-		$dt->setDate($year ?? $dt->format('Y'), $month ?? $dt->format('m'), $day ?? $dt->format('d'));
+		$dt->setDate($year, $month, $day);
 
 		return $dt;
 	}
