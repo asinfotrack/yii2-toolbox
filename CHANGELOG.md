@@ -1,4 +1,8 @@
 # Changelog
+###### [v1.0.4](https://github.com/asinfotrack/yii2-toolbox/releases/tag/1.0.4)
+
+- disabled libxml_use_internal_errors in DebugAction
+
 ###### [v1.0.3](https://github.com/asinfotrack/yii2-toolbox/releases/tag/1.0.3)
 
 - fixed javascript erros in TabsWithMemory
