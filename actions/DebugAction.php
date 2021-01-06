@@ -468,7 +468,9 @@ class DebugAction extends \yii\base\Action
 		ob_start();
 		phpinfo();
 		$domDoc = new \DOMDocument();
+		$prevLibXmlUseInternalErrors = libxml_use_internal_errors(true);
 		$domDoc->loadHTML(ob_get_clean());
+		libxml_use_internal_errors($prevLibXmlUseInternalErrors);
 
 		/* @var $node \DOMNode */
 		/* @var $childNode \DOMNode */
